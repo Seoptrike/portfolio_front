@@ -3,6 +3,7 @@ import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Paper, Typography, Button, Box
 } from '@mui/material'
+import { Textfit } from 'react-textfit'
 
 const CareersPage = () => {
   const isAdmin = false
@@ -19,7 +20,6 @@ const CareersPage = () => {
     <Box sx={{ px: { xs: 2, sm: 4 }, py: { xs: 2, sm: 3 } }}>
       {/* 경력 섹션 */}
       <Box
-        className="section-header"
         sx={{
           display: 'flex',
           justifyContent: isAdmin ? 'space-between' : 'center',
@@ -50,17 +50,29 @@ const CareersPage = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '1rem' } }}>근무처</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '1rem' } }}>직급</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '1rem' } }} colSpan={3}>근무 기간</TableCell>
+              <TableCell>근무처</TableCell>
+              <TableCell>직급</TableCell>
+              <TableCell colSpan={3}>근무 기간</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {careers.map((item, idx) => (
               <TableRow key={idx}>
-                <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>{item.company}</TableCell>
-                <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>{item.position}</TableCell>
-                <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>{item.period}</TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap', maxWidth: 150 }}>
+                  <Textfit mode="single" min={8} max={14}>
+                    {item.company}
+                  </Textfit>
+                </TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap', maxWidth: 100 }}>
+                  <Textfit mode="single" min={8} max={14}>
+                    {item.position}
+                  </Textfit>
+                </TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap', maxWidth: 150 }}>
+                  <Textfit mode="single" min={8} max={14}>
+                    {item.period}
+                  </Textfit>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -69,7 +81,6 @@ const CareersPage = () => {
 
       {/* 학력 섹션 */}
       <Box
-        className="section-header"
         sx={{
           display: 'flex',
           justifyContent: isAdmin ? 'space-between' : 'center',
@@ -100,17 +111,29 @@ const CareersPage = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '1rem' } }}>학교</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '1rem' } }}>전공</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '1rem' } }}>재학 기간</TableCell>
+              <TableCell>학교</TableCell>
+              <TableCell>전공</TableCell>
+              <TableCell>재학 기간</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {education.map((item, idx) => (
               <TableRow key={idx}>
-                <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>{item.school}</TableCell>
-                <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>{item.major}</TableCell>
-                <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>{item.period}</TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap', maxWidth: 180 }}>
+                  <Textfit mode="single" min={8} max={14}>
+                    {item.school}
+                  </Textfit>
+                </TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap', maxWidth: 140 }}>
+                  <Textfit mode="single" min={8} max={14}>
+                    {item.major}
+                  </Textfit>
+                </TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap', maxWidth: 140 }}>
+                  <Textfit mode="single" min={4} max={14}>
+                    {item.period}
+                  </Textfit>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
