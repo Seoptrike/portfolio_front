@@ -16,28 +16,51 @@ const CareersPage = () => {
   ]
 
   return (
-    <Box sx={{ padding: 4 }}>
+    <Box sx={{ px: { xs: 2, sm: 4 }, py: { xs: 2, sm: 3 } }}>
       {/* 경력 섹션 */}
-      <Box className="section-header" sx={{ display: 'flex', justifyContent: isAdmin ? 'space-between' : 'center', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h6">경력 사항</Typography>
-        {isAdmin && <Button variant="outlined" size="small">+ 추가</Button>}
+      <Box
+        className="section-header"
+        sx={{
+          display: 'flex',
+          justifyContent: isAdmin ? 'space-between' : 'center',
+          alignItems: 'center',
+          mb: 2
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' },
+            fontWeight: 'bold'
+          }}
+        >
+          경력 사항
+        </Typography>
+        {isAdmin && (
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{ fontSize: { xs: '0.75rem', sm: '0.85rem' }, py: 0.5 }}
+          >
+            + 추가
+          </Button>
+        )}
       </Box>
 
       <TableContainer component={Paper} sx={{ mb: 4 }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>근무처</TableCell>
-              <TableCell>직급</TableCell>
-              <TableCell colSpan={3}>근무 기간</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '1rem' } }}>근무처</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '1rem' } }}>직급</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '1rem' } }} colSpan={3}>근무 기간</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {careers.map((item, idx) => (
               <TableRow key={idx}>
-                <TableCell>{item.company}</TableCell>
-                <TableCell>{item.position}</TableCell>
-                <TableCell>{item.period}</TableCell>
+                <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>{item.company}</TableCell>
+                <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>{item.position}</TableCell>
+                <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>{item.period}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -45,26 +68,49 @@ const CareersPage = () => {
       </TableContainer>
 
       {/* 학력 섹션 */}
-      <Box className="section-header" sx={{ display: 'flex', justifyContent: isAdmin ? 'space-between' : 'center', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h6">학력 사항</Typography>
-        {isAdmin && <Button variant="outlined" size="small">+ 추가</Button>}
+      <Box
+        className="section-header"
+        sx={{
+          display: 'flex',
+          justifyContent: isAdmin ? 'space-between' : 'center',
+          alignItems: 'center',
+          mb: 2
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' },
+            fontWeight: 'bold'
+          }}
+        >
+          학력 사항
+        </Typography>
+        {isAdmin && (
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{ fontSize: { xs: '0.75rem', sm: '0.85rem' }, py: 0.5 }}
+          >
+            + 추가
+          </Button>
+        )}
       </Box>
 
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>학교</TableCell>
-              <TableCell>전공</TableCell>
-              <TableCell>재학 기간</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '1rem' } }}>학교</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '1rem' } }}>전공</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '1rem' } }}>재학 기간</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {education.map((item, idx) => (
               <TableRow key={idx}>
-                <TableCell>{item.school}</TableCell>
-                <TableCell>{item.major}</TableCell>
-                <TableCell>{item.period}</TableCell>
+                <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>{item.school}</TableCell>
+                <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>{item.major}</TableCell>
+                <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>{item.period}</TableCell>
               </TableRow>
             ))}
           </TableBody>

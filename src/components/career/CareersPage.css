@@ -1,29 +1,26 @@
-.careers-container {
-  padding: 2rem;
-}
-
-.careers-title {
-  text-align: center;
-  margin: 2rem 0 1.5rem;
-}
-
-.careers-table {
-  margin: 0 auto 2rem;
-  width: 90%;
-  max-width: 800px;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 2rem 0 1rem;
-  font-size: 1.25rem;
+.section-title {
   font-weight: bold;
+  font-size: 1.1rem;
 }
 
-/* 버튼이 없는 경우 가운데 정렬 */
-.center-only {
-  margin: 0 auto;
+@media (min-width: 600px) {
+  .section-title {
+    font-size: 1.3rem;
+  }
 }
 
+@media (min-width: 900px) {
+  .section-title {
+    font-size: 1.5rem;
+  }
+}
+
+.table-cell {
+  font-size: 0.85rem;
+}
+
+@media (min-width: 600px) {
+  .table-cell {
+    font-size: 1rem;
+  }
+}
