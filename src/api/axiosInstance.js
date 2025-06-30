@@ -1,8 +1,9 @@
-import axios from 'axios'
+// src/api/axiosInstance.js
+import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  withCredentials: false, // 필요시 true로
-})
+  baseURL: import.meta.env.VITE_API_URL, // ← Vite에서는 이렇게
+  withCredentials: false,
+});
 
-export default axiosInstance
+export default axiosInstance;
