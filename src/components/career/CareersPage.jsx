@@ -18,67 +18,6 @@ const CareersPage = () => {
 
   return (
     <Box sx={{ px: { xs: 2, sm: 4 }, py: { xs: 2, sm: 3 } }}>
-      {/* 경력 섹션 */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: isAdmin ? 'space-between' : 'center',
-          alignItems: 'center',
-          mb: 2
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' },
-            fontWeight: 'bold'
-          }}
-        >
-          경력 사항
-        </Typography>
-        {isAdmin && (
-          <Button
-            variant="outlined"
-            size="small"
-            sx={{ fontSize: { xs: '0.75rem', sm: '0.85rem' }, py: 0.5 }}
-          >
-            + 추가
-          </Button>
-        )}
-      </Box>
-
-      <TableContainer component={Paper} sx={{ mb: 4 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>근무처</TableCell>
-              <TableCell>직급</TableCell>
-              <TableCell colSpan={3}>근무 기간</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {careers.map((item, idx) => (
-              <TableRow key={idx}>
-                <TableCell sx={{ whiteSpace: 'nowrap', maxWidth: 150 }}>
-                  <Textfit mode="single" min={8} max={14}>
-                    {item.company}
-                  </Textfit>
-                </TableCell>
-                <TableCell sx={{ whiteSpace: 'nowrap', maxWidth: 100 }}>
-                  <Textfit mode="single" min={8} max={14}>
-                    {item.position}
-                  </Textfit>
-                </TableCell>
-                <TableCell sx={{ whiteSpace: 'nowrap', maxWidth: 150 }}>
-                  <Textfit mode="single" min={8} max={14}>
-                    {item.period}
-                  </Textfit>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
       {/* 학력 섹션 */}
       <Box
         sx={{

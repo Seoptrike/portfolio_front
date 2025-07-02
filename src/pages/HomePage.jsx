@@ -1,52 +1,45 @@
-import React, { useEffect, useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
-import CareersPage from '../components/career/CareersPage'
-import KosmoPage from '../components/recipes/kosmo/KosmoPage'
-import NcsPage from '../components/recipes/ncs/NcsPage'
-import StackPage from '../components/recipes/Skills/StackPage'
-import './HomePage.css'
-import { getUserListAll } from '../api/userApi'
-
-
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, Button, Stack } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { getUserAllList } from '../api/userApi';
 
 const HomePage = () => {
-    const [user, setUser] =useState();
-    useEffect( ()=>{
-        getUserListAll().then(res=> {
-            setUser(res.data)
-            console.log(res.data);
-        });
-    },[] )
+    const [users, setUsers] = useState();
+    const callAPI = async () => {
+        const res = await getUserAllList();
+        setUsers(res.data);
+        console.log(res.data);
+    }
+    useEffect(()=>{callAPI()},[])
     return (
-        <div className="home-container">
-            <Row className="gx-4 gy-5">
-                {/* 왼쪽 사이드 */}
-                <Col xs={12} lg={4} className="sidebar">
-                    <div className="profile-wrapper text-center">
-                        <img src="vite.svg" alt="Profile" className="profile-image" />
-                    </div>
-                    <CareersPage />
-                </Col>
+        <Box
+            sx={{
+                height: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                background: 'linear-gradient(to right, #f5f7fa, #c3cfe2)',
+                textAlign: 'center',
+                padding: 4,
+            }}
+        >
+            <Typography variant="h3" gutterBottom>
+                👋 안녕하세요, 김인섭입니다.
+            </Typography>
+            <Typography variant="h6" sx={{ maxWidth: 600 }}>
+                프론트엔드와 백엔드를 함께하는 개발자입니다.
+                <br/>
+                기술로 사람의 삶을 더 편리하게 만드는 것에 관심이 있습니다.
+            </Typography>
 
-                {/* 오른쪽 메인 */}
-                <Col xs={12} lg={8}>
-                    <Row className="g-4">
-                        <Col xs={12}>
-                            <NcsPage />
-                        </Col>
-                        <Col xs={12}>
-                            <KosmoPage />
-                        </Col>
-                        <Col xs={12}>
-                            <h3 className="section-title">
-                                <StackPage />
-                            </h3>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-        </div>
-    )
-}
+            <Stack direction="row" spacing={2} mt={5}>
+                <Button variant="contained" component={Link} to="/auth/login">
+                    로그인 하기
+                </Button>
+            </Stack>
+        </Box>
+    );
+};
 
-export default HomePage
+export default HomePage;

@@ -1,5 +1,9 @@
 import axios from './axiosInstance';
 
-export const getUserListAll = () => {
-    return axios.get('/api/users/getUserListAll');
+export const getUserAllList = () => {
+    return axios.get('/api/user/getUserAllList');
+};
+
+export const getUserTotalData = (username) => {
+    return axios.post('/api/total/getUserTotalData',{username})
 };
