@@ -1,5 +1,4 @@
 import React from 'react'
-import Layout from '../components/Layout';
 import GuestBookPage from '../pages/GuestBookPage';
 import ProjectsPage from '../pages/ProjectsPage';
 import AboutMePage from '../pages/AboutMePage';
@@ -7,7 +6,9 @@ import HomePage from '../pages/HomePage';
 import ProjectDetailPage from '../components/projects/details/ProjectDetailPage';
 import AuthRouter from '../routes/AuthRouter';
 import { Route, Routes } from 'react-router-dom';
-import MainPage from '../components/main/MainPage';
+import MainPage from '../pages/MainPage';
+import Layout from '../Layout';
+import NotFound from '../components/common/NotFound';
 
 const RouterConfig = () => {
     return (
@@ -20,6 +21,7 @@ const RouterConfig = () => {
                 <Route path="/projects/:username/:id" element={<ProjectDetailPage />} />
                 <Route path="guestbook/:username" element={<GuestBookPage />} />
                 <Route path="auth/*" element={<AuthRouter />} />
+                <Route path="notfound" element={<NotFound/>}/>
             </Route>
         </Routes>
     )

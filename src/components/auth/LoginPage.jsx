@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Row, Col, InputGroup, Form, Button, Card } from 'react-bootstrap'
 import Swal from 'sweetalert2';
-import { login } from '../../api/authApi';
+import { login } from '../../api/AuthApi';
 
 const LoginPage = () => {
     const [form, setform] = useState({
@@ -32,9 +32,6 @@ const LoginPage = () => {
                     title: "비밀번호가 일치하지 않습니다.",
                 });
             } else if (data.result === 2) {
-                // 성공 시: 토큰 저장 및 리디렉션
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("username", username); // 필요에 따라
                 Swal.fire({
                     icon: "success",
                     title: "로그인 성공",
@@ -43,7 +40,7 @@ const LoginPage = () => {
                 });
 
                 const target = sessionStorage.getItem('target');
-                window.location.href = target || '/';
+                window.location.href = target || `/main/${username}`;
             }
 
         } catch (err) {
@@ -54,7 +51,7 @@ const LoginPage = () => {
             });
         }
     };
-   
+
     return (
         <div className='d-flex justify-content-center'>
             <Card style={{ width: "50rem" }} className='text-center mt-5 o-hidden border-0 shadow-lg'>

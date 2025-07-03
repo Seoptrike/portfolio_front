@@ -31,7 +31,7 @@ const stackIcons = {
     Jira: <SiJira color="#0052CC" />,
 }
 
-const StackPage = () => {
+const StackPage = ({ userID, username, EduHis, onSuccess }) => {
     const isAdmin = true
     const [showOptions, setShowOptions] = useState(false)
     const [selectedStacks, setSelectedStacks] = useState([])

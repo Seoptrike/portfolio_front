@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
-import NcsPage from '../recipes/ncs/NcsPage';
-import StackPage from '../recipes/Skills/StackPage';
-import CareersPage from '../career/CareersPage';
+import NcsPage from '../components/recipes/ncs/NcsPage';
+import StackPage from '../components/mainpage/stack/StackPage';
 import './MainPage.css'
-import { getUserTotalData } from '../../api/userApi';
-import { useParams } from 'react-router-dom';
-import WorkExperiencesPage from '../career/WorkExperiencesPage';
+import { useNavigate, useParams } from 'react-router-dom';
+import WorkExperiencesPage from '../components/mainpage/career/WorkExperiencesPage';
+import EduHistoryPage from '../components/mainpage/career/EduHistoryPage';
+import { getUserTotalData } from '../api/userApi';
 
 const MainPage = () => {
     const { username } = useParams();
+    const navigate = useNavigate();
     const [userCareers, setUserCareers] = useState({});
     const [userID, setUserID] = useState();
     const CallTotalAPI = async () => {
         const res = await getUserTotalData(username)
+         if (res.data.userID === "NONE") {
+            navigate('/notfound');
+            return;
+        }
+        console.log(res.data);
         setUserCareers(res.data);
         setUserID(res.data.userID);
-        console.log(res.data.userID);
-        console.log("isArray:", Array.isArray(res.data.workExperience));
     }
-
     useEffect(() => { CallTotalAPI() }, [username])
-    console.log('현재 접속 유저:', username); // 디버깅용
-
-    //통합정보API
 
     return (
         <div className="home-container">
@@ -31,9 +31,14 @@ const MainPage = () => {
                 {/* 왼쪽 사이드 */}
                 <Col xs={12} lg={4} className="sidebar">
                     <div className="profile-wrapper text-center">
-                        <img src="vite.svg" alt="Profile" className="profile-image" />
+                        <img src="/images/vite.svg" alt="Profile" className="profile-image" />
                     </div>
-                    <CareersPage onSuccess={() => CallTotalAPI()} />
+                    <EduHistoryPage
+                        userID={userID}
+                        username={username}
+                        EduHis={userCareers.educationHistory}
+                        onSuccess={() => CallTotalAPI()}
+                    />
                     <WorkExperiencesPage
                         userID={userID}
                         username={username}
@@ -49,9 +54,12 @@ const MainPage = () => {
                             <NcsPage />
                         </Col>
                         <Col xs={12}>
-                            <h3 className="section-title">
-                                <StackPage />
-                            </h3>
+                            <StackPage
+                                userID={userID}
+                                username={username}
+                                stack={userCareers.stacks}
+                                onSuccess={() => CallTotalAPI()}
+                            />
                         </Col>
                     </Row>
                 </Col>

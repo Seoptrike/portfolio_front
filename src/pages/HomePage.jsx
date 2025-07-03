@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { getUserAllList } from '../api/userApi';
+
 
 const HomePage = () => {
     const [users, setUsers] = useState();
-    const callAPI = async () => {
-        const res = await getUserAllList();
-        setUsers(res.data);
-        console.log(res.data);
-    }
-    useEffect(()=>{callAPI()},[])
     return (
         <Box
             sx={{
