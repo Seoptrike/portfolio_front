@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Row, Col, InputGroup, Form, Button, Card } from 'react-bootstrap'
 import Swal from 'sweetalert2';
-import { login } from '../../api/AuthApi';
+import { login } from '../../api/authApi';
 
 const LoginPage = () => {
     const [form, setform] = useState({
