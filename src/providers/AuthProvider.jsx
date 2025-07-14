@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { loginCheck, hostCheck } from '../api/AuthApi';
+import { loginCheck, hostCheck } from '../api/authApi';
 import { AuthContext } from '../context/AuthContext';
 import { useLocation } from 'react-router-dom';
 
