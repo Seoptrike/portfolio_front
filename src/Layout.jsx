@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { hostCheck, loginCheck, logout } from './api/AuthApi';
+import { hostCheck, loginCheck, logout } from './api/authApi';
 import { AuthContext } from './context/AuthContext';
 
 
@@ -16,41 +16,10 @@ export default function Layout() {
         await loginCheckHandler();
         navigate('/');
     };
-    // const [isHost, setIsHost] = useState(false);
-    // const [loginName, setLoginName] = useState("");
-    // const [isLogin, setIsLogin] = useState(false);
-    // const { username } = useParams();
-    // const navigate = useNavigate();
-    // const LoginCheck = async () => {
-    //     const loginRes = await loginCheck();
-    //     if (loginRes.data.status === 'LOGIN') {
-    //         setIsLogin(true);
-    //         setLoginName(loginRes.data.username);
-    //         const hostRes = await hostCheck(loginRes.data.username)
-    //         if (hostRes.data === 'HOST') {
-    //             setIsHost(true);
-    //         } else {
-    //             setIsHost(false);
-    //         }
-    //     } else {
-    //         setIsLogin(false);
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     LoginCheck();
-    // }, [username]);
 
     const handleNavClick = () => {
         setExpanded(false); // 메뉴 선택 시 드롭다운 닫기
     };
-
-    // const handleLogout = async () => {
-    //     await logout();
-    //     localStorage.removeItem("username");
-    //     await LoginCheck();  // context의 상태 갱신
-    //     navigate('/');
-    // };
 
     console.log("로그인?:" + isLogin);
     console.log("호스트?:" + isHost);
