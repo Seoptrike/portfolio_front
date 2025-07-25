@@ -21,8 +21,8 @@ export default function Layout() {
         setExpanded(false); // 메뉴 선택 시 드롭다운 닫기
     };
 
-    console.log("로그인?:" + isLogin);
-    console.log("호스트?:" + isHost);
+    // console.log("로그인?:" + isLogin);
+    // console.log("호스트?:" + isHost);
     return (
         <div>
             {/* 어두운 상단 네비게이션 바 */}

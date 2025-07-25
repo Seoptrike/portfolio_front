@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { loginCheck, hostCheck } from '../api/AuthApi';
+import { loginCheck, hostCheck } from '../api/authApi';
 
 export default function useAuthStatus(username) {
     const [isLogin, setIsLogin] = useState(false);

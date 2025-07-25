@@ -5,5 +5,5 @@ export const getUserAllList = () => {
 };
 
 export const getUserTotalData = (username) => {
-    return axios.post('/api/total/getUserTotalData',{username})
+    return axios.get(`/api/user/portfolio/${username}`)
 };

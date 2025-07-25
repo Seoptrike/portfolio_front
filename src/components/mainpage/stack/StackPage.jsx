@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
-import { Button, Form, Card } from 'react-bootstrap'
-import Chip from '@mui/material/Chip'
-
-// 리액트 아이콘 import
+import React, { useContext, useEffect, useState } from 'react';
+import { Card, Button } from 'react-bootstrap';
+import Chip from '@mui/material/Chip';
 import {
     FaReact, FaVuejs, FaNodeJs, FaPython, FaJava, FaGithub,
-} from 'react-icons/fa'
+} from 'react-icons/fa';
 import {
     SiTypescript, SiDjango, SiMongodb, SiMysql,
     SiSpring, SiJavascript, SiHtml5, SiCss3, SiNextdotjs, SiJira,
-} from 'react-icons/si'
+} from 'react-icons/si';
+import { AuthContext } from '../../../context/AuthContext';
+import { getAllStack } from '../../../api/techStackApi';
+import { insertUserStack, updateUserStack } from '../../../api/userStackApi';
 
-// 아이콘 매핑
 const stackIcons = {
     HTML: <SiHtml5 color="#e34c26" />,
     CSS: <SiCss3 color="#264de4" />,
@@ -29,112 +29,117 @@ const stackIcons = {
     MongoDB: <SiMongodb color="#47a248" />,
     GitHub: <FaGithub color="#000" />,
     Jira: <SiJira color="#0052CC" />,
-}
+};
 
-const StackPage = ({ userID, username, EduHis, onSuccess }) => {
-    const isAdmin = true
-    const [showOptions, setShowOptions] = useState(false)
-    const [selectedStacks, setSelectedStacks] = useState([])
+const StackPage = ({ userID, username, stack = [], onSuccess }) => {
+    const { isHost } = useContext(AuthContext);
+    const [allStack, setAllStack] = useState([]);
+    const [selectedStacks, setSelectedStacks] = useState([]);
+    const [isEditing, setIsEditing] = useState(false);
 
-    const techStacks = [
-        'HTML', 'CSS', 'JavaScript', 'TypeScript',
-        'React', 'Vue', 'Next.js', 'Node.js',
-        'Python', 'Django',
-        'Java', 'Spring Boot', 'MySQL', 'MongoDB',
-        'GitHub', 'Jira',
-    ]
+    useEffect(() => {
+        if (userID) {
+            setSelectedStacks(stack.map(s => s.stack_id)); // 기존 스택 선택 처리
+        }
+    }, [userID, stack]);
 
-    const handleCheck = (e) => {
-        const { value, checked } = e.target
-        setSelectedStacks((prev) =>
-            checked ? [...prev, value] : prev.filter((item) => item !== value)
-        )
-    }
+    const fetchAllStacks = async () => {
+        const res = await getAllStack('');
+        setAllStack(res.data);
+    };
+
+    const handleEditToggle = async () => {
+        if (!isEditing) {
+            await fetchAllStacks();
+        }
+        setIsEditing(!isEditing);
+    };
+
+    const handleCheckboxChange = (stackId) => {
+        setSelectedStacks(prev =>
+            prev.includes(stackId)
+                ? prev.filter(id => id !== stackId)
+                : [...prev, stackId]
+        );
+    };
+
+    const handleSave = async () => {
+        const payload = {
+            userId: userID,
+            stackList: selectedStacks.map(id => ({
+                stackId: id,
+                score: 1
+            }))
+        };
+
+        try {
+            if (stack.length === 0) {
+                await insertUserStack(payload);
+                alert('스택이 추가되었습니다.');
+            } else {
+                await updateUserStack(payload);
+                alert('스택이 수정되었습니다.');
+            }
+            setIsEditing(false);
+            onSuccess();
+        } catch (err) {
+            console.error(err);
+            alert('스택 저장 중 오류가 발생했습니다.');
+        }
+    };
 
     return (
         <>
             <style>{`
-        .stack-card {
-          padding: 1.5rem;
-          margin: 2rem;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-          border-radius: 10px;
-        }
-
-        .stack-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 1rem;
-        }
-
-        .stack-title {
-          font-size: 1.5rem;
-          font-weight: bold;
-        }
-
-        .stack-options {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-          gap: 0.5rem 1rem;
-          margin-bottom: 1rem;
-        }
-
-        .stack-chip-container {
-          padding: 1rem;
-          border-radius: 8px;
-        }
-
-        .stack-chip-title {
-          font-weight: 600;
-          margin-bottom: 0.5rem;
-        }
-
-        .stack-chip-list {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.6rem;
-        }
-      `}</style>
-
+                .stack-chip-list {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.6rem;
+                }
+                .stack-checkboxes {
+                    margin-top: 1rem;
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                    gap: 0.5rem;
+                }
+            `}</style>
             <Card className="stack-card">
-                <div className="stack-header">
-                    <div className="stack-title">🛠️ 기술 스택</div>
-                    {isAdmin && (
-                        <Button
-                            variant={showOptions ? 'success' : 'outline-success'}
-                            size="sm"
-                            onClick={() => setShowOptions(!showOptions)}
-                        >
-                            {showOptions ? '저장하기' : '선택하기'}
+                <Card.Header className="d-flex justify-content-between align-items-center">
+                    <strong>기술스택</strong>
+                    {isHost && !isEditing && (
+                        <Button variant="outline-primary" size="sm" onClick={handleEditToggle}>
+                            {stack.length > 0 ? '스택 수정하기' : '스택 추가하기'}
                         </Button>
                     )}
-                </div>
+                </Card.Header>
 
-                {showOptions && (
-                    <Form className="stack-options">
-                        {techStacks.map((stack, idx) => (
-                            <Form.Check
-                                key={idx}
-                                type="checkbox"
-                                id={`stack-${idx}`}
-                                label={stack}
-                                value={stack}
-                                checked={selectedStacks.includes(stack)}
-                                onChange={handleCheck}
-                            />
-                        ))}
-                    </Form>
-                )}
-
-                {selectedStacks.length > 0 && (
-                    <div className="stack-chip-container">
+                <Card.Body>
+                    {isEditing ? (
+                        <>
+                            <div className="stack-checkboxes mb-3">
+                                {allStack.map(item => (
+                                    <Form.Check
+                                        key={item.stack_id}
+                                        type="checkbox"
+                                        id={`stack-${item.stack_id}`}
+                                        label={item.name}
+                                        checked={selectedStacks.includes(item.stack_id)}
+                                        onChange={() => handleCheckboxChange(item.stack_id)}
+                                    />
+                                ))}
+                            </div>
+                            <div className="d-flex gap-2">
+                                <Button variant="success" onClick={handleSave}>저장</Button>
+                                <Button variant="secondary" onClick={() => setIsEditing(false)}>취소</Button>
+                            </div>
+                        </>
+                    ) : (
                         <div className="stack-chip-list">
-                            {selectedStacks.map((s, i) => (
+                            {stack.map((s) => (
                                 <Chip
-                                    key={i}
-                                    icon={stackIcons[s]}
-                                    label={s}
+                                    key={s.user_stack_id}
+                                    icon={stackIcons[s.stack_name] || null}
+                                    label={s.stack_name}
                                     variant="outlined"
                                     color="primary"
                                     sx={{
@@ -149,11 +154,11 @@ const StackPage = ({ userID, username, EduHis, onSuccess }) => {
                                 />
                             ))}
                         </div>
-                    </div>
-                )}
+                    )}
+                </Card.Body>
             </Card>
         </>
-    )
-}
+    );
+};
 
-export default StackPage
+export default StackPage;
