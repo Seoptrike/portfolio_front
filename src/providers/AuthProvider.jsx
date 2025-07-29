@@ -10,7 +10,7 @@ export default function AuthProvider({ children }) {
     const location = useLocation();
 
     const extractUsernameFromPath = (pathname) => {
-        const regex = /\/(?:main|about|projects|guestbook)\/([^/]+)/;
+        const regex = /\/(?:main|about|project|guestbook)\/([^/]+)/;
         const match = pathname.match(regex);
         return match ? match[1] : null;
     };
@@ -19,10 +19,11 @@ export default function AuthProvider({ children }) {
         const res = await loginCheck();
         if (res.data.status === 'LOGIN') {
             const username = res.data.username;
+            console.log(res.data.username);
             setIsLogin(true);
             setLoginName(username);
             const urlUsername = extractUsernameFromPath(location.pathname);
-
+            console.log(extractUsernameFromPath(location.pathname));
             if (urlUsername && username === urlUsername) {
                 const hostRes = await hostCheck(username);
                 setIsHost(hostRes.data === 'HOST');

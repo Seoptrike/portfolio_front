@@ -52,13 +52,12 @@ export default function Layout() {
                         <Nav className="ms-auto">
                             {isLogin ? (
                                 <>
-                                    <Nav.Link as={Link} to={`/main/${loginName}`} onClick={handleNavClick}>Home</Nav.Link>
-                                    <Nav.Link as={Link} to={`/about/${loginName}`} onClick={handleNavClick}>About</Nav.Link>
-                                    <Nav.Link as={Link} to={`/projects/${loginName}`} onClick={handleNavClick}>Projects</Nav.Link>
-                                    <Nav.Link as={Link} to={`/guestbook/${loginName}`} onClick={handleNavClick}>Guestbook</Nav.Link>
-                                    <Nav.Link as={Button} variant="outline-light" size="sm" onClick={handleLogout} className="ms-2">
-                                        로그아웃
-                                    </Nav.Link>
+                                    <Nav.Link as={Link} to={`/profile/${loginName}`} onClick={handleNavClick}>프로필</Nav.Link>
+                                    <Nav.Link as={Link} to={`/about/${loginName}`} onClick={handleNavClick}>자기소개서</Nav.Link>
+                                    <Nav.Link as={Link} to={`/project/${loginName}`} onClick={handleNavClick}>프로젝트</Nav.Link>
+                                    <Nav.Link as={Link} to={`/resume/${loginName}`} onClick={handleNavClick}>경력기술서</Nav.Link>
+                                    <Nav.Link as={Link} to={`/guestbook/${loginName}`} onClick={handleNavClick}>방명록</Nav.Link>
+                                    <Nav.Link as={Button} variant="outline-light" size="sm" onClick={handleLogout} className="ms-2">로그아웃</Nav.Link>
                                 </>
                             ) :
                                 <>

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
-import NcsPage from '../components/recipes/ncs/NcsPage';
-import StackPage from '../components/mainpage/stack/StackPage';
+import NcsPage from '../../components/recipes/ncs/NcsPage';
+import StackPage from './stack/StackPage';
 import './MainPage.css'
 import { useNavigate, useParams } from 'react-router-dom';
-import WorkExperiencesPage from '../components/mainpage/career/WorkExperiencesPage';
-import EduHistoryPage from '../components/mainpage/career/EduHistoryPage';
-import { getUserTotalData } from '../api/userApi';
+import WorkExperiencesPage from './career/WorkExperiencesPage';
+import EduHistoryPage from './career/EduHistoryPage';
+import { getUserTotalData } from '../../api/userApi';
 
 const MainPage = () => {
     const { username } = useParams();
