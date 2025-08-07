@@ -41,33 +41,24 @@ const StackPage = ({ userID, username, stack = [], onSuccess }) => {
     return (
         <>
             <style>{`
-                    .stack-chip-list {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.6rem;
-                }
+               .stack-chip-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+}
 
-                /* 각 Chip의 기본 크기 설정 */
-                .stack-chip-list .MuiChip-root {
-                flex: 1 1 calc(25% - 0.6rem); /* 한 줄에 4개 */
-                min-width: 120px;
-                max-width: 25%;
-                }
+@media (max-width: 992px) {
+  .stack-chip-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
-                /* 반응형: 화면이 작아지면 2개씩, 1개씩으로 조정 */
-                @media (max-width: 992px) {
-                .stack-chip-list .MuiChip-root {
-                    flex: 1 1 calc(50% - 0.6rem); /* 2개 */
-                    max-width: 50%;
-                }
-                }
+@media (max-width: 576px) {
+  .stack-chip-list {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
 
-                @media (max-width: 576px) {
-                .stack-chip-list .MuiChip-root {
-                    flex: 1 1 100%; /* 1개 */
-                    max-width: 100%;
-                }
-                }
             `}</style>
             <Card className="stack-card">
                 <Card.Header className="d-flex justify-content-between align-items-center">

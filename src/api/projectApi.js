@@ -8,4 +8,4 @@ export const updateProject = (projectId,projects) => axios.put(`/api/project/${p
 
 export const deleteProject = (projectId) => axios.delete(`/api/project/${projectId}`);
 
-export const getProject = (projectId) => axios.get(`/api/projcet/${projectId}`);
+export const getProject = (projectId) => axios.get(`/api/project/${projectId}`);
