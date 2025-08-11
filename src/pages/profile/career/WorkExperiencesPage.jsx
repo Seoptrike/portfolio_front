@@ -8,17 +8,21 @@ import { AuthContext } from '../../../context/AuthContext';
 const WorkExperiencesPage = ({ userID, username, workExp, onSuccess }) => {
     const { isHost } = useContext(AuthContext);
     const [open, setOpen] = useState(false);
+
+    // form state의 key를 camelCase로 변경
     const [form, setForm] = useState({
-        company_name: '',
+        username: username,
+        companyName: '',
         position: '',
-        start_date: '',
-        end_date: ''
+        startDate: '',
+        endDate: ''
     });
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
-        setForm({ company_name: '', position: '', start_date: '', end_date: '' });
+        // form 초기화도 camelCase로 변경
+        setForm({ companyName: '', position: '', startDate: '', endDate: '' });
     };
 
     const handleChange = (e) => {
@@ -26,17 +30,19 @@ const WorkExperiencesPage = ({ userID, username, workExp, onSuccess }) => {
     };
 
     const handleEdit = (item) => {
+        // form에 값을 채울 때도 camelCase key 사용
         setForm({
-            company_name: item.company_name,
+            companyName: item.companyName,
             position: item.position,
-            start_date: item.start_date,
-            end_date: item.end_date
+            startDate: item.startDate,
+            endDate: item.endDate
         });
         setOpen(true);
     };
 
     const handleSubmit = async () => {
-        const payload = { ...form, user_id: userID };
+        // 서버로 보낼 payload의 key를 camelCase로 변경
+        const payload = { ...form, userId: userID };
         try {
             await insertWorkExp(payload);
             onSuccess();
@@ -72,9 +78,10 @@ const WorkExperiencesPage = ({ userID, username, workExp, onSuccess }) => {
                     {Array.isArray(workExp) && workExp.length > 0 ? (
                         workExp.map((item, idx) => (
                             <tr key={idx}>
-                                <td>{item.company_name}</td>
+                                {/* 데이터를 화면에 표시할 때도 camelCase key 사용 */}
+                                <td>{item.companyName}</td>
                                 <td>{item.position}</td>
-                                <td>{item.start_date} ~ {item.end_date}</td>
+                                <td>{item.startDate} ~ {item.endDate}</td>
                                 {isHost && (
                                     <td className="text-center">
                                         <OverlayTrigger overlay={<Tooltip>수정</Tooltip>}>
@@ -93,7 +100,7 @@ const WorkExperiencesPage = ({ userID, username, workExp, onSuccess }) => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={isHost ? 4 : 3}>경력 정보가 없습니다.</td>
+                            <td colSpan={isHost ? 4 : 3} className="text-center">경력 정보가 없습니다.</td>
                         </tr>
                     )}
                 </tbody>

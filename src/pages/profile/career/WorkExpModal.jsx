@@ -5,7 +5,7 @@ const WorkExpModal = ({ show, onHide, form, handleChange, handleSubmit }) => {
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>경력 추가</Modal.Title>
+        <Modal.Title>경력 추가/수정</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -13,8 +13,8 @@ const WorkExpModal = ({ show, onHide, form, handleChange, handleSubmit }) => {
             <Form.Label>근무처</Form.Label>
             <Form.Control
               type="text"
-              name="company_name"
-              value={form.company_name}
+              name="companyName"
+              value={form.companyName}
               onChange={handleChange}
             />
           </Form.Group>
@@ -31,8 +31,8 @@ const WorkExpModal = ({ show, onHide, form, handleChange, handleSubmit }) => {
             <Form.Label>근무 시작일</Form.Label>
             <Form.Control
               type="date"
-              name="start_date"
-              value={form.start_date}
+              name="startDate"
+              value={form.startDate}
               onChange={handleChange}
             />
           </Form.Group>
@@ -40,8 +40,8 @@ const WorkExpModal = ({ show, onHide, form, handleChange, handleSubmit }) => {
             <Form.Label>근무 종료일</Form.Label>
             <Form.Control
               type="date"
-              name="end_date"
-              value={form.end_date}
+              name="endDate"
+              value={form.endDate}
               onChange={handleChange}
             />
           </Form.Group>
@@ -49,7 +49,7 @@ const WorkExpModal = ({ show, onHide, form, handleChange, handleSubmit }) => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>취소</Button>
-        <Button variant="primary" onClick={handleSubmit}>등록</Button>
+        <Button variant="primary" onClick={handleSubmit}>저장</Button>
       </Modal.Footer>
     </Modal>
   );

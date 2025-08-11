@@ -12,7 +12,7 @@ export default function AuthProvider({ children }) {
     const extractUsernameFromPath = (pathname) => {
         const segments = pathname.split("/").filter(Boolean);
 
-        if (segments[0] === "profile" || segments[0] === "about") {
+        if (segments[0] === "profile" || segments[0] === "about"|| segments[0] === "resume") {
             return segments[1] ?? null;
         }
 

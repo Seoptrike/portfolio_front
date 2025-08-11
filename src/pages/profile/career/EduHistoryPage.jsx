@@ -7,16 +7,16 @@ import { AuthContext } from '../../../context/AuthContext';
 const EduHistoryPage = ({ userID, EduHis, onSuccess }) => {
     const [open, setOpen] = useState(false);
     const [form, setForm] = useState({
-        school_name: '',
+        schoolName: '',
         major: '',
-        start_date: '',
-        end_date: ''
+        startDate: '',
+        endDate: ''
     });
     const { isHost } = useContext(AuthContext);
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
-        setForm({ school_name: '', major: '', start_date: '', end_date: '' });
+        setForm({ schoolName: '', major: '', startDate: '', endDate: '' });
     };
 
     const handleChange = (e) => {
@@ -24,8 +24,7 @@ const EduHistoryPage = ({ userID, EduHis, onSuccess }) => {
     };
 
     const handleSubmit = async () => {
-        const payload = { ...form, user_id: userID };
-        console.log('📤 전송할 경력:', payload);
+        const payload = { ...form, userId: userID };
         try {
             await insertEduHistory(payload);
             onSuccess();
@@ -47,7 +46,7 @@ const EduHistoryPage = ({ userID, EduHis, onSuccess }) => {
                 )}
             </Row>
 
-            <Table striped bordered hover>
+            <Table striped bordered hover responsive>
                 <thead>
                     <tr>
                         <th>학교</th>
@@ -59,14 +58,14 @@ const EduHistoryPage = ({ userID, EduHis, onSuccess }) => {
                     {Array.isArray(EduHis) && EduHis.length > 0 ? (
                         EduHis.map((item, idx) => (
                             <tr key={idx}>
-                                <td>{item.school_name}</td>
+                                <td>{item.schoolName}</td>
                                 <td>{item.major}</td>
-                                <td>{item.start_date} ~ {item.end_date}</td>
+                                <td>{item.startDate} ~ {item.endDate}</td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={3}>경력 정보가 없습니다.</td>
+                            <td colSpan={3} className="text-center">학력 정보가 없습니다.</td>
                         </tr>
                     )}
                 </tbody>
@@ -83,4 +82,4 @@ const EduHistoryPage = ({ userID, EduHis, onSuccess }) => {
     )
 }
 
-export default EduHistoryPage
+export default EduHistoryPage;
