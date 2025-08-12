@@ -7,7 +7,7 @@ import { AuthContext } from '../../../context/AuthContext';
 import dayjs from 'dayjs';
 import { apiDatesToForm, formToApiDates, ymLt, clampEndYM } from '../../../utils/yearModule';
 
-const EduHistoryPage = ({ username, EduHis, onSuccess }) => {
+const EduHistoryPage = ({ userId, username, EduHis, onSuccess }) => {
     const { isHost } = useContext(AuthContext);
     const [isEdit, setIsEdit] = useState(false);
     const [open, setOpen] = useState(false);
@@ -146,7 +146,7 @@ const EduHistoryPage = ({ username, EduHis, onSuccess }) => {
                                             <Button
                                                 variant="link"
                                                 size="sm"
-                                                onClick={() => handleDelete(item.workId)}
+                                                onClick={() => handleDelete(item.educationId)}
                                                 style={{ padding: '0.25rem', margin: '0 4px' }}
                                                 className="text-danger"
                                                 aria-label="삭제"
