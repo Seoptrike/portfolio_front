@@ -28,10 +28,16 @@ const ProjectListPage = () => {
         navigate(`/project/update/${username}/${project_id}`);
     }
 
-    const handleDeleteBtnClick = (project_id) => () => {
-        deleteProject(project_id);
-        alert("삭제완료");
-        fetchProjects();
+    const handleDeleteBtnClick = (projectId) => async () => {
+        if (!window.confirm('정말 삭제할까요?')) return;
+        try {
+            await deleteProject(projectId);
+            await fetchProjects();
+            alert("삭제 완료!")
+        } catch (e) {
+            console.error(e);
+            alert('삭제 실패');
+        }
     }
     return (
         <Container className="py-4">
@@ -52,14 +58,14 @@ const ProjectListPage = () => {
 
                 {projects && projects.length > 0 ? (
                     projects.map(project => (
-                        <Card key={project.project_id} className="mb-4 shadow-sm">
+                        <Card key={project.projectId} className="mb-4 shadow-sm">
                             <Card.Body>
                                 <Row>
                                     {/* 썸네일: 모바일에선 상단에, 데스크톱에선 왼쪽에 위치 */}
                                     <Col xs={12} md={4} lg={3} className="mb-3 mb-md-0 d-flex align-items-center justify-content-center">
-                                        {project.thumbnail_url ? (
+                                        {project.thumbnailUrl ? (
                                             <img
-                                                src={project.thumbnail_url}
+                                                src={project.thumbnailUrl}
                                                 alt="thumbnail"
                                                 style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
                                             />
@@ -74,10 +80,10 @@ const ProjectListPage = () => {
                                             <h5 className="mb-0">{project.title}</h5>
                                             {isHost &&
                                                 <div className="ms-2 flex-shrink-0">
-                                                    <Button variant="outline-secondary" size="sm" className="me-2" onClick={() => handleUpdateBtnClick(project.project_id)}>
+                                                    <Button variant="outline-secondary" size="sm" className="me-2" onClick={handleUpdateBtnClick(project.projectId)}>
                                                         수정
                                                     </Button>
-                                                    <Button variant="outline-danger" size="sm" onClick={() => handleDeleteBtnClick(project.project_id)}>
+                                                    <Button variant="outline-danger" size="sm" onClick={handleDeleteBtnClick(project.projectId)}>
                                                         삭제
                                                     </Button>
                                                 </div>
@@ -85,28 +91,28 @@ const ProjectListPage = () => {
                                         </div>
                                         <p className="text-muted" style={{ fontSize: '0.9rem' }}>{project.description}</p>
                                         <Stack gap={3}>
-                                            <div className="small"><strong>기간:</strong> {project.start_date} ~ {project.end_date}</div>
+                                            <div className="small"><strong>기간:</strong> {project.startDate} ~ {project.endDate}</div>
                                             <div className="d-flex flex-wrap align-items-center gap-2">
                                                 <strong className="small">기술스택:</strong>
-                                                {project.stack_names && project.stack_names.map((stack, index) => (
-                                                    <span key={index} className="badge bg-light text-dark border">
-                                                        {stack}
+                                                {Array.isArray(project.stackNames) && project.stackNames.map((stack) => (
+                                                    <span key={stack.stackId} className="badge bg-light text-dark border">
+                                                        {stack.name}
                                                     </span>
                                                 ))}
                                             </div>
                                             <div className="d-flex flex-wrap gap-2 mt-2">
                                                 {project.notion_url && (
-                                                    <a href={project.notion_url} target="_blank" rel="noopener noreferrer" className="btn btn-outline-secondary btn-sm">
+                                                    <a href={project.notionUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-secondary btn-sm">
                                                         Notion
                                                     </a>
                                                 )}
                                                 {project.github_url && (
-                                                    <a href={project.github_url} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark btn-sm">
+                                                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark btn-sm">
                                                         GitHub
                                                     </a>
                                                 )}
                                                 {project.deploy_url && (
-                                                    <a href={project.deploy_url} target="_blank" rel="noopener noreferrer" className="btn btn-outline-info btn-sm">
+                                                    <a href={project.deployUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-info btn-sm">
                                                         배포 링크
                                                     </a>
                                                 )}

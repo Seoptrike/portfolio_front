@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Card, Button } from 'react-bootstrap';
+import React from 'react';
+import { Card } from 'react-bootstrap';
 import Chip from '@mui/material/Chip';
 import Rating from '@mui/material/Rating';
 import {
@@ -9,9 +9,6 @@ import {
     SiTypescript, SiDjango, SiMongodb, SiMysql,
     SiSpring, SiJavascript, SiHtml5, SiCss3, SiNextdotjs, SiJira,
 } from 'react-icons/si';
-import { AuthContext } from '../../../context/AuthContext';
-import { getAllStack } from '../../../api/techStackApi';
-import { insertUserStack, updateUserStack } from '../../../api/userStackApi';
 
 const stackIcons = {
     HTML: <SiHtml5 color="#e34c26" />,
@@ -32,11 +29,7 @@ const stackIcons = {
     Jira: <SiJira color="#0052CC" />,
 };
 
-const StackPage = ({ userID, username, stack = [], onSuccess }) => {
-    const { isHost } = useContext(AuthContext);
-    const [allStack, setAllStack] = useState([]);
-    const [selectedStacks, setSelectedStacks] = useState([]);
-    const [isEditing, setIsEditing] = useState(false);
+const StackPage = ({ stack = [] }) => {
 
     return (
         <>

@@ -1,6 +1,6 @@
 import axios from './axiosInstance';
 
-export const getUserProject = (username) => axios.get(`/api/project/user/${username}`);
+export const getUserProject = (username) => axios.get(`/api/project/${username}`);
 
 export const insertProject = (projects) => axios.post(`/api/project`, projects);
 
@@ -8,4 +8,4 @@ export const updateProject = (projectId,projects) => axios.put(`/api/project/${p
 
 export const deleteProject = (projectId) => axios.delete(`/api/project/${projectId}`);
 
-export const getProject = (projectId) => axios.get(`/api/project/${projectId}`);
+export const getProjectById = (projectId) => axios.get(`/api/project/detail/${projectId}`);

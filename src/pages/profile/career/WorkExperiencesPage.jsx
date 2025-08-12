@@ -1,16 +1,18 @@
 import React, { useContext, useState } from 'react';
 import { Table, Button, Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import WorkExpModal from './WorkExpModal';
-import { insertWorkExp } from '../../../api/careerApi';
-import { Pencil } from 'react-bootstrap-icons';
+import { insertWorkExp, updateWorkExp, deleteWorkExp } from '../../../api/careerApi';
+import { Pencil, Trash } from 'react-bootstrap-icons';
 import { AuthContext } from '../../../context/AuthContext';
+import dayjs from 'dayjs';
+import { apiDatesToForm, formToApiDates, ymLt, clampEndYM } from '../../../utils/yearModule';
 
-const WorkExperiencesPage = ({ userID, username, workExp, onSuccess }) => {
+const WorkExperiencesPage = ({ username, workExp, onSuccess }) => {
     const { isHost } = useContext(AuthContext);
     const [open, setOpen] = useState(false);
-
-    // form state의 key를 camelCase로 변경
+    const [isEdit, setIsEdit] = useState(false);
     const [form, setForm] = useState({
+        workId: null,
         username: username,
         companyName: '',
         position: '',
@@ -18,37 +20,86 @@ const WorkExperiencesPage = ({ userID, username, workExp, onSuccess }) => {
         endDate: ''
     });
 
-    const handleOpen = () => setOpen(true);
+    const formatYM = (v) => v ? dayjs(v).format('YYYY.MM') : '';
+    const handleOpen = () => {
+        setIsEdit(false);           // 신규 모드
+        setForm(f => ({
+            ...f,
+            workId: null,
+            companyName: '',
+            position: '',
+            startDate: '',
+            endDate: ''
+        }));
+        setOpen(true);
+    };
     const handleClose = () => {
         setOpen(false);
-        // form 초기화도 camelCase로 변경
-        setForm({ companyName: '', position: '', startDate: '', endDate: '' });
-    };
-
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        setIsEdit(false);
+        setForm(f => ({
+            ...f,
+            workId: null,
+            companyName: '',
+            position: '',
+            startDate: '',
+            endDate: ''
+        }));
     };
 
     const handleEdit = (item) => {
-        // form에 값을 채울 때도 camelCase key 사용
+        setIsEdit(true); // ★ 수정 모드
         setForm({
-            companyName: item.companyName,
-            position: item.position,
-            startDate: item.startDate,
-            endDate: item.endDate
+            workId: item.workId,        // ★ 서버가 식별할 PK
+            username: username,         // 혹은 item.username ?? username
+            companyName: item.companyName ?? "",
+            position: item.position ?? "",
+            ...apiDatesToForm({ startDate: item.startDate, endDate: item.endDate }) // YYYY-MM
         });
         setOpen(true);
     };
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;           // value는 YYYY-MM
+        setForm((f) => {
+            if (name === "endDate") {
+                return { ...f, endDate: clampEndYM(f.startDate, value) };
+            }
+            return { ...f, [name]: value };
+        });
+    };
+
     const handleSubmit = async () => {
-        // 서버로 보낼 payload의 key를 camelCase로 변경
-        const payload = { ...form, userId: userID };
+        if (ymLt(form.endDate, form.startDate)) {
+            alert("종료월은 시작월 이후여야 해요.");
+            return;
+        }
+        const payload = {
+            companyName: form.companyName,
+            position: form.position,
+            username: form.username,
+            ...formToApiDates(form), // startDate/endDate를 YYYY-MM-DD로 보정
+        };
+
         try {
-            await insertWorkExp(payload);
+            if (isEdit) {
+                await updateWorkExp({ ...payload, workId: form.workId }); // ★ 수정
+            } else {
+                await insertWorkExp(payload);                              // ★ 신규
+            }
             onSuccess();
             handleClose();
         } catch (err) {
-            console.error('등록 실패:', err);
+            console.error('등록/수정 실패:', err);
+        }
+    };
+
+    const handleDelete = async (workId) => {
+        if (!window.confirm('정말 삭제할까요?')) return;
+        try {
+            await deleteWorkExp(workId);   // 백엔드: DELETE /api/career/work/{workId}
+            onSuccess();                   // 목록 새로고침
+        } catch (e) {
+            alert('삭제에 실패했습니다.');
         }
     };
 
@@ -78,10 +129,9 @@ const WorkExperiencesPage = ({ userID, username, workExp, onSuccess }) => {
                     {Array.isArray(workExp) && workExp.length > 0 ? (
                         workExp.map((item, idx) => (
                             <tr key={idx}>
-                                {/* 데이터를 화면에 표시할 때도 camelCase key 사용 */}
                                 <td>{item.companyName}</td>
                                 <td>{item.position}</td>
-                                <td>{item.startDate} ~ {item.endDate}</td>
+                                <td>{formatYM(item.startDate)} ~ {item.endDate ? formatYM(item.endDate) : '현재'}</td>
                                 {isHost && (
                                     <td className="text-center">
                                         <OverlayTrigger overlay={<Tooltip>수정</Tooltip>}>
@@ -92,6 +142,18 @@ const WorkExperiencesPage = ({ userID, username, workExp, onSuccess }) => {
                                                 style={{ padding: '0.25rem', margin: '0 4px' }}
                                             >
                                                 <Pencil />
+                                            </Button>
+                                        </OverlayTrigger>
+                                        <OverlayTrigger overlay={<Tooltip>삭제</Tooltip>}>
+                                            <Button
+                                                variant="link"
+                                                size="sm"
+                                                onClick={() => handleDelete(item.workId)} 
+                                                style={{ padding: '0.25rem', margin: '0 4px' }}
+                                                className="text-danger"
+                                                aria-label="삭제"
+                                            >
+                                                <Trash />
                                             </Button>
                                         </OverlayTrigger>
                                     </td>
@@ -112,6 +174,7 @@ const WorkExperiencesPage = ({ userID, username, workExp, onSuccess }) => {
                 form={form}
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}
+                isEdit={isEdit}
             />
         </Container>
     );

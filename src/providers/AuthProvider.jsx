@@ -12,17 +12,17 @@ export default function AuthProvider({ children }) {
     const extractUsernameFromPath = (pathname) => {
         const segments = pathname.split("/").filter(Boolean);
 
-        if (segments[0] === "profile" || segments[0] === "about"|| segments[0] === "resume") {
+        if (segments[0] === "profile" || segments[0] === "about"|| segments[0] === "resume" || segments[0] === "project") {
             return segments[1] ?? null;
         }
 
-        if (segments[0] === "project") {
-            if (segments[1] === "detail" || segments[1] === "insert" || segments[1] === "update") {
-                return segments[2] ?? null;
-            } else {
-                return segments[1] ?? null;
-            }
-        }
+        // if (segments[0] === "project") {
+        //     if (segments[1] === "detail" || segments[1] === "insert" || segments[1] === "update") {
+        //         return segments[2] ?? null;
+        //     } else {
+        //         return segments[1] ?? null;
+        //     }
+        // }
 
         if (segments[0] === "guestbook") {
             return segments[1] === "list" ? segments[2] ?? null : segments[1] ?? null;

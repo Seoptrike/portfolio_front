@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { hostCheck, loginCheck, logout } from './api/authApi';
+import { logout } from './api/authApi';
 import { AuthContext } from './context/AuthContext';
 
 
 export default function Layout() {
     const [expanded, setExpanded] = useState(false);
-    const { isLogin, loginName, isHost, loginCheckHandler } = useContext(AuthContext);
+    const { isLogin, loginName, loginCheckHandler } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleLogout = async () => {

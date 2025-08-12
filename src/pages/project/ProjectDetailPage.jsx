@@ -9,7 +9,6 @@ const ProjectDetailPage = (projects) => {
     const toggle = (id) => setOpenId(prev => (prev === id ? null : id));
     const projectArray = Array.isArray(projects) ? projects : Object.values(projects);
     const flatProjects = projectArray.flat();
-    console.log(flatProjects);
     return (
         <div className="project-container">
             <h2 className="ncs-title">Projects</h2>

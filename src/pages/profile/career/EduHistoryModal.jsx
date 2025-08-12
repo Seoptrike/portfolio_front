@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const EduHistoryModal = ({ show, onHide, form, handleChange, handleSubmit }) => {
+const EduHistoryModal = ({ show, onHide, form, handleChange, handleSubmit, isEdit }) => {
     return (
         <Modal show={show} onHide={onHide} centered>
             <Modal.Header closeButton>
@@ -28,20 +28,21 @@ const EduHistoryModal = ({ show, onHide, form, handleChange, handleSubmit }) => 
                         />
                     </Form.Group>
                     <Form.Group className="mb-2">
-                        <Form.Label>입학일</Form.Label>
+                        <Form.Label>입학(년-월)</Form.Label>
                         <Form.Control
-                            type="date"
+                            type="month"                 // ← date 대신 month
                             name="startDate"
-                            value={form.startDate}
+                            value={form.startDate || ""} // "2025-08" 형태
                             onChange={handleChange}
                         />
                     </Form.Group>
+
                     <Form.Group className="mb-2">
-                        <Form.Label>졸업일</Form.Label>
+                        <Form.Label>졸업(년-월)</Form.Label>
                         <Form.Control
-                            type="date"
+                            type="month"
                             name="endDate"
-                            value={form.endDate}
+                            value={form.endDate || ""}   // 비우면 '현재' 취급
                             onChange={handleChange}
                         />
                     </Form.Group>
@@ -49,7 +50,7 @@ const EduHistoryModal = ({ show, onHide, form, handleChange, handleSubmit }) => 
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={onHide}>취소</Button>
-                <Button variant="primary" onClick={handleSubmit}>저장</Button>
+                <Button variant="primary" onClick={handleSubmit}> {isEdit ? '수정' : '저장'}</Button>
             </Modal.Footer>
         </Modal>
     );

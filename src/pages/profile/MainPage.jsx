@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
-import NcsPage from '../../components/recipes/ncs/NcsPage';
 import StackPage from './stack/StackPage';
 import './MainPage.css'
 import { useNavigate, useParams } from 'react-router-dom';
