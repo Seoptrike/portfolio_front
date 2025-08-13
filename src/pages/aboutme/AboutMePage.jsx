@@ -9,10 +9,12 @@ import {
 } from '../../api/aboutApi';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import useEditMode from '../../hooks/useEditMode';
 
 const AboutMePage = () => {
     const [aboutList, setAboutList] = useState([]);
     const { username } = useParams();
+    const { editMode } = useEditMode();
     const { isHost } = useContext(AuthContext);
     const [about_id, setAbout_id] = useState(null);
     const navigate = useNavigate();
@@ -187,7 +189,7 @@ const AboutMePage = () => {
                                 <>
                                     <div className="d-flex justify-content-between align-items-center mb-3">
                                         <Card.Title className="mb-0">{about.title}</Card.Title>
-                                        {isHost && (
+                                        {editMode && (
                                             <div>
                                                 <Button variant="outline-secondary" size="sm" onClick={() => handleEditClick(about)}>수정</Button>{' '}
                                                 <Button variant="outline-danger" size="sm" onClick={() => handleDelete(about.detail_id)}>삭제</Button>
@@ -202,7 +204,7 @@ const AboutMePage = () => {
                         </Card.Body>
                     </Card>
                 ))}
-                {isHost && renderAddUI()}
+                {editMode && renderAddUI()}
             </Stack>
         );
     };

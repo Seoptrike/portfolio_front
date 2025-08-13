@@ -6,12 +6,14 @@ import { deleteAchieve, fetchAchieveList, insertAchieve, updateAchieve } from '.
 import WorkExpModal from '../profile/career/WorkExpModal';
 import { insertWorkExp } from '../../api/careerApi';
 import { AuthContext } from '../../context/AuthContext';
+import useEditMode from '../../hooks/useEditMode';
 
 const CareerPage = () => {
     const { username } = useParams();
     const [careers, setCareers] = useState([]);
     const [open, setOpen] = useState(false);
     const { isHost } = useContext(AuthContext);
+    const { editMode } = useEditMode();
     const navigate = useNavigate();
     const [form, setForm] = useState({
         companyName: '',
@@ -196,7 +198,7 @@ const CareerPage = () => {
                                                             {detail.content}
                                                         </p>
                                                     </div>
-                                                    {isHost && (
+                                                    {editMode && (
                                                         <div className="flex-shrink-0">
                                                             <Button variant="light" size="sm" className="p-1 me-1" onClick={() => handleDetailEdit(detail)}>
                                                                 <PencilSquare />
@@ -210,7 +212,7 @@ const CareerPage = () => {
                                             )}
                                         </ListGroup.Item>
                                     ))}
-                                    {isHost && (
+                                    {editMode && (
                                         <ListGroup.Item className="text-center p-3">
                                             {addingDetailToWorkId === career.workId ? (
                                                 // ✅ 추가 모드일 때: 입력 폼을 보여줌

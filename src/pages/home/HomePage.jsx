@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, Typography, Button, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 
 const HomePage = () => {
-    const [users, setUsers] = useState();
+    const { isLogin } = useContext(AuthContext);
+
     return (
         <Box
             sx={{
@@ -23,15 +25,16 @@ const HomePage = () => {
             </Typography>
             <Typography variant="h6" sx={{ maxWidth: 600 }}>
                 프론트엔드와 백엔드를 함께하는 개발자입니다.
-                <br/>
+                <br />
                 기술로 사람의 삶을 더 편리하게 만드는 것에 관심이 있습니다.
             </Typography>
-
-            <Stack direction="row" spacing={2} mt={5}>
-                <Button variant="contained" component={Link} to="/auth/login">
-                    로그인 하기
-                </Button>
-            </Stack>
+            {!isLogin &&
+                <Stack direction="row" spacing={2} mt={5}>
+                    <Button variant="contained" component={Link} to="/auth/login">
+                        로그인 하기
+                    </Button>
+                </Stack>
+            }
         </Box>
     );
 };

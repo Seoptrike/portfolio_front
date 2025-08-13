@@ -6,9 +6,11 @@ import { Pencil, Trash } from 'react-bootstrap-icons';
 import { AuthContext } from '../../../context/AuthContext';
 import dayjs from 'dayjs';
 import { apiDatesToForm, formToApiDates, ymLt, clampEndYM } from '../../../utils/yearModule';
+import useEditMode from '../../../hooks/useEditMode';
 
 const WorkExperiencesPage = ({ username, workExp, onSuccess }) => {
     const { isHost } = useContext(AuthContext);
+    const { editMode } = useEditMode();
     const [open, setOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [form, setForm] = useState({
@@ -107,7 +109,7 @@ const WorkExperiencesPage = ({ username, workExp, onSuccess }) => {
         <Container className="mt-4">
             <Row className="align-items-center mb-3">
                 <Col><h5>경력 사항</h5></Col>
-                {isHost && (
+                {editMode && (
                     <Col className="text-end">
                         <Button variant="outline-primary" size="sm" onClick={handleOpen}>
                             + 추가
@@ -122,7 +124,7 @@ const WorkExperiencesPage = ({ username, workExp, onSuccess }) => {
                         <th>근무처</th>
                         <th>직급</th>
                         <th>근무 기간</th>
-                        {isHost && <th className="text-center">관리</th>}
+                        {editMode && <th className="text-center">관리</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -132,7 +134,7 @@ const WorkExperiencesPage = ({ username, workExp, onSuccess }) => {
                                 <td>{item.companyName}</td>
                                 <td>{item.position}</td>
                                 <td>{formatYM(item.startDate)} ~ {item.endDate ? formatYM(item.endDate) : '현재'}</td>
-                                {isHost && (
+                                {editMode && (
                                     <td className="text-center">
                                         <OverlayTrigger overlay={<Tooltip>수정</Tooltip>}>
                                             <Button
@@ -148,7 +150,7 @@ const WorkExperiencesPage = ({ username, workExp, onSuccess }) => {
                                             <Button
                                                 variant="link"
                                                 size="sm"
-                                                onClick={() => handleDelete(item.workId)} 
+                                                onClick={() => handleDelete(item.workId)}
                                                 style={{ padding: '0.25rem', margin: '0 4px' }}
                                                 className="text-danger"
                                                 aria-label="삭제"
@@ -162,7 +164,7 @@ const WorkExperiencesPage = ({ username, workExp, onSuccess }) => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={isHost ? 4 : 3} className="text-center">경력 정보가 없습니다.</td>
+                            <td colSpan={editMode ? 4 : 3} className="text-center">경력 정보가 없습니다.</td>
                         </tr>
                     )}
                 </tbody>

@@ -381,6 +381,11 @@
   resolved "https://registry.npmjs.org/@humanwhocodes/retry/-/retry-0.4.3.tgz"
   integrity sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==
 
+"@imagekit/javascript@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.npmjs.org/@imagekit/javascript/-/javascript-5.1.0.tgz"
+  integrity sha512-P12NaxlO6Qu4GROFagX9qgP5kKde236mCu5jJB1cWJ6mPaVdjyk0Mw3ciGIWdKXST/jP1cFqS2ZoBVRSq1SWow==
+
 "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.8"
   resolved "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.8.tgz"
@@ -597,6 +602,13 @@
   version "7.0.15"
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.15.tgz"
   integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
+
+"@types/node@^20.19.0 || >=22.12.0":
+  version "24.2.1"
+  resolved "https://registry.npmjs.org/@types/node/-/node-24.2.1.tgz"
+  integrity sha512-DRh5K+ka5eJic8CjH7td8QpYEV6Zo10gfRkjHCO3weqZHWDtAaSTFtl4+VMqOJ4N5jcuhZ9/l+yy8rVgw7BQeQ==
+  dependencies:
+    undici-types "~7.10.0"
 
 "@types/parse-json@^4.0.0":
   version "4.0.2"
@@ -1778,6 +1790,11 @@ uncontrollable@^8.0.4:
   version "8.0.4"
   resolved "https://registry.npmjs.org/uncontrollable/-/uncontrollable-8.0.4.tgz"
   integrity sha512-ulRWYWHvscPFc0QQXvyJjY6LIXU56f0h8pQFvhxiKk5V1fcI8gp9Ht9leVAhrVjzqMw0BgjspBINx9r6oyJUvQ==
+
+undici-types@~7.10.0:
+  version "7.10.0"
+  resolved "https://registry.npmjs.org/undici-types/-/undici-types-7.10.0.tgz"
+  integrity sha512-t5Fy/nfn+14LuOc2KNYg75vZqClpAiqscVvMygNnlsHBFpSXdJaYtXMcdNLpl/Qvc3P2cB3s6lOV51nqsFq4ag==
 
 update-browserslist-db@^1.1.3:
   version "1.1.3"

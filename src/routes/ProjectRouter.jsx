@@ -6,9 +6,9 @@ import ProjectUpsertPage from '../pages/project/ProjectUpsertPage'
 const ProjectRouter = () => {
     return (
         <Routes>
-            <Route path="/insert/:username" element={<ProjectUpsertPage />} />
-            <Route path="/:username" element={<ProjectListPage />} />
-            <Route path="/update/:username/:projectId" element={<ProjectUpsertPage />} />
+            <Route path="/insert" element={<ProjectUpsertPage />} />
+            <Route path="/" element={<ProjectListPage />} />
+            <Route path="/update/:projectId" element={<ProjectUpsertPage />} />
         </Routes>
     )
 }

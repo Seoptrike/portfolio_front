@@ -6,9 +6,11 @@ import EduHistoryModal from './EduHistoryModal';
 import { AuthContext } from '../../../context/AuthContext';
 import dayjs from 'dayjs';
 import { apiDatesToForm, formToApiDates, ymLt, clampEndYM } from '../../../utils/yearModule';
+import useEditMode from '../../../hooks/useEditMode';
 
 const EduHistoryPage = ({ userId, username, EduHis, onSuccess }) => {
     const { isHost } = useContext(AuthContext);
+    const { editMode } = useEditMode();
     const [isEdit, setIsEdit] = useState(false);
     const [open, setOpen] = useState(false);
     const [form, setForm] = useState({
@@ -105,7 +107,7 @@ const EduHistoryPage = ({ userId, username, EduHis, onSuccess }) => {
         <Container className="mt-4">
             <Row className="align-items-center mb-3">
                 <Col><h5>학력 사항</h5></Col>
-                {isHost && (
+                {editMode && (
                     <Col className="text-end">
                         <Button variant="outline-primary" size="sm" onClick={handleOpen}>
                             + 추가
@@ -120,7 +122,7 @@ const EduHistoryPage = ({ userId, username, EduHis, onSuccess }) => {
                         <th>학교</th>
                         <th>전공</th>
                         <th>재학 기간</th>
-                        {isHost && <th className="text-center">관리</th>}
+                        {editMode && <th className="text-center">관리</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -130,7 +132,7 @@ const EduHistoryPage = ({ userId, username, EduHis, onSuccess }) => {
                                 <td>{item.schoolName}</td>
                                 <td>{item.major}</td>
                                 <td>{formatYM(item.startDate)} ~ {item.endDate ? formatYM(item.endDate) : '현재'}</td>
-                                {isHost && (
+                                {editMode && (
                                     <td className="text-center">
                                         <OverlayTrigger overlay={<Tooltip>수정</Tooltip>}>
                                             <Button

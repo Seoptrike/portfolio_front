@@ -3,11 +3,13 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { deleteProject, getUserProject } from '../../api/projectApi';
 import { Card, Row, Col, Button, Container, Stack } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext';
+import useEditMode from '../../hooks/useEditMode';
 
 const ProjectListPage = () => {
     const [projects, setProjects] = useState([]);
+    const { editMode } = useEditMode();
     const { username } = useParams();
-    const { isHost } = useContext(AuthContext);
+    const { isHost, loginId } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const fetchProjects = async () => {
@@ -25,7 +27,7 @@ const ProjectListPage = () => {
     }, [username]);
 
     const handleUpdateBtnClick = (project_id) => () => {
-        navigate(`/project/update/${username}/${project_id}`);
+        navigate(`/${username}/project/update/${project_id}`);
     }
 
     const handleDeleteBtnClick = (projectId) => async () => {
@@ -40,16 +42,16 @@ const ProjectListPage = () => {
         }
     }
     return (
-        <Container className="py-4">
+        <Container>
             <div style={{ padding: '1rem' }}>
                 <Row className="align-items-center mb-3">
                     <Col xs={12} md>
                         <h2 className="mb-2">🧑‍💻 프로젝트 목록</h2>
                     </Col>
-                    {isHost &&
+                    {editMode &&
                         // 모바일에서 버튼 정렬 및 간격 조정
                         <Col xs={12} md="auto" className="text-md-end mt-2 mt-md-0">
-                            <Link to={`/project/insert/${username}`}>
+                            <Link to={`/${username}/project/insert`}>
                                 <Button variant="primary">등록하러가기</Button>
                             </Link>
                         </Col>
@@ -78,7 +80,7 @@ const ProjectListPage = () => {
                                     <Col xs={12} md={8} lg={9}>
                                         <div className="d-flex justify-content-between align-items-start mb-2">
                                             <h5 className="mb-0">{project.title}</h5>
-                                            {isHost &&
+                                            {editMode &&
                                                 <div className="ms-2 flex-shrink-0">
                                                     <Button variant="outline-secondary" size="sm" className="me-2" onClick={handleUpdateBtnClick(project.projectId)}>
                                                         수정

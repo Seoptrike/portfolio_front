@@ -25,3 +25,4 @@ export const hostCheck = (username) =>
 
 export const logout = () =>
     safeApiCall(() => axios.post('/api/auth/logout'));
+

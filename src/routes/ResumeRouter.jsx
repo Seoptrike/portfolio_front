@@ -6,7 +6,7 @@ import ResumeListPage from '../pages/resume/ResumeListPage'
 const ResumeRouter = () => {
     return (
         <Routes>
-            <Route path="/:username" element={<ResumeListPage />} />
+            <Route path="/" element={<ResumeListPage />} />
         </Routes>
     )
 }

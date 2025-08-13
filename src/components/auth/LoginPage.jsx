@@ -40,7 +40,7 @@ const LoginPage = () => {
                 });
 
                 const target = sessionStorage.getItem('target');
-                window.location.href = target || `/profile/${username}`;
+                window.location.href = target || `/${username}`;
             }
 
         } catch (err) {

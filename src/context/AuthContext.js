@@ -5,5 +5,6 @@ export const AuthContext = createContext({
     isLogin: false,
     isHost: false,
     loginName: '',
+    loginId:'',
     loginCheck: () => { },
 });

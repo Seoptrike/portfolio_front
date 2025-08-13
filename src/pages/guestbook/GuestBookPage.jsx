@@ -4,12 +4,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import { AuthContext } from '../../context/AuthContext';
 import { fetchGuestBookList, createGuestBook, deleteGuestBook, updateGuestBook } from '../../api/guestBookApi';
+import useEditMode from '../../hooks/useEditMode';
 
 const GuestBookPage = () => {
     // 1. 필요한 Hooks 및 Context 설정
     const { username } = useParams(); // URL에서 방명록 주인의 username 가져오기
     const { isHost, loginName } = useContext(AuthContext); // 로그인한 사용자 정보와 주인 여부
-
+    const { editMode } = useEditMode();
     // 2. State 설정
     const [list, setList] = useState([]); // 방명록 목록
     const [newMessage, setNewMessage] = useState(''); // 새로 작성할 메시지
@@ -145,7 +146,7 @@ const GuestBookPage = () => {
                                         <p className="mb-0 mt-1" style={{ whiteSpace: 'pre-line' }}>{item.message}</p>
                                     </div>
                                     {/* 로그인한 사용자가 주인 또는 작성자일 때만 버튼 표시 */}
-                                    {(isHost || loginName === item.guestname) && (
+                                    {(editMode || loginName === item.guestname) && (
                                         <div className="flex-shrink-0">
                                             <Button variant="light" size="sm" className="p-1 me-1" onClick={() => handleEditClick(item)}>
                                                 <PencilSquare />
