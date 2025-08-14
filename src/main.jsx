@@ -8,6 +8,9 @@ import LoadingProvider from './providers/LoadingProvider.jsx';
 import api from './api/axiosInstance.js';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import 'handsontable/styles/handsontable.min.css';
+import 'handsontable/styles/ht-theme-main.min.css';
+
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>

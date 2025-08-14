@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Col, Row, Modal } from 'react-bootstrap'
 import StackPage from './stack/StackPage';
 import { useNavigate, useParams } from 'react-router-dom';
-import WorkExperiencesPage from './career/WorkExperiencesPage';
-import EduHistoryPage from './career/EduHistoryPage';
 import { getUserTotalData } from '../../api/userApi';
 import ProjectDetailPage from '../project/ProjectDetailPage';
 import useEditMode from '../../hooks/useEditMode';
 import MypagePage from '../user/MypagePage';
+import WorkExperiencesItem from './career/WorkExperiencesItem';
+import EduHistoryItem from './career/EduHistoryItem';
 
 const MainPage = () => {
     const { username } = useParams();
@@ -16,7 +16,7 @@ const MainPage = () => {
     const [userID, setUserID] = useState();
     const [userProject, setUserProject] = useState({});
     const [userInfo, setUserInfo] = useState({});
-
+    const main = 5;
     const { editMode } = useEditMode();
     const [showProfileModal, setShowProfileModal] = useState(false);
 
@@ -35,10 +35,10 @@ const MainPage = () => {
     useEffect(() => { CallTotalAPI() }, [username])
 
     return (
-        <div className="home-container">
+        <div className="mt-4">
             <Row className="gx-4 gy-5">
                 {/* 왼쪽 사이드 */}
-                <Col xs={12} lg={4} className="sidebar">
+                <Col xs={12} lg={main} className="sidebar">
                     <div className="profile-wrapper text-center" style={{ position: "relative" }}>
                         <div style={{ position: "relative", display: "inline-block" }}>
                             <img
@@ -95,22 +95,22 @@ const MainPage = () => {
                             </Modal.Body>
                         </Modal>
                     </div>
-                    <EduHistoryPage
+                    <EduHistoryItem
                         userID={userID}
                         username={username}
-                        EduHis={userCareers.educationHistory}
+                        data={userCareers.educationHistory}
                         onSuccess={() => CallTotalAPI()}
                     />
-                    <WorkExperiencesPage
+                    <WorkExperiencesItem
                         userID={userID}
                         username={username}
-                        workExp={userCareers.workExperience}
+                        data={userCareers.workExperience}
                         onSuccess={() => CallTotalAPI()}
                     />
                 </Col>
 
                 {/* 오른쪽 메인 */}
-                <Col xs={12} lg={8}>
+                <Col xs={12} lg={12-main}>
                     <Row className="g-4">
                         <Col xs={12}>
                             <ProjectDetailPage

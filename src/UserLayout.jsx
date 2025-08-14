@@ -73,7 +73,7 @@ const UserLayout = () => {
                         expand="lg"
                         style={{
                             position: "sticky",
-                            top: navHeight,
+                            top: 0,
                             zIndex: 1020,
                             marginBottom: "1rem",
                             borderRadius: "0.5rem",
@@ -103,7 +103,7 @@ const UserLayout = () => {
                         <nav
                             style={{
                                 position: "sticky",
-                                top: navHeight, // 유저명 바 높이만큼 오프셋 (상황에 맞게 조정)
+                                top: 0 , // 유저명 바 높이만큼 오프셋 (상황에 맞게 조정)
                                 zIndex: 1020,
                                 background: "#fff",
                                 borderTop: "1px solid rgba(0,0,0,0.06)",

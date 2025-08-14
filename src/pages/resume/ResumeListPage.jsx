@@ -3,18 +3,19 @@ import { Container, Accordion, ListGroup, Button, Form } from 'react-bootstrap';
 import { PencilSquare, Trash, PlusCircleDotted } from 'react-bootstrap-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { deleteAchieve, fetchAchieveList, insertAchieve, updateAchieve } from '../../api/achievements';
-import WorkExpModal from '../profile/career/WorkExpModal';
 import { insertWorkExp } from '../../api/careerApi';
 import { AuthContext } from '../../context/AuthContext';
 import useEditMode from '../../hooks/useEditMode';
 import dayjs from 'dayjs';
+import CommonCareerModal from '../profile/career/CommonCareerModal';
+import { clampEndYM, ymToFirstDay, ymToLastDay } from '../../utils/yearModule';
 
 const CareerPage = () => {
     const { username } = useParams();
     const [careers, setCareers] = useState([]);
     const [open, setOpen] = useState(false);
     const { isHost } = useContext(AuthContext);
-    const { editMode } = useEditMode();
+    const { editMode, isEdit } = useEditMode();
     const formatYM = (v) => v ? dayjs(v).format('YYYY.MM') : '';
     const navigate = useNavigate();
     const [form, setForm] = useState({
@@ -23,6 +24,12 @@ const CareerPage = () => {
         startDate: '',
         endDate: ''
     });
+    const modalForm = {
+        title1: form.companyName ?? "",
+        title2: form.position ?? "",
+        startDate: form.startDate ?? "",
+        endDate: form.endDate ?? "",
+    };
     // 현재 수정 중인 detail 항목의 ID를 저장합니다. null이면 수정 중인 항목이 없다는 의미입니다.
     const [editingDetailId, setEditingDetailId] = useState(null);
 
@@ -56,13 +63,15 @@ const CareerPage = () => {
         setForm({ companyName: '', position: '', startDate: '', endDate: '' });
     };
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
-
     const handleSubmit = async () => {
-        // 서버로 보낼 payload의 key를 camelCase로 변경
-        const payload = { ...form, username: username };
+        const payload = {
+            username: username,
+            companyName: modalForm.title1,
+            position: modalForm.title2,
+            startDate: ymToFirstDay(modalForm.startDate),
+            endDate: ymToLastDay(modalForm.endDate)
+        };
+        console.log(payload);
         try {
             await insertWorkExp(payload);
             callAPI();
@@ -138,6 +147,14 @@ const CareerPage = () => {
         await deleteAchieve(detailId);
         callAPI()
     }
+
+    const handleModalChange = (e) => {
+        const { name, value } = e.target;
+        if (name === "title1") return setForm(f => ({ ...f, companyName: value }));
+        if (name === "title2") return setForm(f => ({ ...f, position: value }));
+        if (name === "endDate") return setForm(f => ({ ...f, endDate: clampEndYM(f.startDate, value) }));
+        setForm(f => ({ ...f, [name]: value })); // startDate 등 공통 필드
+    };
 
     return (
         <Container className="py-5">
@@ -276,13 +293,29 @@ const CareerPage = () => {
                         <p>등록된 경력이 없습니다.</p>
                     </div>
                 )}
-            <WorkExpModal
+            <CommonCareerModal
                 show={open}
                 onHide={handleClose}
-                form={form}
-                handleChange={handleChange}
+                form={modalForm}                 // ✅ 어댑팅된 폼
+                handleChange={handleModalChange} // ✅ 어댑터 onChange
                 handleSubmit={handleSubmit}
+                isEdit={isEdit}
+                onDelete={() => handleDelete(editingId)} // 또는 form.workId 등 네가 쓰는 ID
+                labels={{
+                    title1: "회사",
+                    title2: "직무",
+                    startLabel: "입사(년-월)",
+                    endLabel: "퇴사(년-월)",
+                    editTitle: "경력 수정",
+                    addTitle: "경력 추가",
+                    save: "저장",
+                    update: "수정",
+                    delete: "삭제",
+                    cancel: "취소",
+                    guide: "재직 기간은 월까지 입력해 주세요.",
+                }}
             />
+            {/* <WorkExpModal show={open} onHide={handleClose} form={form} handleChange={handleModalChange} handleSubmit={handleSubmit} /> */}
         </Container>
     );
 };
