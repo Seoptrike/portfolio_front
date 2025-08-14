@@ -60,12 +60,6 @@ export default function Layout() {
 
                             {isLogin ? (
                                 <>
-                                    {/* 마이페이지 */}
-                                    <Nav.Link as={Link} to={`/${loginName}/mypage`} className="text-md-start text-center">
-                                        <span className="d-none d-md-inline"><BsPerson size={18} /></span>
-                                        <span className="d-md-none">마이페이지</span>
-                                    </Nav.Link>
-
                                     {/* 로그아웃 */}
                                     <Button
                                         variant="outline-light"

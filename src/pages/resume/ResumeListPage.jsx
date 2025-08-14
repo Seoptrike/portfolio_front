@@ -7,6 +7,7 @@ import WorkExpModal from '../profile/career/WorkExpModal';
 import { insertWorkExp } from '../../api/careerApi';
 import { AuthContext } from '../../context/AuthContext';
 import useEditMode from '../../hooks/useEditMode';
+import dayjs from 'dayjs';
 
 const CareerPage = () => {
     const { username } = useParams();
@@ -14,6 +15,7 @@ const CareerPage = () => {
     const [open, setOpen] = useState(false);
     const { isHost } = useContext(AuthContext);
     const { editMode } = useEditMode();
+    const formatYM = (v) => v ? dayjs(v).format('YYYY.MM') : '';
     const navigate = useNavigate();
     const [form, setForm] = useState({
         companyName: '',
@@ -82,7 +84,7 @@ const CareerPage = () => {
     // 수정 내용 저장 
     const handleSaveDetail = async (workId, detailId) => {
         console.log(`${workId} 경력의 ${detailId} 상세 내용을 저장합니다.`, editingForm);
-        const payload = {...editingForm , detailId : detailId};
+        const payload = { ...editingForm, detailId: detailId };
         await updateAchieve(payload)
         // await updateWorkExpDetail(detailId, editingForm);
         callAPI();
@@ -132,7 +134,7 @@ const CareerPage = () => {
     };
 
     // '삭제하기'
-    const handleDetailDelete = async(detailId)=>{
+    const handleDetailDelete = async (detailId) => {
         await deleteAchieve(detailId);
         callAPI()
     }
@@ -148,7 +150,7 @@ const CareerPage = () => {
                                 <div className="w-100">
                                     <div className="d-flex justify-content-between">
                                         <strong style={{ fontSize: '1.1rem' }}>{career.companyName}</strong>
-                                        <span className="text-muted">{career.startDate} ~ {career.endDate}</span>
+                                        <span className="text-muted">{formatYM(career.startDate)} ~ {formatYM(career.endDate)}</span>
                                     </div>
                                     <div className="text-muted small mt-1">{career.position}</div>
                                 </div>

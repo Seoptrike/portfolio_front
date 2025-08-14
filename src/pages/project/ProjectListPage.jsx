@@ -134,7 +134,7 @@ const ProjectListPage = () => {
                                 아직 등록된 프로젝트가 없습니다.
                             </Card.Text>
                             {isHost && (
-                                <Link to={`/project/insert/${username}`}>
+                                <Link to={`/${username}/project/insert`}>
                                     <Button variant="primary" className="mt-3">
                                         첫 프로젝트 등록하기
                                     </Button>

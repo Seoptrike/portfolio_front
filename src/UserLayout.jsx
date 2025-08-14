@@ -5,7 +5,7 @@ import { FiUser, FiFileText, FiFolder, FiBriefcase, FiMessageCircle } from "reac
 import { Container, Navbar, Nav, Button } from "react-bootstrap";
 import { AuthContext } from "./context/AuthContext";
 import EditModeProvider from "./providers/EditModeProvider";
-import useEditMode from "./hooks/useEditMode"; // ✅ 훅 분리 후 경로
+import useEditMode from "./hooks/useEditMode";
 import useIsMobile from "./hooks/useIsMobile";
 
 const HeaderEditFAB = ({ isHost }) => {
@@ -30,29 +30,29 @@ const HeaderEditFAB = ({ isHost }) => {
 };
 // 아이콘 전용 탭: 1/5씩 균등분배, 텍스트는 숨기고 아이콘만
 const IconTab = ({ to, label, children }) => {
-  return (
-    <NavLink
-      to={to}
-      end={to === "."}
-      aria-label={label}
-      title={label} // 모바일에선 툴팁 제한적이지만 데스크톱에선 도움됨
-      style={({ isActive }) => ({
-        flex: "1 1 0",
-        minWidth: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "10px 0",
-        textDecoration: "none",
-        // 아이콘 색상
-        color: isActive ? "#0d6efd" : "#495057",
-        // active indicator
-        boxShadow: isActive ? "inset 0 -2px 0 #0d6efd" : "inset 0 -2px 0 transparent",
-      })}
-    >
-      {children}
-    </NavLink>
-  );
+    return (
+        <NavLink
+            to={to}
+            end={to === "."}
+            aria-label={label}
+            title={label} // 모바일에선 툴팁 제한적이지만 데스크톱에선 도움됨
+            style={({ isActive }) => ({
+                flex: "1 1 0",
+                minWidth: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "10px 0",
+                textDecoration: "none",
+                // 아이콘 색상
+                color: isActive ? "#0d6efd" : "#495057",
+                // active indicator
+                boxShadow: isActive ? "inset 0 -2px 0 #0d6efd" : "inset 0 -2px 0 transparent",
+            })}
+        >
+            {children}
+        </NavLink>
+    );
 };
 
 
@@ -81,11 +81,10 @@ const UserLayout = () => {
                             paddingRight: "1rem",
                         }}
                     >
-                        <Navbar.Brand className="fw-semibold">@{username}</Navbar.Brand>
                         <Navbar.Toggle />
                         <Navbar.Collapse>
                             <Nav className="me-auto">
-                                <Nav.Link as={NavLink} end to=".">프로필</Nav.Link>
+                                <Nav.Link as={NavLink} end to="."><strong>@{username}</strong></Nav.Link>
                                 <Nav.Link as={NavLink} to="about">자기소개서</Nav.Link>
                                 <Nav.Link as={NavLink} to="project">프로젝트</Nav.Link>
                                 <Nav.Link as={NavLink} to="resume">경력기술서</Nav.Link>
@@ -100,18 +99,6 @@ const UserLayout = () => {
                 {/* 모바일: Collapse 제거, 가로 스크롤 탭 + FAB */}
                 {isMobile && (
                     <>
-                        {/* 고정 유저명 바 (선택) */}
-                        <div style={{
-                            position: "sticky",
-                            top: navHeight,
-                            zIndex: 1020,
-                            background: "#fff",
-                            padding: "0.5rem 0.75rem",
-                            fontWeight: 600
-                        }}>
-                            @{username}
-                        </div>
-
                         {/* 아이콘 탭 바: 1줄에 5개 꽉 채우기 */}
                         <nav
                             style={{
@@ -132,7 +119,7 @@ const UserLayout = () => {
                                     alignItems: "stretch"
                                 }}
                             >
-                                <IconTab to="." label="프로필"><FiUser size={22} /></IconTab>
+                                <IconTab to="." label={`@${username}`}><FiUser size={22} /></IconTab>
                                 <IconTab to="about" label="자기소개서"><FiFileText size={22} /></IconTab>
                                 <IconTab to="project" label="프로젝트"><FiFolder size={22} /></IconTab>
                                 <IconTab to="resume" label="경력기술서"><FiBriefcase size={22} /></IconTab>

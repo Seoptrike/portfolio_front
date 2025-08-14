@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Form, Button, Card, Container, Row, Col, FloatingLabel } from 'react-bootstrap';
 import { register } from '../../api/authApi';
 import { useNavigate } from 'react-router-dom';
+import ImagePicker from '../common/ImagePicker';
+import useImageKitUpload from '../../hooks/useImageKitUpload';
 
 const RegisterPage = () => {
     const navigate = useNavigate();
@@ -10,25 +12,53 @@ const RegisterPage = () => {
         password: '',
         phone: '',
         photo: '',
-        github_url: ''
+        githubUrl: ''
     });
+    const [photoFile, setPhotoFile] = useState(null);
+    const { uploadImage, busy: uploading, progress } = useImageKitUpload();
 
     const handleChange = (e) => {
-        const { name, value, files } = e.target;
-        if (name === 'photo') {
-            setFormData({ ...formData, photo: files[0] });
-        } else {
-            setFormData({ ...formData, [name]: value });
-        }
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await register(formData);
-        navigate(`/`)
-        alert('회원가입을 환영합니다!');
-    };
 
+        try {
+            // 1) 제출 시점에만 업로드
+            let photoUrl = null;
+            let photoUrlId = null;
+
+            if (photoFile) {
+                // 회원가입 전이라 userId가 없으므로 username 기반 폴더 사용
+                const uploaded = await uploadImage(photoFile, {
+                    userId: formData.username, // dev/prod prefix는 훅에서 처리됨
+                    folder: "profile",
+                });
+                photoUrl = uploaded?.url ?? null;
+                photoUrlId = uploaded?.fileId ?? null;
+            }
+
+            // 2) 회원가입 요청 (백엔드가 JSON으로 받는다고 가정)
+            const payload = {
+                username: formData.username,
+                password: formData.password,
+                phone: formData.phone,
+                githubUrl: formData.githubUrl,
+                photo: photoUrl,
+                photoUrlId,
+            };
+            console.log(payload);
+
+            await register(payload);
+            alert("회원가입을 환영합니다!");
+            navigate("/");
+        } catch (err) {
+            console.error(err);
+            alert("회원가입에 실패했습니다.");
+        }
+    };
     return (
         <Container className="mt-5 pt-4">
             <Row className="justify-content-center">
@@ -68,21 +98,22 @@ const RegisterPage = () => {
                                 />
                             </FloatingLabel>
 
+                            {/* 파일 선택만, 업로드는 제출 시 */}
                             <Form.Group controlId="formPhoto" className="mb-3">
                                 <Form.Label>프로필 사진</Form.Label>
-                                <Form.Control
-                                    type="file"
-                                    name="photo"
-                                    onChange={handleChange}
-                                    accept="image/*"
-                                />
+                                <div style={{ display: "grid", gap: 8 }}>
+                                    <ImagePicker value={photoFile} onChange={setPhotoFile} />
+                                    {uploading && (
+                                        <small style={{ color: "#666" }}>{progress}% 업로드 중…</small>
+                                    )}
+                                </div>
                             </Form.Group>
 
                             <FloatingLabel label="GitHub URL" className="mb-3">
                                 <Form.Control
                                     type="url"
-                                    name="github_url"
-                                    value={formData.github_url}
+                                    name="githubUrl"
+                                    value={formData.githubUrl}
                                     onChange={handleChange}
                                     placeholder="https://github.com/yourname"
                                 />
