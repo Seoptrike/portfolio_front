@@ -4,7 +4,7 @@ import useIsMobile from "../../hooks/useIsMobile";
 const CommonHeroBanner = ({
     title,
     eyebrow,                 // optional small label
-    size = "compact",        // "compact" | "section" | "hero"
+    size ,        // "compact" | "section" | "hero"
     rounded = 16,
     maxW = 1200,
     padY, padX,

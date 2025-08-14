@@ -6,7 +6,7 @@ import { getUserData, updateUserData } from "../../api/userApi";
 import ImagePicker from "../../components/common/ImagePicker";
 import useImageKitUpload from "../../hooks/useImageKitUpload.js";
 
-const MypagePage = () => {
+const MypagePage = (setShowProfileModal) => {
     const navigate = useNavigate();
     const { isLogin, loginName } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
@@ -81,7 +81,7 @@ const MypagePage = () => {
             setPhotoUrl(newPhotoUrl);
             setPhotoFile(null);
             alert("프로필이 저장되었습니다.");
-            navigate(`/${username}`)
+            setShowProfileModal(false);
         } catch (err) {
             console.error(err);
             alert("저장에 실패했습니다.");

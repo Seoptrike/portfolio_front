@@ -91,7 +91,7 @@ const MainPage = () => {
                                 <Modal.Title>프로필 설정</Modal.Title>
                             </Modal.Header>
                             <Modal.Body style={{ padding: 0 }}>
-                                <MypagePage />
+                                <MypagePage setShowProfileModal />
                             </Modal.Body>
                         </Modal>
                     </div>

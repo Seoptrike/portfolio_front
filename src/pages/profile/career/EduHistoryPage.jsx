@@ -136,7 +136,7 @@ const EduHistoryPage = ({ userId, username, EduHis, onSuccess }) => {
                             <tr key={item.educationId ?? item.schoolName}>
                                 <td style={{ width: `40%` }}>
                                     <div
-                                        style={{ fontSize: isMobile ? '0.8rem' : '0.8rem', whiteSpace: 'nowrap' }}
+                                        style={{ fontSize: isMobile ? '0.6rem' : '0.8rem', whiteSpace: 'nowrap' }}
                                         title={item.schoolName}
                                     >
                                         {item.schoolName}
@@ -145,7 +145,7 @@ const EduHistoryPage = ({ userId, username, EduHis, onSuccess }) => {
 
                                 <td style={{ width: `40%` }}>
                                     <div
-                                        style={{ fontSize: isMobile ? '0.8rem' : '0.8rem', whiteSpace: 'nowrap' }}
+                                        style={{ fontSize: isMobile ? '0.6rem' : '0.8rem', whiteSpace: 'nowrap' }}
                                         title={item.major}
                                     >
                                         {item.major}
