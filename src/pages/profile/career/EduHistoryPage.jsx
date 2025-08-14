@@ -7,9 +7,12 @@ import { AuthContext } from '../../../context/AuthContext';
 import dayjs from 'dayjs';
 import { apiDatesToForm, formToApiDates, ymLt, clampEndYM } from '../../../utils/yearModule';
 import useEditMode from '../../../hooks/useEditMode';
+import useIsMobile from '../../../hooks/useIsMobile';
+import CommonHeroBanner from '../../../components/common/CommonHeroBanner';
 
 const EduHistoryPage = ({ userId, username, EduHis, onSuccess }) => {
     const { isHost } = useContext(AuthContext);
+    const { isMobile } = useIsMobile();
     const { editMode } = useEditMode();
     const [isEdit, setIsEdit] = useState(false);
     const [open, setOpen] = useState(false);
@@ -106,7 +109,9 @@ const EduHistoryPage = ({ userId, username, EduHis, onSuccess }) => {
     return (
         <Container className="mt-4">
             <Row className="align-items-center mb-3">
-                <Col><h5>학력 사항</h5></Col>
+                <Col>
+                    <CommonHeroBanner title="학력사항" size="compact"/>
+                </Col>
                 {editMode && (
                     <Col className="text-end">
                         <Button variant="outline-primary" size="sm" onClick={handleOpen}>
@@ -119,37 +124,66 @@ const EduHistoryPage = ({ userId, username, EduHis, onSuccess }) => {
             <Table striped bordered hover responsive>
                 <thead>
                     <tr>
-                        <th>학교</th>
-                        <th>전공</th>
-                        <th>재학 기간</th>
+                        <th style={{ width: `40%` }}>학교</th>
+                        <th style={{ width: `40%` }}>전공</th>
+                        <th style={{ width: `30%` }}>재학 기간</th>
                         {editMode && <th className="text-center">관리</th>}
                     </tr>
                 </thead>
                 <tbody>
                     {Array.isArray(EduHis) && EduHis.length > 0 ? (
-                        EduHis.map((item, idx) => (
-                            <tr key={idx}>
-                                <td>{item.schoolName}</td>
-                                <td>{item.major}</td>
-                                <td>{formatYM(item.startDate)} ~ {item.endDate ? formatYM(item.endDate) : '현재'}</td>
+                        EduHis.map((item) => (
+                            <tr key={item.educationId ?? item.schoolName}>
+                                <td style={{ width: `40%` }}>
+                                    <div
+                                        style={{ fontSize: isMobile ? '0.8rem' : '0.8rem', whiteSpace: 'nowrap' }}
+                                        title={item.schoolName}
+                                    >
+                                        {item.schoolName}
+                                    </div>
+                                </td>
+
+                                <td style={{ width: `40%` }}>
+                                    <div
+                                        style={{ fontSize: isMobile ? '0.8rem' : '0.8rem', whiteSpace: 'nowrap' }}
+                                        title={item.major}
+                                    >
+                                        {item.major}
+                                    </div>
+                                </td>
+
+                                <td style={{ width: `30%` }}>
+                                    <div
+                                        style={{ fontSize: isMobile ? '0.8rem' : '0.9rem', whiteSpace: 'nowrap' }}
+                                        title={`${formatYM(item.startDate)} ~ ${item.endDate ? formatYM(item.endDate) : '현재'}`}
+                                    >
+                                        {formatYM(item.startDate)} ~ {item.endDate ? formatYM(item.endDate) : '현재'}
+                                    </div>
+                                </td>
+
                                 {editMode && (
-                                    <td className="text-center">
+                                    <td
+                                        className="text-center"
+                                        style={{ whiteSpace: 'nowrap' }}
+                                    >
                                         <OverlayTrigger overlay={<Tooltip>수정</Tooltip>}>
                                             <Button
                                                 variant="link"
                                                 size="sm"
                                                 onClick={() => handleEdit(item)}
-                                                style={{ padding: '0.25rem', margin: '0 4px' }}
+                                                style={{ padding: '0.25rem', margin: '0 4px', fontSize: '1em' }}
+                                                aria-label="수정"
                                             >
                                                 <Pencil />
                                             </Button>
                                         </OverlayTrigger>
+
                                         <OverlayTrigger overlay={<Tooltip>삭제</Tooltip>}>
                                             <Button
                                                 variant="link"
                                                 size="sm"
                                                 onClick={() => handleDelete(item.educationId)}
-                                                style={{ padding: '0.25rem', margin: '0 4px' }}
+                                                style={{ padding: '0.25rem', margin: '0 4px', fontSize: '1em' }}
                                                 className="text-danger"
                                                 aria-label="삭제"
                                             >
@@ -162,7 +196,13 @@ const EduHistoryPage = ({ userId, username, EduHis, onSuccess }) => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={3} className="text-center">학력 정보가 없습니다.</td>
+                            <td
+                                colSpan={editMode ? 4 : 3}
+                                className="text-center"
+                                style={{ fontSize: isMobile ? '0.8rem' : '0.9rem', whiteSpace: 'nowrap' }}
+                            >
+                                학력 정보가 없습니다.
+                            </td>
                         </tr>
                     )}
                 </tbody>

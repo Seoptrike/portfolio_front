@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { getUserData, updateUserData } from "../../api/userApi";
 import ImagePicker from "../../components/common/ImagePicker";
-import useImageKitUpload from "../../hooks/useImageKitUpload";
+import useImageKitUpload from "../../hooks/useImageKitUpload.js";
 
 const MypagePage = () => {
     const navigate = useNavigate();

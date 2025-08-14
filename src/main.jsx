@@ -6,6 +6,8 @@ import RouterConfig from './routes/RouterConfig';
 import AuthProvider from './providers/AuthProvider.jsx';
 import LoadingProvider from './providers/LoadingProvider.jsx';
 import api from './api/axiosInstance.js';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>

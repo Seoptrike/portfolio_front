@@ -3,7 +3,7 @@ import { Form, Button, Card, Container, Row, Col, FloatingLabel } from 'react-bo
 import { register } from '../../api/authApi';
 import { useNavigate } from 'react-router-dom';
 import ImagePicker from '../common/ImagePicker';
-import useImageKitUpload from '../../hooks/useImageKitUpload';
+import useImageKitUpload from '../../hooks/useImageKitUpload.js';
 
 const RegisterPage = () => {
     const navigate = useNavigate();

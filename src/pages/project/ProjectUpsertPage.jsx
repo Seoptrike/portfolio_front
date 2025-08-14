@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useContext } from "react";
 import { Form, Button, Container, Row, Col, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import ImagePicker from "../../components/common/ImagePicker";
-import useImageKitUpload from "../../hooks/useImageKitUpload";
+import useImageKitUpload from "../../hooks/useImageKitUpload.js";
 import { AuthContext } from "../../context/AuthContext";
 import { getAllStack } from "../../api/techStackApi";
 import { insertProject, updateProject, getProjectById } from "../../api/projectApi";

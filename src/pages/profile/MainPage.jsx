@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row, Modal } from 'react-bootstrap'
 import StackPage from './stack/StackPage';
-import './MainPage.css'
 import { useNavigate, useParams } from 'react-router-dom';
 import WorkExperiencesPage from './career/WorkExperiencesPage';
 import EduHistoryPage from './career/EduHistoryPage';
@@ -40,7 +39,6 @@ const MainPage = () => {
             <Row className="gx-4 gy-5">
                 {/* 왼쪽 사이드 */}
                 <Col xs={12} lg={4} className="sidebar">
-
                     <div className="profile-wrapper text-center" style={{ position: "relative" }}>
                         <div style={{ position: "relative", display: "inline-block" }}>
                             <img
