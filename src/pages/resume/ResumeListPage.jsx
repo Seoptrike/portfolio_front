@@ -47,7 +47,7 @@ const CareerPage = () => {
             const res = await fetchAchieveList(username);
             setCareers(res.data);
         } catch {
-            navigate("/notfound")
+            //navigate("/notfound")
         }
     }
 

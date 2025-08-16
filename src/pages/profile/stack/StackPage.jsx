@@ -1,98 +1,131 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card } from 'react-bootstrap';
-import Chip from '@mui/material/Chip';
-import Rating from '@mui/material/Rating';
+import { Box, Chip, Typography, Stack as MuiStack, Rating, Tooltip } from '@mui/material';
 import CommonHeroBanner from '../../../components/common/CommonHeroBanner';
 import {
-    FaReact, FaVuejs, FaNodeJs, FaPython, FaJava, FaGithub,
-} from 'react-icons/fa';
-import {
-    SiTypescript, SiDjango, SiMongodb, SiMysql,
-    SiSpring, SiJavascript, SiHtml5, SiCss3, SiNextdotjs, SiJira,
+    SiHtml5, SiCss3, SiJavascript, SiReact, SiVuedotjs, SiExpress,
+    SiSpring, SiSpringboot, SiPython, SiMysql, SiPostgresql, SiMongodb,
+    SiDocker, SiNginx, SiAmazon, SiVercel, SiJira, SiNotion
 } from 'react-icons/si';
+import { FaNodeJs, FaJava, FaGithub } from 'react-icons/fa';
+import useIsMobile from '../../../hooks/useIsMobile';
 
-const stackIcons = {
-    HTML: <SiHtml5 color="#e34c26" />,
-    CSS: <SiCss3 color="#264de4" />,
-    JavaScript: <SiJavascript color="#f0db4f" />,
-    TypeScript: <SiTypescript color="#007acc" />,
-    React: <FaReact color="#61dafb" />,
-    Vue: <FaVuejs color="#42b883" />,
-    'Next.js': <SiNextdotjs />,
-    'Node.js': <FaNodeJs color="#68a063" />,
-    Python: <FaPython color="#3776ab" />,
-    Django: <SiDjango color="#092e20" />,
-    Java: <FaJava color="#f89820" />,
-    'Spring Boot': <SiSpring color="#6db33f" />,
-    MySQL: <SiMysql color="#00758f" />,
-    MongoDB: <SiMongodb color="#47a248" />,
-    GitHub: <FaGithub color="#000" />,
-    Jira: <SiJira color="#0052CC" />,
+const ICON_MAP = {
+    HTML: { Icon: SiHtml5, color: '#E34F26' }, CSS: { Icon: SiCss3, color: '#1572B6' },
+    JavaScript: { Icon: SiJavascript, color: '#F7DF1E' }, React: { Icon: SiReact, color: '#61DAFB' },
+    Vue: { Icon: SiVuedotjs, color: '#42B883' }, 'Node.js': { Icon: FaNodeJs, color: '#68A063' },
+    Express: { Icon: SiExpress, color: '#000' }, Java: { Icon: FaJava, color: '#f89820' },
+    'Spring Boot': { Icon: SiSpringboot, color: '#6DB33F' }, Spring: { Icon: SiSpring, color: '#6DB33F' },
+    Python: { Icon: SiPython, color: '#3776AB' }, MySQL: { Icon: SiMysql, color: '#00758F' },
+    PostgreSQL: { Icon: SiPostgresql, color: '#336791' }, MongoDB: { Icon: SiMongodb, color: '#47A248' },
+    Docker: { Icon: SiDocker, color: '#2496ED' }, Nginx: { Icon: SiNginx, color: '#009639' },
+    AWS: { Icon: SiAmazon, color: '#FF9900' }, Vercel: { Icon: SiVercel, color: '#000' },
+    GitHub: { Icon: FaGithub, color: '#000' }, Jira: { Icon: SiJira, color: '#0052CC' }, Notion: { Icon: SiNotion, color: '#000' },
 };
 
 const StackPage = ({ stack = [] }) => {
+    const isMobile = useIsMobile();
+    // 전체 나열: 유효 항목만 추려서 이름순 정렬
+    const list = useMemo(() => {
+        const arr = (Array.isArray(stack) ? stack : [])
+            .filter(s => s && typeof s.name === 'string' && s.name.trim().length > 0)
+            .map(s => ({
+                stackId: s.stackId ?? s.stack_id ?? s.id,
+                name: s.name ?? s.stack_name ?? '',
+                usageCount: s.usageCount ?? s.usage_count ?? 0,
+            }));
+        return arr.sort((a, b) => (a?.name ?? '').localeCompare(b?.name ?? ''));
+    }, [stack]);
 
     return (
-        <>
-            <style>{`
-               .stack-chip-list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.6rem;
-}
+        <div style={{ marginTop: '0.5rem' }}>
+            <CommonHeroBanner title="기술스택" size="compact" />
 
-@media (max-width: 992px) {
-  .stack-chip-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+            <div style={{
+                display: "grid",
+                gridTemplateColumns: isMobile
+                    ? "repeat(2, 1fr)"   // 모바일: 2칸
+                    : "repeat(5, 1fr)",  // 데스크탑: 4칸
+                gap: "0.6rem",
+            }}>
+                {list.map(s => {
+                    const m = ICON_MAP[s.name] || {};
+                    const Icon = m.Icon;
+                    const color = m.color || '#666';
+                    const stars = Math.min(s.usageCount ?? 0, 5);
 
-@media (max-width: 576px) {
-  .stack-chip-list {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-
-            `}</style>
-            <div className='my-4'>
-                <CommonHeroBanner title="기술스택" size="compact" />
-                <Card className="stack-card">
-                    <Card.Body>
-                        <div className="stack-chip-list">
-                            {stack.map((s) => (
-                                <Chip
-                                    key={s.stack_id}
-                                    icon={stackIcons[s.stack_name] || null}
-                                    label={
-                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                            <span style={{ fontSize: '0.9rem' }}>{s.stack_name}</span>
-                                            <Rating
-                                                name={`rating-${s.stack_name}`}
-                                                value={Math.min(s.usage_count || 0, 5)}
-                                                readOnly
-                                                precision={1}
-                                                size="small"
-                                                sx={{ mt: 0.3 }}
-                                            />
-                                        </div>
-                                    }
-                                    variant="outlined"
-                                    color="primary"
+                    return (
+                        <Chip
+                            key={s.stackId}
+                            icon={
+                                Icon ? (
+                                    <Box component="span" sx={{ display: "flex", alignItems: "center" }}>
+                                        <Icon size={18} color={color} />
+                                    </Box>
+                                ) : null
+                            }
+                            label={
+                                <Box
                                     sx={{
-                                        height: 'auto',
-                                        padding: '6px 12px',
-                                        '.MuiChip-icon': {
-                                            fontSize: '1.4rem',
-                                            marginLeft: '4px'
-                                        }
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center", // ← 가운데 정렬
+                                        justifyContent: "center",
+                                        gap: 0.25,
+                                        width: "100%",       // 전체 폭 맞춰서 가운데 정렬
                                     }}
-                                />
-                            ))}
-                        </div>
-                    </Card.Body>
-                </Card>
+                                >
+                                    <Typography
+                                        sx={{
+                                            fontSize: "0.95rem",
+                                            fontWeight: 600,
+                                            lineHeight: 1.15,
+                                            textAlign: "center", // 텍스트도 가운데
+                                        }}
+                                    >
+                                        {s.name}
+                                    </Typography>
+                                    <Tooltip title={`사용 횟수: ${s.usageCount ?? 0}`} arrow>
+                                        <Rating
+                                            name={`rating-${s.stackId}`}
+                                            value={stars}
+                                            max={5}
+                                            precision={1}
+                                            readOnly
+                                            size="small"
+                                        />
+                                    </Tooltip>
+                                </Box>
+                            }
+                            variant="outlined"
+                            color="default"
+                            sx={{
+                                width: "100%",
+                                height: "auto",
+                                py: 1,
+                                px: 1.2,
+                                borderRadius: 2,
+                                borderColor: "divider",
+                                bgcolor: "background.paper",
+                                boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                                transition: "transform .18s ease, box-shadow .18s ease",
+                                "&:hover": {
+                                    transform: "translateY(-2px)",
+                                    boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
+                                },
+                                ".MuiChip-icon": { mr: 0.5 },
+                                ".MuiChip-label": {
+                                    display: "flex",
+                                    width: "100%",
+                                    justifyContent: "center", // 칩 전체 컨텐츠 가운데
+                                    px: 0,
+                                },
+                            }}
+                        />
+                    );
+                })}
             </div>
-        </>
+        </div>
     );
 };
 

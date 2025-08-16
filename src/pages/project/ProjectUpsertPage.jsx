@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useContext } from "react";
+import React, { useEffect, useMemo, useState, useContext } from "react";
 import { Form, Button, Container, Row, Col, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import ImagePicker from "../../components/common/ImagePicker";
@@ -64,7 +64,7 @@ const ProjectUpsertPage = () => {
                 }
             } catch (e) {
                 console.error(e);
-                //navigate("/notfound");
+                // navigate("/notfound");
             } finally {
                 setLoading(false);
             }
@@ -123,7 +123,7 @@ const ProjectUpsertPage = () => {
             </Container>
         );
     }
-
+    console.log(stackList);
     return (
         <Container className="mt-4">
             <h2>{isEdit ? "프로젝트 수정" : "프로젝트 등록"}</h2>

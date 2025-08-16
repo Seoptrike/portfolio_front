@@ -8,7 +8,7 @@ import MainPage from '../pages/profile/MainPage';
 import Layout from '../Layout';
 import NotFound from '../components/common/NotFound';
 import ProjectRouter from './ProjectRouter';
-import ResumeRouter from './ResumeRouter';
+import ResumeListPage from '../pages/resume/ResumeListPage';
 import UserLayout from '../UserLayout';
 import SearchPage from '../pages/search/SearchPage';
 import MypagePage from '../pages/user/MypagePage';
@@ -28,7 +28,7 @@ const RouterConfig = () => {
                     <Route path="about" element={<AboutMePage />} />    {/* /:username/about */}
                     <Route path="guestbook" element={<GuestBookPage />} />
                     <Route path="project/*" element={<ProjectRouter />} />
-                    <Route path="resume/*" element={<ResumeRouter />} />
+                    <Route path="resume" element={<ResumeListPage />} />
                 </Route>
 
                 {/* 그 외 */}
