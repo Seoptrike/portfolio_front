@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Container, Accordion, ListGroup, Button, Form } from 'react-bootstrap';
+import { Accordion, ListGroup, Button, Form } from 'react-bootstrap';
 import { PencilSquare, Trash, PlusCircleDotted } from 'react-bootstrap-icons';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { deleteAchieve, fetchAchieveList, insertAchieve, updateAchieve } from '../../api/achievements';
 import { insertWorkExp } from '../../api/careerApi';
 import { AuthContext } from '../../context/AuthContext';
@@ -17,7 +17,6 @@ const CareerPage = () => {
     const { isHost } = useContext(AuthContext);
     const { editMode, isEdit } = useEditMode();
     const formatYM = (v) => v ? dayjs(v).format('YYYY.MM') : '';
-    const navigate = useNavigate();
     const [form, setForm] = useState({
         companyName: '',
         position: '',
@@ -157,8 +156,7 @@ const CareerPage = () => {
     };
 
     return (
-        <Container className="py-5">
-            <h2 className="mb-4 text-center">💼 경력 기술서</h2>
+        <>
             {careers.length > 0 ?
                 (<Accordion defaultActiveKey="0" alwaysOpen>
                     {careers.map(career => (
@@ -315,8 +313,7 @@ const CareerPage = () => {
                     guide: "재직 기간은 월까지 입력해 주세요.",
                 }}
             />
-            {/* <WorkExpModal show={open} onHide={handleClose} form={form} handleChange={handleModalChange} handleSubmit={handleSubmit} /> */}
-        </Container>
+        </>
     );
 };
 

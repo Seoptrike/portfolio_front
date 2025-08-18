@@ -125,7 +125,7 @@ const ProjectUpsertPage = () => {
     }
     console.log(stackList);
     return (
-        <Container className="mt-4">
+        <>
             <h2>{isEdit ? "프로젝트 수정" : "프로젝트 등록"}</h2>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
@@ -225,7 +225,7 @@ const ProjectUpsertPage = () => {
                     {saving || uploading ? "저장 중…" : isEdit ? "수정" : "등록"}
                 </Button>
             </Form>
-        </Container>
+        </>
     );
 };
 

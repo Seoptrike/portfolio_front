@@ -42,109 +42,104 @@ const ProjectListPage = () => {
         }
     }
     return (
-        <Container>
-            <div style={{ padding: '1rem' }}>
-                <Row className="align-items-center mb-3">
-                    <Col xs={12} md>
-                        <h2 className="mb-2">🧑‍💻 프로젝트 목록</h2>
+        <div>
+            <Row className="align-items-center">
+                {editMode &&
+                    // 모바일에서 버튼 정렬 및 간격 조정
+                    <Col xs={12} md="auto" className="text-md-end">
+                        <Link to={`/${username}/project/insert`}>
+                            <Button variant="primary">등록하러가기</Button>
+                        </Link>
                     </Col>
-                    {editMode &&
-                        // 모바일에서 버튼 정렬 및 간격 조정
-                        <Col xs={12} md="auto" className="text-md-end mt-2 mt-md-0">
-                            <Link to={`/${username}/project/insert`}>
-                                <Button variant="primary">등록하러가기</Button>
-                            </Link>
-                        </Col>
-                    }
-                </Row>
+                }
+            </Row>
 
-                {projects && projects.length > 0 ? (
-                    projects.map(project => (
-                        <Card key={project.projectId} className="mb-4 shadow-sm">
-                            <Card.Body>
-                                <Row>
-                                    {/* 썸네일: 모바일에선 상단에, 데스크톱에선 왼쪽에 위치 */}
-                                    <Col xs={12} md={4} lg={3} className="mb-3 mb-md-0 d-flex align-items-center justify-content-center">
-                                        {project.thumbnailUrl ? (
-                                            <img
-                                                src={project.thumbnailUrl}
-                                                alt="thumbnail"
-                                                style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
-                                            />
-                                        ) : (
-                                            <div style={{ width: '100%', height: '150px', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #eee' }} />
-                                        )}
-                                    </Col>
+            {projects && projects.length > 0 ? (
+                projects.map(project => (
+                    <Card key={project.projectId} className="mb-4 shadow-sm">
+                        <Card.Body>
+                            <Row>
+                                {/* 썸네일: 모바일에선 상단에, 데스크톱에선 왼쪽에 위치 */}
+                                <Col xs={12} md={4} lg={3} className="mb-3 mb-md-0 d-flex align-items-center justify-content-center">
+                                    {project.thumbnailUrl ? (
+                                        <img
+                                            src={project.thumbnailUrl}
+                                            alt="thumbnail"
+                                            style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
+                                        />
+                                    ) : (
+                                        <div style={{ width: '100%', height: '150px', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #eee' }} />
+                                    )}
+                                </Col>
 
-                                    {/* 정보: 모바일에선 하단에, 데스크톱에선 오른쪽에 위치 */}
-                                    <Col xs={12} md={8} lg={9}>
-                                        <div className="d-flex justify-content-between align-items-start mb-2">
-                                            <h5 className="mb-0">{project.title}</h5>
-                                            {editMode &&
-                                                <div className="ms-2 flex-shrink-0">
-                                                    <Button variant="outline-secondary" size="sm" className="me-2" onClick={handleUpdateBtnClick(project.projectId)}>
-                                                        수정
-                                                    </Button>
-                                                    <Button variant="outline-danger" size="sm" onClick={handleDeleteBtnClick(project.projectId)}>
-                                                        삭제
-                                                    </Button>
-                                                </div>
-                                            }
+                                {/* 정보: 모바일에선 하단에, 데스크톱에선 오른쪽에 위치 */}
+                                <Col xs={12} md={8} lg={9}>
+                                    <div className="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 className="mb-0">{project.title}</h5>
+                                        {editMode &&
+                                            <div className="ms-2 flex-shrink-0">
+                                                <Button variant="outline-secondary" size="sm" className="me-2" onClick={handleUpdateBtnClick(project.projectId)}>
+                                                    수정
+                                                </Button>
+                                                <Button variant="outline-danger" size="sm" onClick={handleDeleteBtnClick(project.projectId)}>
+                                                    삭제
+                                                </Button>
+                                            </div>
+                                        }
+                                    </div>
+                                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>{project.description}</p>
+                                    <Stack gap={3}>
+                                        <div className="small"><strong>기간:</strong> {project.startDate} ~ {project.endDate}</div>
+                                        <div className="d-flex flex-wrap align-items-center gap-2">
+                                            <strong className="small">기술스택:</strong>
+                                            {Array.isArray(project.stackNames) && project.stackNames.map((stack) => (
+                                                <span key={stack.stackId} className="badge bg-light text-dark border">
+                                                    {stack.name}
+                                                </span>
+                                            ))}
                                         </div>
-                                        <p className="text-muted" style={{ fontSize: '0.9rem' }}>{project.description}</p>
-                                        <Stack gap={3}>
-                                            <div className="small"><strong>기간:</strong> {project.startDate} ~ {project.endDate}</div>
-                                            <div className="d-flex flex-wrap align-items-center gap-2">
-                                                <strong className="small">기술스택:</strong>
-                                                {Array.isArray(project.stackNames) && project.stackNames.map((stack) => (
-                                                    <span key={stack.stackId} className="badge bg-light text-dark border">
-                                                        {stack.name}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                            <div className="d-flex flex-wrap gap-2 mt-2">
-                                                {project.notion_url && (
-                                                    <a href={project.notionUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-secondary btn-sm">
-                                                        Notion
-                                                    </a>
-                                                )}
-                                                {project.github_url && (
-                                                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark btn-sm">
-                                                        GitHub
-                                                    </a>
-                                                )}
-                                                {project.deploy_url && (
-                                                    <a href={project.deployUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-info btn-sm">
-                                                        배포 링크
-                                                    </a>
-                                                )}
-                                            </div>
-                                        </Stack>
-                                    </Col>
-                                </Row>
-                            </Card.Body>
-                        </Card>
-                    ))
-                ) : (
-                    // '프로젝트 없음'을 표시하는 카드 디자인
-                    <Card className="text-center shadow-sm">
-                        <Card.Body style={{ padding: '3rem' }}>
-                            <h4 className="text-muted">🗂️</h4>
-                            <Card.Text className="text-muted mt-2">
-                                아직 등록된 프로젝트가 없습니다.
-                            </Card.Text>
-                            {isHost && (
-                                <Link to={`/${username}/project/insert`}>
-                                    <Button variant="primary" className="mt-3">
-                                        첫 프로젝트 등록하기
-                                    </Button>
-                                </Link>
-                            )}
+                                        <div className="d-flex flex-wrap gap-2 mt-2">
+                                            {project.notion_url && (
+                                                <a href={project.notionUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-secondary btn-sm">
+                                                    Notion
+                                                </a>
+                                            )}
+                                            {project.github_url && (
+                                                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark btn-sm">
+                                                    GitHub
+                                                </a>
+                                            )}
+                                            {project.deploy_url && (
+                                                <a href={project.deployUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-info btn-sm">
+                                                    배포 링크
+                                                </a>
+                                            )}
+                                        </div>
+                                    </Stack>
+                                </Col>
+                            </Row>
                         </Card.Body>
                     </Card>
-                )}
-            </div>
-        </Container>
+                ))
+            ) : (
+                // '프로젝트 없음'을 표시하는 카드 디자인
+                <Card className="text-center shadow-sm">
+                    <Card.Body style={{ padding: '3rem' }}>
+                        <h4 className="text-muted">🗂️</h4>
+                        <Card.Text className="text-muted mt-2">
+                            아직 등록된 프로젝트가 없습니다.
+                        </Card.Text>
+                        {isHost && (
+                            <Link to={`/${username}/project/insert`}>
+                                <Button variant="primary" className="mt-3">
+                                    첫 프로젝트 등록하기
+                                </Button>
+                            </Link>
+                        )}
+                    </Card.Body>
+                </Card>
+            )}
+        </div>
     );
 };
 export default ProjectListPage

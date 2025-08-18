@@ -8,9 +8,12 @@ import useEditMode from '../../hooks/useEditMode';
 import MypagePage from '../user/MypagePage';
 import WorkExperiencesItem from './career/WorkExperiencesItem';
 import EduHistoryItem from './career/EduHistoryItem';
+import useIsMobile from '../../hooks/useIsMobile';
+import { useLoading } from '../../context/LoadingContext';
 
 const MainPage = () => {
     const { username } = useParams();
+    const { withLoading } = useLoading();
     const navigate = useNavigate();
     const [userCareers, setUserCareers] = useState({});
     const [userID, setUserID] = useState();
@@ -19,8 +22,9 @@ const MainPage = () => {
     const main = 5;
     const { editMode } = useEditMode();
     const [showProfileModal, setShowProfileModal] = useState(false);
+    const isMobile = useIsMobile();
 
-    const CallTotalAPI = async () => {
+    const CallTotalAPI = withLoading(async () => {
         const res = await getUserTotalData(username)
         if (res.data.userID === "NONE") {
             navigate('/notfound');
@@ -31,13 +35,12 @@ const MainPage = () => {
         setUserID(res.data.userID);
         setUserProject(res.data.projects)
         setUserInfo(res.data.userInfo);
-    }
+    });
     useEffect(() => { CallTotalAPI() }, [username])
-
+    console.log(isMobile, window.innerWidth)
     return (
         <div className="mt-4">
-            <Row className="gx-4 gy-5">
-                {/* 왼쪽 사이드 */}
+            <Row>
                 <Col xs={12} lg={main} className="sidebar">
                     <div className="profile-wrapper text-center" style={{ position: "relative" }}>
                         <div style={{ position: "relative", display: "inline-block" }}>
@@ -45,8 +48,8 @@ const MainPage = () => {
                                 src={userInfo.photo ? userInfo.photo : "/images/vite.svg"}
                                 alt="Profile"
                                 style={{
-                                    width: 160,
-                                    height: 160,
+                                    width: isMobile ? 160 : 320,
+                                    height: isMobile ? 160 : 320,
                                     objectFit: "cover",
                                     borderRadius: "50%",         // ✅ 동그랗게
                                     border: "1px solid #eee",
@@ -61,10 +64,10 @@ const MainPage = () => {
                                     aria-label="프로필 설정"
                                     style={{
                                         position: "absolute",
-                                        right: 8,
-                                        bottom: 8,
-                                        width: 44,
-                                        height: 44,
+                                        right: isMobile ? 4 : 12,  // 📱 모바일일 때는 좀 더 붙게
+                                        bottom: isMobile ? 4 : 12, // 📱 모바일일 때는 좀 더 붙게
+                                        width: isMobile ? 36 : 44, // 📱 버튼 크기도 줄임
+                                        height: isMobile ? 36 : 44,
                                         borderRadius: "50%",        // ✅ 동그란 버튼
                                         border: "1px solid rgba(0,0,0,0.1)",
                                         background: "#fff",
@@ -110,7 +113,7 @@ const MainPage = () => {
                 </Col>
 
                 {/* 오른쪽 메인 */}
-                <Col xs={12} lg={12-main}>
+                <Col xs={12} lg={12 - main}>
                     <Row className="g-4">
                         <Col xs={12}>
                             <ProjectDetailPage

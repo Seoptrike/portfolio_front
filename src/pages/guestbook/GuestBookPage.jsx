@@ -109,10 +109,10 @@ const GuestBookPage = () => {
     }
 
     return (
-        <Container className="my-5">
+        <div>
             {/* --- 메시지 리스트 영역 --- */}
             <Card className="mb-4 shadow-sm">
-                <Card.Header as="h5">📝 남겨진 메시지</Card.Header>
+
                 <ListGroup variant="flush">
                     {list.map(item => (
                         <ListGroup.Item key={item.guestbookId} >
@@ -187,7 +187,7 @@ const GuestBookPage = () => {
                     </Form>
                 </Card>
             )}
-        </Container>
+        </div>
     );
 }
 

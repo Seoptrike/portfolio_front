@@ -15,9 +15,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-// ❌ react-slick 제거
-// import Slider from "react-slick";
-
 const ProjectDetailPage = (projects) => {
     const [openId, setOpenId] = useState(null);
     const toggle = (id) => setOpenId(prev => (prev === id ? null : id));
@@ -29,7 +26,6 @@ const ProjectDetailPage = (projects) => {
     return (
         <div className="project-container">
             <CommonHeroBanner title="프로젝트" size="compact" />
-
             <Swiper
                 modules={[Navigation, Autoplay]}
                 // 🔁 무한 루프

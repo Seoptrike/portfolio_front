@@ -10,12 +10,14 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import 'handsontable/styles/handsontable.min.css';
 import 'handsontable/styles/ht-theme-main.min.css';
+import CommonSpinner from './components/common/CommonSpinner.jsx';
 
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>
         <LoadingProvider attachAxios={api}>
             <AuthProvider>
+                <CommonSpinner/>
                 <RouterConfig />
             </AuthProvider>
         </LoadingProvider>

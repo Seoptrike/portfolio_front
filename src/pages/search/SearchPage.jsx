@@ -14,7 +14,7 @@ const SearchPage = () => {
         setResults(res.data)
     };
     return (
-        <Container>
+        <div>
             <Row className="justify-content-center">
                 <Col md={6}>
                     {/* 검색 영역 */}
@@ -55,7 +55,7 @@ const SearchPage = () => {
                     <p className="text-muted">검색 결과가 없습니다.</p>
                 )}
             </Row>
-        </Container>
+        </div>
     )
 }
 

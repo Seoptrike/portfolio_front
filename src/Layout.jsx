@@ -14,7 +14,14 @@ const Layout = () => {
 
     // 원하는 최대 폭(px)
     const MAX_WIDTH = 1440;
-
+    const wrapperStyle = {
+        maxWidth: MAX_WIDTH,
+        margin: '0 auto',
+        width: '100%',
+        boxSizing: 'border-box',
+        paddingRight: '1rem',
+        paddingLeft: '1rem',
+    };
     useLayoutEffect(() => {
         const el = navRef.current;
         if (!el) return;
@@ -41,14 +48,20 @@ const Layout = () => {
                 fixed="top"
                 expanded={expanded}
                 onToggle={setExpanded}
+                style={{
+                    '--bs-navbar-padding-y': '.25rem',          // 기본 .5rem → .25rem
+                    '--bs-navbar-brand-padding-y': '0',         // 브랜드 상하 패딩 제거
+                    '--bs-navbar-brand-font-size': '1rem',      // 필요시 텍스트도 줄이기
+                    '--bs-navbar-nav-link-padding-x': '.5rem',  // 링크 좌우 여백 축소
+                    minHeight: 56
+                }}
             >
-                {/* 컨테이너를 넓게: maxWidth 인라인 지정 */}
-                <Container style={{ maxWidth: MAX_WIDTH, width: "100%" }}>
+                <Container style={{ maxWidth: MAX_WIDTH, width: '100%' }}>
                     <Navbar.Brand
                         as={Link}
                         to={loginName ? `/${loginName}` : `/`}
                         onClick={() => setExpanded(false)}
-                        style={{ display: "flex", alignItems: "center" }}
+                        style={{ display: "flex", alignItems: "center", margin: "0 1.5rem" }}
                     >
                         <img
                             src="/images/seoportfolio_logo.png"
@@ -71,7 +84,7 @@ const Layout = () => {
                                 style={{ display: "flex", alignItems: "center" }}
                             >
                                 <span className="d-none d-md-inline">
-                                    <BsSearch size={18} />
+                                    찾기 <BsSearch size={18}/>
                                 </span>
                                 <span className="d-md-none">검색</span>
                             </Nav.Link>
@@ -85,7 +98,7 @@ const Layout = () => {
                                     style={{ display: "flex", alignItems: "center" }}
                                 >
                                     <span className="d-none d-md-inline">
-                                        <BsBoxArrowRight size={18} />
+                                        로그아웃 <BsBoxArrowRight size={18} />
                                     </span>
                                     <span className="d-md-none">로그아웃</span>
                                 </Button>
@@ -97,7 +110,7 @@ const Layout = () => {
                                     style={{ display: "flex", alignItems: "center" }}
                                 >
                                     <span className="d-none d-md-inline">
-                                        <BsBoxArrowInRight size={18} />
+                                        로그인 <BsBoxArrowInRight size={18} />
                                     </span>
                                     <span className="d-md-none">로그인</span>
                                 </Nav.Link>
@@ -106,23 +119,12 @@ const Layout = () => {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-
-            {/* 본문 래퍼를 중앙정렬 + 폭 제한 + 가로 스크롤 숨김 */}
-            <main style={{ paddingTop: navHeight, overflowX: "hidden" }}>
-                <div
-                    style={{
-                        maxWidth: MAX_WIDTH,
-                        margin: "0 auto",
-                        width: "100%",
-                        boxSizing: "border-box",
-                        paddingRight: "1rem",
-                        paddingLeft: "1rem",
-                        paddingBottom: "1rem",
-                    }}
-                >
+            <main style={{ paddingTop: navHeight, overflowX: 'hidden' }}>
+                <div style={{ ...wrapperStyle, paddingBottom: '1rem' }}>
                     <Outlet context={{ navHeight }} />
                 </div>
             </main>
+
         </div>
     );
 };
