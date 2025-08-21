@@ -109,7 +109,7 @@ const CommonCareerPage = ({
         try {
             if (isEdit) {
                 await updateFn({ ...payload, [idKey]: form[idKey] });
-               
+
             } else {
                 await createFn(payload);
             }
@@ -119,7 +119,7 @@ const CommonCareerPage = ({
             console.error("등록/수정 실패:", err);
             alert("작업에 실패했습니다.");
         }
-         console.log(payload);
+        console.log(payload);
     };
 
     const handleDelete = async (id) => {
@@ -134,7 +134,7 @@ const CommonCareerPage = ({
     };
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 2 }}>
+        <Box sx={{ mt: 2 }}>
             {/* 헤더: 가운데 배너 + 오른쪽 추가 버튼 */}
             <Box sx={{ position: "relative", mb: 2 }}>
                 <Grid container justifyContent="center" alignItems="center">
@@ -216,7 +216,7 @@ const CommonCareerPage = ({
                 onDelete={() => handleDelete(form[idKey])}
                 labels={modalLabels}
             />
-        </Container>
+        </Box>
     );
 };
 
