@@ -1,7 +1,7 @@
 // src/components/ImagePicker.jsx
 import { useEffect, useRef, useState } from "react";
 
-const ImagePicker = ({ value, onChange, accept = "image/*", maxSize = 5 * 1024 * 1024 }) => {
+const ImagePicker = ({ value, onChange, accept = "image/*", maxSize = 5 * 1024 * 1024, hidePreview = false }) => {
     const [preview, setPreview] = useState(null);
     const inputRef = useRef(null);
 
@@ -28,7 +28,8 @@ const ImagePicker = ({ value, onChange, accept = "image/*", maxSize = 5 * 1024 *
                     onChange?.(f);
                 }}
             />
-            {preview && (
+            {/* ✅ hidePreview가 false일 때만 보여줌 */}
+            {!hidePreview && preview && (
                 <img
                     src={preview}
                     alt="preview"

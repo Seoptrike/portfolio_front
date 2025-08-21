@@ -1,145 +1,125 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { deleteProject, getUserProject } from '../../api/projectApi';
-import { Card, Row, Col, Button, Container, Stack } from 'react-bootstrap';
-import { AuthContext } from '../../context/AuthContext';
-import useEditMode from '../../hooks/useEditMode';
+import React, { useContext, useEffect, useMemo, useState, useCallback } from "react";
+import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
+import { deleteProject, getUserProject } from "../../api/projectApi";
+import useEditMode from "../../hooks/useEditMode";
+import { AuthContext } from "../../context/AuthContext";
+// --- MUI ---
+import {
+    Box,
+    Button,
+    Stack,
+    Typography,
+    Paper
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import HeaderSection from "./HeaderSection";
+import ProjectCard from "./ProjectCard";
+import useIsMobile from "../../hooks/useIsMobile";
 
+// =====================
+// Page (Container + Data)
+// =====================
 const ProjectListPage = () => {
     const [projects, setProjects] = useState([]);
     const { editMode } = useEditMode();
     const { username } = useParams();
-    const { isHost, loginId } = useContext(AuthContext);
+    const { isHost } = useContext(AuthContext);
+    const isMobile = useIsMobile();
     const navigate = useNavigate();
 
-    const fetchProjects = async () => {
+    // --- 프로젝트 데이터 가져오기 ---
+    const fetchProjects = useCallback(async () => {
         try {
-            const res = await getUserProject(username); // ✅ 응답 기다림
-            console.log(res.data);                      // ✅ 이때는 값 있음
-            setProjects(res.data ?? []);                // ✅ 방어 코드
+            const res = await getUserProject(username);
+            setProjects(res?.data ?? []);
         } catch (err) {
             navigate("/notfound");
         }
-    };
+    }, [username, navigate]);
 
     useEffect(() => {
         fetchProjects();
-    }, [username]);
+    }, [fetchProjects]);
 
-    const handleUpdateBtnClick = (project_id) => () => {
-        navigate(`/${username}/project/update/${project_id}`);
-    }
+    // --- 수정/삭제 핸들러 팩토리 (메모)
+    const makeUpdate = useCallback((projectId) => () => navigate(`/${username}/project/update/${projectId}`), [navigate, username]);
 
-    const handleDeleteBtnClick = (projectId) => async () => {
-        if (!window.confirm('정말 삭제할까요?')) return;
+    const makeDelete = useCallback((projectId) => async () => {
+        if (!window.confirm("정말 삭제할까요?")) return;
         try {
             await deleteProject(projectId);
             await fetchProjects();
-            alert("삭제 완료!")
+            alert("삭제 완료!");
         } catch (e) {
             console.error(e);
-            alert('삭제 실패');
+            alert("삭제 실패");
         }
-    }
+    }, [fetchProjects]);
+
+    const hasProjects = (projects?.length ?? 0) > 0;
+
+    const header = useMemo(() => (
+        <HeaderSection editMode={editMode} username={username} />
+    ), [editMode, username]);
+
     return (
-        <div>
-            <Row className="align-items-center">
-                {editMode &&
-                    // 모바일에서 버튼 정렬 및 간격 조정
-                    <Col xs={12} md="auto" className="text-md-end">
-                        <Link to={`/${username}/project/insert`}>
-                            <Button variant="primary">등록하러가기</Button>
-                        </Link>
-                    </Col>
-                }
-            </Row>
-
-            {projects && projects.length > 0 ? (
-                projects.map(project => (
-                    <Card key={project.projectId} className="mb-4 shadow-sm">
-                        <Card.Body>
-                            <Row>
-                                {/* 썸네일: 모바일에선 상단에, 데스크톱에선 왼쪽에 위치 */}
-                                <Col xs={12} md={4} lg={3} className="mb-3 mb-md-0 d-flex align-items-center justify-content-center">
-                                    {project.thumbnailUrl ? (
-                                        <img
-                                            src={project.thumbnailUrl}
-                                            alt="thumbnail"
-                                            style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
-                                        />
-                                    ) : (
-                                        <div style={{ width: '100%', height: '150px', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #eee' }} />
-                                    )}
-                                </Col>
-
-                                {/* 정보: 모바일에선 하단에, 데스크톱에선 오른쪽에 위치 */}
-                                <Col xs={12} md={8} lg={9}>
-                                    <div className="d-flex justify-content-between align-items-start mb-2">
-                                        <h5 className="mb-0">{project.title}</h5>
-                                        {editMode &&
-                                            <div className="ms-2 flex-shrink-0">
-                                                <Button variant="outline-secondary" size="sm" className="me-2" onClick={handleUpdateBtnClick(project.projectId)}>
-                                                    수정
-                                                </Button>
-                                                <Button variant="outline-danger" size="sm" onClick={handleDeleteBtnClick(project.projectId)}>
-                                                    삭제
-                                                </Button>
-                                            </div>
-                                        }
-                                    </div>
-                                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>{project.description}</p>
-                                    <Stack gap={3}>
-                                        <div className="small"><strong>기간:</strong> {project.startDate} ~ {project.endDate}</div>
-                                        <div className="d-flex flex-wrap align-items-center gap-2">
-                                            <strong className="small">기술스택:</strong>
-                                            {Array.isArray(project.stackNames) && project.stackNames.map((stack) => (
-                                                <span key={stack.stackId} className="badge bg-light text-dark border">
-                                                    {stack.name}
-                                                </span>
-                                            ))}
-                                        </div>
-                                        <div className="d-flex flex-wrap gap-2 mt-2">
-                                            {project.notion_url && (
-                                                <a href={project.notionUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-secondary btn-sm">
-                                                    Notion
-                                                </a>
-                                            )}
-                                            {project.github_url && (
-                                                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark btn-sm">
-                                                    GitHub
-                                                </a>
-                                            )}
-                                            {project.deploy_url && (
-                                                <a href={project.deployUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-info btn-sm">
-                                                    배포 링크
-                                                </a>
-                                            )}
-                                        </div>
-                                    </Stack>
-                                </Col>
-                            </Row>
-                        </Card.Body>
-                    </Card>
-                ))
+        <Box>
+            {header}
+            {hasProjects ? (
+                <Box
+                    sx={{
+                        display: 'grid',
+                        gap: 2,
+                        gridTemplateColumns: {
+                            xs: '1fr',       // 모바일~sm: 한 줄에 1개
+                            md: '1fr 1fr',   // md 이상: 한 줄에 2개
+                        },
+                    }}
+                >
+                    {projects.map((project) => (
+                        <Box key={project.projectId}>
+                            <ProjectCard
+                                project={project}
+                                editMode={editMode}
+                                onUpdate={makeUpdate(project.projectId)}
+                                onDelete={makeDelete(project.projectId)}
+                                isMobile={isMobile}
+                            />
+                        </Box>
+                    ))}
+                </Box>
             ) : (
-                // '프로젝트 없음'을 표시하는 카드 디자인
-                <Card className="text-center shadow-sm">
-                    <Card.Body style={{ padding: '3rem' }}>
-                        <h4 className="text-muted">🗂️</h4>
-                        <Card.Text className="text-muted mt-2">
-                            아직 등록된 프로젝트가 없습니다.
-                        </Card.Text>
-                        {isHost && (
-                            <Link to={`/${username}/project/insert`}>
-                                <Button variant="primary" className="mt-3">
-                                    첫 프로젝트 등록하기
-                                </Button>
-                            </Link>
-                        )}
-                    </Card.Body>
-                </Card>
+                // --- 프로젝트가 없는 경우 ---
+                <Paper
+                    variant="outlined"
+                    sx={{ p: { xs: 4, md: 6 }, borderRadius: 3, textAlign: "center" }}
+                >
+                    <Typography variant="h3" sx={{ fontSize: { xs: 48, md: 64 } }}>
+                        🗂️
+                    </Typography>
+                    <Typography variant="h6" fontWeight={700} sx={{ mt: 1 }}>
+                        아직 등록된 프로젝트가 없습니다.
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                        첫 프로젝트를 추가하고 포트폴리오를 완성해보세요.
+                    </Typography>
+
+                    {isHost && (
+                        <Button
+                            variant="contained"
+                            size="large"
+                            startIcon={<AddIcon />}
+                            component={RouterLink}
+                            to={`/${username}/project/insert`}
+                            sx={{ mt: 3 }}
+                        >
+                            첫 프로젝트 등록하기
+                        </Button>
+                    )}
+                </Paper>
             )}
-        </div>
+        </Box>
     );
 };
-export default ProjectListPage
+
+export default ProjectListPage;
