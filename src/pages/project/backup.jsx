@@ -1,232 +1,213 @@
-import React, { useEffect, useMemo, useState, useContext } from "react";
-import { Form, Button, Container, Row, Col, Spinner } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
-import ImagePicker from "../../components/common/ImagePicker";
-import useImageKitUpload from "../../hooks/useImageKitUpload.js";
-import { AuthContext } from "../../context/AuthContext";
-import { getAllStack } from "../../api/techStackApi";
-import { insertProject, updateProject, getProjectById } from "../../api/projectApi";
+// components/ProjectCard.jsx
+import React from "react";
+import {
+  Card, CardContent, Box, Typography, Stack,
+  Tooltip, IconButton, Button
+} from "@mui/material";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import NotesIcon from "@mui/icons-material/Notes";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import ExternalLinkButton from "./ExternalLinkButton";
+import ProjectStackList from "./ProjectStackList";
 
-const toDateInput = (v) => (v ? String(v).slice(0, 10) : "");
+const ProjectCard = React.memo(function ProjectCard({
+  project,
+  editMode,
+  onUpdate,
+  onDelete,
+  isMobile,
+}) {
+  const stacks = Array.isArray(project.stackNames) ? project.stackNames : [];
+  const notion = project.notionUrl || project.notion_url;
+  const github = project.githubUrl || project.github_url;
+  const deploy = project.deployUrl || project.deploy_url;
 
-const ProjectUpsertPage = () => {
-    const { username, projectId } = useParams();
-    const { loginId } = useContext(AuthContext); // userId가 컨텍스트에 있어야 함
-    const isEdit = useMemo(() => Boolean(projectId), [projectId]);
-    const navigate = useNavigate();
+  const [expanded, setExpanded] = React.useState(false);
 
-    const [stackList, setStackList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
+  return (
+    <Card
+      elevation={0}
+      sx={{
+        borderRadius: 3,
+        border: "1px solid",
+        borderColor: "divider",
+        transition: "box-shadow .2s ease, transform .1s ease",
+        "&:hover": { boxShadow: 6, transform: "translateY(-2px)" },
+      }}
+    >
+      <CardContent sx={{ p: { xs: 1.5, md: 2 }, pb: { xs: 1.5, md: 2 } }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "stretch", md: "flex-start" },
+            gap: { xs: 1.25, md: 2 },
+          }}
+        >
+          {/* 썸네일 */}
+          <Box
+            sx={{
+              width: { xs: "100%", md: 300 },
+              aspectRatio: { xs: "16 / 9", md: "1 / 1" },
+              height: { md: 300 },
+              flexShrink: 0,
+              borderRadius: 2,
+              overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              border: { xs: "none", md: "1px solid" },
+              borderColor: { xs: "transparent", md: "divider" },
+              mx: { xs: "auto", md: 0 },
+            }}
+          >
+            {project.thumbnailUrl ? (
+              <Box
+                component="img"
+                src={project.thumbnailUrl}
+                alt="thumbnail"
+                sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            ) : (
+              <Typography variant="caption" color="text.secondary">
+                사진 없음
+              </Typography>
+            )}
+          </Box>
 
-    // 썸네일 파일(저장 누르기 전까지는 업로드 X)
-    const [imageFile, setImageFile] = useState(null);
-    const { uploadImage, busy: uploading, progress } = useImageKitUpload();
+          {/* 설명 영역 */}
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            {/* 타이틀 + 액션 */}
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              spacing={1}
+              sx={{ mb: { xs: 0.75, md: 1 } }}
+            >
+              <Typography
+                variant={isMobile ? "subtitle1" : "h6"}
+                fontWeight={700}
+                sx={{
+                  wordBreak: "keep-all",
+                  textAlign: { xs: "center", md: "left" },
+                  flex: 1,
+                }}
+              >
+                {project.title}
+              </Typography>
 
-    const [form, setForm] = useState({
-        username,
-        title: "",
-        description: "",
-        startDate: "",
-        endDate: "",
-        githubUrl: "",
-        deployUrl: "",
-        notionUrl: "",
-        thumbnailUrl: "",
-        stackIds: [],
-    });
+              {editMode && (
+                <Stack direction="row" spacing={0.75} flexShrink={0}>
+                  <Tooltip title="수정">
+                    <IconButton onClick={onUpdate} size="small">
+                      <EditOutlinedIcon sx={{ fontSize: 22 }} />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="삭제">
+                    <IconButton onClick={onDelete} size="small" color="error">
+                      <DeleteOutlineIcon sx={{ fontSize: 22 }} />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+              )}
+            </Stack>
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const stacksP = getAllStack("");
-                if (isEdit) {
-                    const [stacksRes, projectRes] = await Promise.all([stacksP, getProjectById(projectId)]);
-                    setStackList(stacksRes.data ?? []);
-                    const p = projectRes.data;
-                    setForm((prev) => ({
-                        ...prev,
-                        username,
-                        title: p.title ?? "",
-                        description: p.description ?? "",
-                        startDate: toDateInput(p.startDate),
-                        endDate: toDateInput(p.endDate),
-                        githubUrl: p.githubUrl ?? "",
-                        deployUrl: p.deployUrl ?? "",
-                        notionUrl: p.notionUrl ?? "",
-                        thumbnailUrl: p.thumbnailUrl ?? "",
-                        stackIds: Array.isArray(p.stackNames) ? p.stackNames.map((s) => s.stackId) : [],
-                    }));
-                } else {
-                    const stacksRes = await stacksP;
-                    setStackList(stacksRes.data ?? []);
-                    setForm((f) => ({ ...f, username })); // 라우트 변경 대비
-                }
-            } catch (e) {
-                console.error(e);
-                // navigate("/notfound");
-            } finally {
-                setLoading(false);
-            }
-        })();
-    }, [isEdit, projectId, username, navigate]);
+            {/* 설명 */}
+            {project.description && (
+              <>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    mb: { xs: 0.5, md: 1 },
+                    whiteSpace: "pre-line",
+                    ...(isMobile && !expanded
+                      ? {
+                          display: "-webkit-box",
+                          WebkitLineClamp: 4,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                        }
+                      : null),
+                    textAlign: { xs: "center", md: "left" },
+                  }}
+                >
+                  {project.description}
+                </Typography>
+                {isMobile && (
+                  <Box sx={{ textAlign: "center", mb: 1 }}>
+                    <Button
+                      variant="text"
+                      size="small"
+                      onClick={() => setExpanded((v) => !v)}
+                    >
+                      {expanded ? "접기" : "더보기"}
+                    </Button>
+                  </Box>
+                )}
+              </>
+            )}
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm((f) => ({ ...f, [name]: value }));
-    };
+            <Stack spacing={1.2} sx={{ mt: { xs: 0.5, md: 0 } }}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ textAlign: { xs: "center", md: "left" } }}
+              >
+                <strong>기간:</strong> {project.startDate} ~ {project.endDate}
+              </Typography>
 
-    const handleStackChange = (id) => {
-        setForm((prev) => ({
-            ...prev,
-            stackIds: prev.stackIds.includes(id)
-                ? prev.stackIds.filter((sid) => sid !== id)
-                : [...prev.stackIds, id],
-        }));
-    };
+              <Box sx={{ textAlign: { xs: "center", md: "left" } }}>
+                <ProjectStackList stacks={stacks} />
+              </Box>
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (form.startDate && form.endDate && new Date(form.endDate) < new Date(form.startDate)) {
-            alert("종료일은 시작일 이후여야 합니다.");
-            return;
-        }
-        setSaving(true);
-        try {
-            let thumbnailUrl = form.thumbnailUrl || null;
-            let thumbnailFileId = form.thumbnailFileId || null;
+              {(notion || github || deploy) && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    mt: 0.5,
+                    flexWrap: "wrap",      // ✅ 모바일에서 줄바꿈 허용
+                    overflowX: "visible",  // ✅ 가로 스크롤 대신 줄바꿈
+                    alignItems: "center",
+                    justifyContent: { xs: "center", md: "flex-start" },
+                  }}
+                >
+                  {notion && (
+                    <ExternalLinkButton
+                      href={notion}
+                      icon={<NotesIcon fontSize="small" />}
+                    >
+                      Notion
+                    </ExternalLinkButton>
+                  )}
+                  {github && (
+                    <ExternalLinkButton
+                      href={github}
+                      icon={<GitHubIcon fontSize="small" />}
+                    >
+                      GitHub
+                    </ExternalLinkButton>
+                  )}
+                  {deploy && (
+                    <ExternalLinkButton
+                      href={deploy}
+                      icon={<OpenInNewIcon fontSize="small" />}
+                    >
+                      배포링크
+                    </ExternalLinkButton>
+                  )}
+                </Box>
+              )}
+            </Stack>
+          </Box>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+});
 
-            if (imageFile) {
-                const uploaded = await uploadImage(imageFile, { userId: loginId, folder: "project" });
-                thumbnailUrl = uploaded?.url ?? null;
-                thumbnailFileId = uploaded?.fileId ?? null; // ✅ 새 fileId 저장
-            }
-
-            const payload = { ...form, username, thumbnailUrl, thumbnailFileId };
-            if (isEdit) await updateProject(projectId, payload);
-            else await insertProject(payload);
-
-            alert(isEdit ? "프로젝트 수정 완료!" : "프로젝트 등록 완료!");
-            navigate(`/${username}/project`);
-        } catch (e) {
-            console.error(e);
-            alert("저장 실패");
-        } finally {
-            setSaving(false);
-        }
-    };
-
-    if (loading) {
-        return (
-            <Container className="mt-5 text-center">
-                <Spinner animation="border" /> 불러오는 중…
-            </Container>
-        );
-    }
-    console.log(stackList);
-    return (
-        <>
-            <h2>{isEdit ? "프로젝트 수정" : "프로젝트 등록"}</h2>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                    <Form.Label>제목</Form.Label>
-                    <Form.Control name="title" value={form.title} onChange={handleChange} required />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>설명</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        name="description"
-                        rows={3}
-                        value={form.description}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
-
-                <Row>
-                    <Col>
-                        <Form.Group className="mb-3">
-                            <Form.Label>시작일</Form.Label>
-                            <Form.Control
-                                type="date"
-                                name="startDate"
-                                value={form.startDate}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group className="mb-3">
-                            <Form.Label>종료일</Form.Label>
-                            <Form.Control
-                                type="date"
-                                name="endDate"
-                                value={form.endDate}
-                                onChange={handleChange}
-                                min={form.startDate || undefined}
-                            />
-                        </Form.Group>
-                    </Col>
-                </Row>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>GitHub URL</Form.Label>
-                    <Form.Control name="githubUrl" value={form.githubUrl} onChange={handleChange} />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>배포 URL</Form.Label>
-                    <Form.Control name="deployUrl" value={form.deployUrl} onChange={handleChange} />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>Notion URL</Form.Label>
-                    <Form.Control name="notionUrl" value={form.notionUrl} onChange={handleChange} />
-                </Form.Group>
-
-                {/* 썸네일: 파일 선택만, 업로드는 저장 시점 */}
-                <Form.Group className="mb-3">
-                    <Form.Label>썸네일 이미지</Form.Label>
-                    <div>
-                        <ImagePicker value={imageFile} onChange={setImageFile} />
-                        {uploading && (
-                            <small style={{ marginLeft: 8, color: "#666" }}>{progress}% 업로드 중…</small>
-                        )}
-                        {!imageFile && form.thumbnailUrl && (
-                            <div style={{ marginTop: 8 }}>
-                                <img
-                                    src={`${form.thumbnailUrl}?tr=w-160,h-160,fo-auto,q=auto`}
-                                    alt="current thumbnail"
-                                    style={{ width: 96, height: 96, objectFit: "cover", borderRadius: 8 }}
-                                />
-                            </div>
-                        )}
-                    </div>
-                </Form.Group>
-
-                <Form.Group className="mb-4">
-                    <Form.Label>기술 스택</Form.Label>
-                    <div className="d-flex flex-wrap gap-3 mt-2">
-                        {stackList.map((stack) => (
-                            <Form.Check
-                                key={stack.stackId}
-                                type="checkbox"
-                                id={`stack-${stack.stackId}`}
-                                label={stack.name}
-                                checked={form.stackIds.includes(stack.stackId)}
-                                onChange={() => handleStackChange(stack.stackId)}
-                            />
-                        ))}
-                    </div>
-                </Form.Group>
-
-                <Button variant="primary" type="submit" disabled={saving || uploading}>
-                    {saving || uploading ? "저장 중…" : isEdit ? "수정" : "등록"}
-                </Button>
-            </Form>
-        </>
-    );
-};
-
-export default ProjectUpsertPage;
+export default ProjectCard;

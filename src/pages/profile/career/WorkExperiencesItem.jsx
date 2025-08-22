@@ -1,10 +1,10 @@
 import React from "react";
-import { apiDatesToForm, formToApiDates, ymLt, clampEndYM } from '../../../utils/yearModule';
+import { formToApiDates } from '../../../utils/yearModule';
 import { insertWorkExp, updateWorkExp, deleteWorkExp } from '../../../api/careerApi';
 import CommonCareerPage from "./CommonCareerPage";
 
 const WorkExperiencesItem = ({ userID, username, data = [], onSuccess }) => {
-   const idKey = "workId";
+    const idKey = "workId";
 
     return (
         <CommonCareerPage

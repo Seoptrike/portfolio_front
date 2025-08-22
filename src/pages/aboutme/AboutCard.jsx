@@ -21,6 +21,49 @@ const AboutCard = ({
     return (
         <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent sx={{ p: { xs: 1.25, md: 1.5 } }}>
+                <Box
+                    sx={{
+                        position: "relative",
+                        my: 2,
+                        minHeight: { xs: 56, md: 64 },        // 헤더 높이 고정
+                        px: { xs: 6, md: 8 },                 // 좌우 약간의 안전 여백
+                    }}
+                >
+                    {/* 제목: 절대 중앙 고정 */}
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            left: "50%",
+                            top: "50%",
+                            transform: "translate(-50%, -50%)", // ← 진짜 중앙
+                            textAlign: "center",
+                            pointerEvents: "none",               // 액션 버튼과의 포커스 충돌 방지
+                            width: "100%",
+                        }}
+                    >
+                        <CommonHeroBanner title={about.title} size={isMobile ? "compact" : "section"} />
+                    </Box>
+
+                    {/* 우측 액션: 보일 때만 보이되, 자리와 중앙은 무관 */}
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            right: 0,
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                        }}
+                    >
+                        <Stack direction="row" spacing={0.75} sx={{ visibility: editMode && !isEditing ? "visible" : "hidden" }}>
+                            <IconButton onClick={onStartEdit} size="medium">
+                                <EditIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton onClick={onDelete} size="medium" color="error">
+                                <DeleteIcon fontSize="large" />
+                            </IconButton>
+                        </Stack>
+                    </Box>
+                </Box>
+                {/* 제목 밑에 내용 or Form */}
                 {isEditing ? (
                     <AddEditForm
                         mode="edit"
@@ -30,37 +73,30 @@ const AboutCard = ({
                         onSave={onSaveEdit}
                     />
                 ) : (
-                    <>
-                        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
-                            <Box flex={1} display="flex" justifyContent={"center"}>
-                                <CommonHeroBanner title={about.title} size={isMobile ? "compact" : "section"} />
-                            </Box>
-                            {editMode && (
-                                <Stack direction="row" spacing={0.5}>
-                                    <IconButton size="small" onClick={onStartEdit}><EditIcon fontSize="small" /></IconButton>
-                                    <IconButton size="small" color="error" onClick={onDelete}><DeleteIcon fontSize="small" /></IconButton>
-                                </Stack>
-                            )}
-                        </Stack>
-                        <Typography
-                            sx={{
-                                whiteSpace: 'pre-wrap',
-                                textAlign: { xs: 'center', md: 'left' },       // 모바일: 가운데, 데스크탑: 왼쪽
-                                fontSize: { xs: '0.95rem', md: '1.5rem' },    // 모바일은 조금 작게
-                                lineHeight: { xs: 1.6, md: 1.75 },             // 모바일: 넉넉, 데스크탑: 기본
-                                color: 'text.primary',
-                                px: { xs: 1, md: 0 },                          // 모바일은 좌우 여백 조금 줌
-                                maxWidth: { md: '80%' },                       // 데스크탑에서는 본문 폭 제한
-                                mx: { xs: 'auto', md: 'unset' },               // 모바일은 가운데 정렬 위해 auto margin
-                                pl: { md: 2 },                                 // 바와 본문 사이 여백
-                                borderRadius: { xs: 2, md: 0 },                // 모바일 배경일 때 모서리 둥글게
-                                py: { xs: 1.5, md: 0 }                         // 모바일 배경일 때 위아래 여백
-                            }}
-                        >
-                            {about.content}
-                        </Typography>
-
-                    </>
+                    <Typography
+                        sx={{
+                            whiteSpace: "pre-wrap",
+                            textAlign: "center",
+                            maxWidth: { md: 720, lg: 760, xl: 1200 },
+                            mx: "auto",
+                            fontSize: { xs: "0.98rem", md: "1.12rem", lg: "1.18rem" },
+                            lineHeight: { xs: 1.7, md: 1.9 },
+                            letterSpacing: { xs: "0.005em", md: "0.01em" },
+                            wordBreak: "keep-all",
+                            textWrap: "pretty",
+                            px: { xs: 2, md: 0 },
+                            py: { xs: 1.25, md: 0.5 },
+                            borderRadius: { xs: 2, md: 0 },
+                            color: "text.primary",
+                            "& br + br": {
+                                display: "block",
+                                content: '""',
+                                marginTop: { xs: "0.75rem", md: "1rem" },
+                            },
+                        }}
+                    >
+                        {about.content}
+                    </Typography>
                 )}
             </CardContent>
         </Card>

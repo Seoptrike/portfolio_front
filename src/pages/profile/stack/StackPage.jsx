@@ -1,7 +1,5 @@
 import React, { useMemo } from 'react';
-import { Card } from 'react-bootstrap';
-import { Box, Chip, Typography, Stack as MuiStack, Rating, Tooltip } from '@mui/material';
-import CommonHeroBanner from '../../../components/common/CommonHeroBanner';
+import { Box, Chip, Typography, Rating, Tooltip } from '@mui/material';
 import {
     SiHtml5, SiCss3, SiJavascript, SiReact, SiVuedotjs, SiExpress,
     SiSpring, SiSpringboot, SiPython, SiMysql, SiPostgresql, SiMongodb,
@@ -38,9 +36,7 @@ const StackPage = ({ stack = [] }) => {
     }, [stack]);
 
     return (
-        <div style={{ marginTop: '0.5rem' }}>
-            <CommonHeroBanner title="기술스택" size="compact" />
-
+        <div>
             <div style={{
                 display: "grid",
                 gridTemplateColumns: isMobile

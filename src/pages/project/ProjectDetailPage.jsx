@@ -6,7 +6,6 @@ import {
 import { SiNotion } from "react-icons/si";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 import { ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material';
-import CommonHeroBanner from '../../components/common/CommonHeroBanner';
 
 // ✅ Swiper로 교체
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -25,7 +24,6 @@ const ProjectDetailPage = (projects) => {
 
     return (
         <div className="project-container">
-            <CommonHeroBanner title="프로젝트" size="compact" />
             <Swiper
                 modules={[Navigation, Autoplay]}
                 // 🔁 무한 루프

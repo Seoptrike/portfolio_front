@@ -10,7 +10,7 @@ import WorkExperiencesItem from './career/WorkExperiencesItem';
 import EduHistoryItem from './career/EduHistoryItem';
 import useIsMobile from '../../hooks/useIsMobile';
 import { useLoading } from '../../context/LoadingContext';
-
+import CommonHeroBanner from '../../components/common/CommonHeroBanner';
 const MainPage = () => {
     const { username } = useParams();
     const { withLoading } = useLoading();
@@ -19,7 +19,6 @@ const MainPage = () => {
     const [userID, setUserID] = useState();
     const [userProject, setUserProject] = useState({});
     const [userInfo, setUserInfo] = useState({});
-    const main = 5;
     const { editMode } = useEditMode();
     const [showProfileModal, setShowProfileModal] = useState(false);
     const isMobile = useIsMobile();
@@ -40,8 +39,12 @@ const MainPage = () => {
     console.log(isMobile, window.innerWidth)
     return (
         <div className="mt-4">
-            <Row>
-                <Col xs={12} lg={main} className="sidebar">
+            <Row
+                style={{ "--bs-gutter-x": "1.25rem", "--bs-gutter-y": "1.25rem" }} // g-3.5 느낌
+            >
+                {/* 1. 사진: 모바일 1번째, 데스크탑 좌상단 */}
+                <Col xs={12} lg={6} className="order-1 order-lg-1">
+                    {/* === 프로필 블록 시작 === */}
                     <div className="profile-wrapper text-center" style={{ position: "relative" }}>
                         <div style={{ position: "relative", display: "inline-block" }}>
                             <img
@@ -51,12 +54,11 @@ const MainPage = () => {
                                     width: isMobile ? 160 : 320,
                                     height: isMobile ? 160 : 320,
                                     objectFit: "cover",
-                                    borderRadius: "50%",         // ✅ 동그랗게
+                                    borderRadius: "50%",
                                     border: "1px solid #eee",
                                     display: "block",
                                 }}
                             />
-
                             {editMode && (
                                 <button
                                     type="button"
@@ -64,11 +66,11 @@ const MainPage = () => {
                                     aria-label="프로필 설정"
                                     style={{
                                         position: "absolute",
-                                        right: isMobile ? 4 : 12,  // 📱 모바일일 때는 좀 더 붙게
-                                        bottom: isMobile ? 4 : 12, // 📱 모바일일 때는 좀 더 붙게
-                                        width: isMobile ? 36 : 44, // 📱 버튼 크기도 줄임
+                                        right: isMobile ? 4 : 12,
+                                        bottom: isMobile ? 4 : 12,
+                                        width: isMobile ? 36 : 44,
                                         height: isMobile ? 36 : 44,
-                                        borderRadius: "50%",        // ✅ 동그란 버튼
+                                        borderRadius: "50%",
                                         border: "1px solid rgba(0,0,0,0.1)",
                                         background: "#fff",
                                         display: "grid",
@@ -82,7 +84,6 @@ const MainPage = () => {
                             )}
                         </div>
 
-                        {/* 모달 */}
                         <Modal
                             show={showProfileModal}
                             onHide={() => setShowProfileModal(false)}
@@ -98,6 +99,11 @@ const MainPage = () => {
                             </Modal.Body>
                         </Modal>
                     </div>
+                    {/* === 프로필 블록 끝 === */}
+                </Col>
+
+                {/* 2. 커리어: 모바일 2번째, 데스크탑 좌하단 */}
+                <Col xs={12} lg={6} className="order-2 order-lg-3">
                     <EduHistoryItem
                         userID={userID}
                         username={username}
@@ -112,23 +118,23 @@ const MainPage = () => {
                     />
                 </Col>
 
-                {/* 오른쪽 메인 */}
-                <Col xs={12} lg={12 - main}>
-                    <Row className="g-4">
-                        <Col xs={12}>
-                            <ProjectDetailPage
-                                projects={userProject}
-                            />
-                        </Col>
-                        <Col xs={12}>
-                            <StackPage
-                                userID={userID}
-                                username={username}
-                                stack={userCareers.stacks}
-                                onSuccess={() => CallTotalAPI()}
-                            />
-                        </Col>
-                    </Row>
+                {/* 3. 프로젝트: 모바일 3번째, 데스크탑 우상단 */}
+                <Col xs={12} lg={6} className="order-3 order-lg-2">
+                    <CommonHeroBanner title="프로젝트" size="compact" />
+                    <ProjectDetailPage projects={userProject} />
+                </Col>
+
+                {/* 4. 스택: 모바일 4번째, 데스크탑 우하단 */}
+                <Col xs={12} lg={6} className="order-4 order-lg-4">
+                    <div className={isMobile ? "mb-1" : "mb-3"}>
+                        <CommonHeroBanner title="기술스택" size="compact" />
+                    </div>
+                    <StackPage
+                        userID={userID}
+                        username={username}
+                        stack={userCareers.stacks}
+                        onSuccess={() => CallTotalAPI()}
+                    />
                 </Col>
             </Row>
         </div>

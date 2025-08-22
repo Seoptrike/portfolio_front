@@ -1,12 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import dayjs from "dayjs";
 import {
-    Container, Grid, Paper, Table, TableHead, TableRow, TableCell, TableBody,
+    Grid, Paper, Table, TableHead, TableRow, TableCell, TableBody,
     TableContainer, Button, Box
 } from "@mui/material";
-import { AuthContext } from "../../../context/AuthContext";
 import useEditMode from "../../../hooks/useEditMode";
-import useIsMobile from "../../../hooks/useIsMobile";
 import CommonHeroBanner from "../../../components/common/CommonHeroBanner";
 import { apiDatesToForm, formToApiDates, ymLt, clampEndYM } from "../../../utils/yearModule";
 import CommonCareerModal from "./CommonCareerModal";
@@ -53,10 +51,7 @@ const CommonCareerPage = ({
         guide: "기간은 월까지 입력해 주세요."
     }
 }) => {
-    const { isHost } = useContext(AuthContext);
     const { editMode } = useEditMode();
-    const { isMobile } = useIsMobile();
-
     const [open, setOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [form, setForm] = useState({
@@ -134,9 +129,9 @@ const CommonCareerPage = ({
     };
 
     return (
-        <Box sx={{ mt: 2 }}>
+        <Box>
             {/* 헤더: 가운데 배너 + 오른쪽 추가 버튼 */}
-            <Box sx={{ position: "relative", mb: 2 }}>
+            <Box sx={{ position: "relative", my: 1 }}>
                 <Grid container justifyContent="center" alignItems="center">
                     <Grid size="auto">
                         <CommonHeroBanner title={title} size="compact" />
