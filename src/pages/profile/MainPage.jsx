@@ -36,7 +36,6 @@ const MainPage = () => {
         setUserInfo(res.data.userInfo);
     });
     useEffect(() => { CallTotalAPI() }, [username])
-    console.log(isMobile, window.innerWidth)
     return (
         <div className="mt-4">
             <Row

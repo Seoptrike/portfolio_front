@@ -13,6 +13,7 @@ import {
 import AboutCard from './AboutCard';
 import AddCard from './AddCard';
 import AddEditForm from './AddEditForm';
+import AboutEmptyState from './AboutEmptyState';
 
 const AboutMePage = () => {
     const [aboutList, setAboutList] = useState([]);
@@ -90,10 +91,14 @@ const AboutMePage = () => {
 
     const renderContent = () => {
         if (aboutList.length === 0) {
-            return isHost ? (
-                <Grid maxWidth={'false'}>
-                    <Grid size={{ xs: 12, md: 12, lg: 12 }}>
-                        {isAdding ? (
+            return (
+                <Stack spacing={2.5}>
+                    <AboutEmptyState
+                        canEdit={isHost || editMode}
+                        onAdd={() => setIsAdding(true)}
+                    />
+                    {editMode && (
+                        isAdding ? (
                             <AddEditForm
                                 mode="add"
                                 values={newAbout}
@@ -102,12 +107,10 @@ const AboutMePage = () => {
                                 onSave={handleAddSave}
                             />
                         ) : (
-                            <AddCard onClick={handleAddClick} />
-                        )}
-                    </Grid>
-                </Grid>
-            ) : (
-                <Typography color="text.secondary">작성된 자기소개가 없습니다.</Typography>
+                            <AddCard onClick={() => setIsAdding(true)} />
+                        )
+                    )}
+                </Stack>
             );
         }
 

@@ -43,7 +43,21 @@ const CommonCareerModal = ({
     };
 
     return (
-        <Dialog open={show} onClose={onHide} fullWidth maxWidth="sm">
+        <Dialog
+            open={show}
+            onClose={onHide}
+            fullWidth
+            maxWidth="sm"
+            keepMounted
+            TransitionProps={{
+                onEntering: (node) => {
+                    const el = node.querySelector(
+                        'input, textarea, button, [tabindex]:not([tabindex="-1"])'
+                    );
+                    el?.focus();
+                },
+            }}
+        >
             <DialogTitle sx={{ fontWeight: 700 }}>
                 {isEdit ? labels.editTitle : labels.addTitle}
             </DialogTitle>
@@ -51,6 +65,7 @@ const CommonCareerModal = ({
             <DialogContent dividers>
                 <Stack spacing={2}>
                     <TextField
+                        autoFocus
                         label={labels.title1}
                         name="title1"                 // 공용 키(페이지에서 매핑)
                         value={form.title1 ?? ""}
