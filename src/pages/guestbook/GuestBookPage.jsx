@@ -14,7 +14,6 @@ const GuestBookPage = () => {
     // 2. State 설정
     const [list, setList] = useState([]); // 방명록 목록
     const [newMessage, setNewMessage] = useState(''); // 새로 작성할 메시지
-    const [loading, setLoading] = useState(true); // 로딩 상태
     const navigate = useNavigate();
 
     const [editingId, setEditingId] = useState(null); // 수정 중인 항목의 ID (null이면 수정 중 아님)
@@ -22,15 +21,12 @@ const GuestBookPage = () => {
 
     // 3. 데이터 로딩 함수
     const fetchList = async () => {
-        setLoading(true);
         try {
             const response = await fetchGuestBookList(username);
-            console.log(response.data);
             setList(response.data);
         } catch (error) {
             navigate("/notfound")
         } finally {
-            setLoading(false);
         }
     };
 
@@ -102,11 +98,6 @@ const GuestBookPage = () => {
             alert(error.response?.data || "메시지 수정 중 오류가 발생했습니다.");
         }
     };
-
-    // 로딩 중일 때 UI
-    if (loading) {
-        return <Container className="d-flex justify-content-center my-5"><Spinner animation="border" /></Container>;
-    }
 
     return (
         <div>
