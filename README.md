@@ -3,7 +3,7 @@
 [![Frontend Deploy](https://img.shields.io/badge/vercel-deployed-brightgreen?logo=vercel)](https://portfolio-front-dun.vercel.app/)
 [![Backend Deploy](https://img.shields.io/badge/render-deployed-blue?logo=render)](https://portfolio-back-prod.onrender.com)
 [![UptimeRobot status](https://img.shields.io/uptimerobot/status/ur3080415-95ab227abd22404eb3bef434)](https://stats.uptimerobot.com/ur3080415-95ab227abd22404eb3bef434)
-[![CI/CD](https://github.com/yourname/yourrepo/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/yourname/yourrepo/actions)
+[![CI/CD](https://github.com/Seoptrike/portfolio_back/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/Seoptrike/yourrepo/portfolio_back)
 
 ---
 
