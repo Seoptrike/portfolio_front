@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import {
-    Avatar,
     Divider,
     IconButton,
     ListItem,
-    ListItemAvatar,
     ListItemText,
     Stack,
     TextField,
@@ -15,14 +13,12 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import CloseIcon from "@mui/icons-material/Close";
-import NotesIcon from "@mui/icons-material/Notes";
 
 const DetailItem = ({ detail, editMode, onUpdate, onDelete }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [form, setForm] = useState({ title: detail.title, content: detail.content });
 
-    const handleChange = (e) =>
-        setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+    const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
     const handleSave = async () => {
         await onUpdate({ detailId: detail.detailId, ...form });
         setIsEditing(false);
@@ -30,17 +26,19 @@ const DetailItem = ({ detail, editMode, onUpdate, onDelete }) => {
 
     return (
         <>
-            <ListItem alignItems="flex-start" sx={{ px: 0, py: { xs: 1.5, md: 2 } }}>
-                <ListItemAvatar>
-                    <Avatar variant="rounded" sx={{ width: { xs: 36, md: 44 }, height: { xs: 36, md: 44 } }}>
-                        <NotesIcon fontSize="medium" />
-                    </Avatar>
-                </ListItemAvatar>
-
+            <ListItem
+                alignItems="flex-start"
+                sx={{ px: { xs: 0.5, sm: 1 }, py: { xs: 1.25, md: 2 } }}
+            >
                 <ListItemText
                     primary={
                         isEditing ? (
-                            <Stack direction="row" spacing={1} alignItems="center">
+                            <Stack
+                                direction="row"
+                                spacing={1}
+                                alignItems="center"
+                                sx={{ width: "100%" }}
+                            >
                                 <TextField
                                     name="title"
                                     value={form.title}
@@ -67,6 +65,7 @@ const DetailItem = ({ detail, editMode, onUpdate, onDelete }) => {
                                 direction="row"
                                 justifyContent="space-between"
                                 alignItems="center"
+                                sx={{ width: "100%" }}
                             >
                                 <Typography
                                     sx={{
