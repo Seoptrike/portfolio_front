@@ -11,8 +11,8 @@ const HeroHeader = React.memo(function HeroHeader({
     isHost = false,
     primaryActionLabel,
     primaryActionIcon,
-    onPrimaryAction,             // optional (navigate 없이 클릭 핸들러로도 사용 가능)
-    actionButtonProps = {},      // e.g. { component: RouterLink, to: "/path", sx: {...} }
+    onPrimaryAction,
+    actionButtonProps = {},
     sx,
 }) {
     const showAction = (isHost || editMode) && Boolean(primaryActionLabel);
@@ -27,7 +27,7 @@ const HeroHeader = React.memo(function HeroHeader({
                 border: "1px solid",
                 borderColor: "divider",
                 background: (t) =>
-                    `linear-gradient(180deg, ${t.palette.primary.main}14 0%, ${t.palette.background.paper} 60%)`,
+                    `linear-gradient(180deg, #21252914 10%, ${t.palette.background.paper} 60%)`,
                 ...sx,
             }}
         >
@@ -45,11 +45,12 @@ const HeroHeader = React.memo(function HeroHeader({
                             width: 28,
                             height: 28,
                             borderRadius: "50%",
-                            backgroundColor: t.palette.primary.main,
+                            // ✅ 파란 배경 제거 → 중립 계열
+                            backgroundColor: t.palette.grey[800],
                             display: "grid",
                             placeItems: "center",
-                            boxShadow: `0 6px 16px ${t.palette.primary.main}59`,
-                            color: t.palette.primary.contrastText,
+                            boxShadow: `0 6px 16px ${t.palette.grey[800]}59`,
+                            color: t.palette.common.white,
                             flexShrink: 0,
                         })}
                     >
@@ -80,9 +81,10 @@ const HeroHeader = React.memo(function HeroHeader({
                             size="small"
                             sx={(t) => ({
                                 fontWeight: 600,
-                                color: t.palette.primary.main,
+                                // ✅ 파란 텍스트/배경 제거 → 회색 톤
+                                color: t.palette.text.primary,
                                 borderColor: "transparent",
-                                backgroundColor: t.palette.primary.main + "1A",
+                                backgroundColor: t.palette.grey[200],
                             })}
                         />
                     )}
@@ -97,8 +99,16 @@ const HeroHeader = React.memo(function HeroHeader({
                                 disableElevation
                                 startIcon={primaryActionIcon}
                                 onClick={onPrimaryAction}
-                                sx={{ borderRadius: 999, px: 2 }}
-                                {...actionButtonProps} // RouterLink + to 등 최종 오버라이드
+                                sx={{
+                                    borderRadius: 999,
+                                    px: 2,
+                                    // ✅ 버튼 색상도 중립 톤
+                                    backgroundColor: (t) => t.palette.grey[800],
+                                    "&:hover": {
+                                        backgroundColor: (t) => t.palette.grey[900],
+                                    },
+                                }}
+                                {...actionButtonProps}
                             >
                                 {primaryActionLabel}
                             </Button>
