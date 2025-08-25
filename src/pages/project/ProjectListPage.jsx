@@ -3,17 +3,17 @@ import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import { deleteProject, getUserProject } from "../../api/projectApi";
 import useEditMode from "../../hooks/useEditMode";
 import { AuthContext } from "../../context/AuthContext";
+
 // --- MUI ---
 import {
     Box,
     Button,
-    Stack,
     Typography,
-    Paper
+    Paper,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import HeaderSection from "./HeaderSection";
-import ProjectCard from "./ProjectCard";
+import ProjectCard from "./projectcard/ProjectCard";
 import useIsMobile from "../../hooks/useIsMobile";
 
 // =====================
@@ -41,58 +41,72 @@ const ProjectListPage = () => {
         fetchProjects();
     }, [fetchProjects]);
 
-    // --- 수정/삭제 핸들러 팩토리 (메모)
-    const makeUpdate = useCallback((projectId) => () => navigate(`/${username}/project/update/${projectId}`), [navigate, username]);
+    // --- 수정/삭제 핸들러 ---
+    const makeUpdate = useCallback(
+        (projectId) => () => navigate(`/${username}/project/update/${projectId}`),
+        [navigate, username]
+    );
 
-    const makeDelete = useCallback((projectId) => async () => {
-        if (!window.confirm("정말 삭제할까요?")) return;
-        try {
-            await deleteProject(projectId);
-            await fetchProjects();
-            alert("삭제 완료!");
-        } catch (e) {
-            console.error(e);
-            alert("삭제 실패");
-        }
-    }, [fetchProjects]);
+    const makeDelete = useCallback(
+        (projectId) => async () => {
+            if (!window.confirm("정말 삭제할까요?")) return;
+            try {
+                await deleteProject(projectId);
+                await fetchProjects();
+                alert("삭제 완료!");
+            } catch (e) {
+                console.error(e);
+                alert("삭제 실패");
+            }
+        },
+        [fetchProjects]
+    );
 
     const hasProjects = (projects?.length ?? 0) > 0;
 
-    const header = useMemo(() => (
-        <HeaderSection editMode={editMode} username={username} />
-    ), [editMode, username]);
+    const header = React.useMemo(
+        () => <HeaderSection editMode={editMode} username={username} />,
+        [editMode, username]
+    );
 
     return (
         <Box>
             {header}
+
             {hasProjects ? (
                 <Box
                     sx={{
-                        display: 'grid',
-                        gap: 2,
+                        display: "grid",
+                        gap: 1.5,
                         gridTemplateColumns: {
-                            xs: '1fr',       // 모바일~sm: 한 줄에 1개
-                            md: '1fr 1fr',   // md 이상: 한 줄에 2개
+                            xs: "repeat(1, 1fr)",    // 모바일: 2개
+                            sm: "repeat(3, 1fr)",    // 작은 태블릿: 3개
+                            md: "repeat(3, 1fr)",    // 큰 태블릿: 4개
+                            lg: "repeat(3, 1fr)",    // 데스크탑: 5개
                         },
                     }}
                 >
                     {projects.map((project) => (
-                        <Box key={project.projectId}>
-                            <ProjectCard
-                                project={project}
-                                editMode={editMode}
-                                onUpdate={makeUpdate(project.projectId)}
-                                onDelete={makeDelete(project.projectId)}
-                                isMobile={isMobile}
-                            />
-                        </Box>
+                        <ProjectCard
+                            key={project.projectId}
+                            project={project}
+                            editMode={editMode}
+                            onUpdate={makeUpdate(project.projectId)}
+                            onDelete={makeDelete(project.projectId)}
+                            isMobile={isMobile}
+                        />
                     ))}
                 </Box>
             ) : (
                 // --- 프로젝트가 없는 경우 ---
                 <Paper
                     variant="outlined"
-                    sx={{ p: { xs: 4, md: 6 }, borderRadius: 3, textAlign: "center" }}
+                    sx={{
+                        p: { xs: 4, md: 6 },
+                        borderRadius: 3,
+                        textAlign: "center",
+                        bgcolor: "background.paper",
+                    }}
                 >
                     <Typography variant="h3" sx={{ fontSize: { xs: 48, md: 64 } }}>
                         🗂️
@@ -111,7 +125,7 @@ const ProjectListPage = () => {
                             startIcon={<AddIcon />}
                             component={RouterLink}
                             to={`/${username}/project/insert`}
-                            sx={{ mt: 3 }}
+                            sx={{ mt: 3, borderRadius: 2 }}
                         >
                             첫 프로젝트 등록하기
                         </Button>

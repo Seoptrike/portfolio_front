@@ -10,11 +10,10 @@ import {
     Typography,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import ImagePicker from "../../components/common/ImagePicker";
 import useImageKitUpload from "../../hooks/useImageKitUpload.js";
 import { AuthContext } from "../../context/AuthContext";
 import { getAllStack } from "../../api/techStackApi";
-import { insertProject, updateProject, getProjectById } from "../../api/projectApi";
+import { insertProject, updateProject, getProjectById, deleteProject } from "../../api/projectApi";
 import StackCheckboxGroup from "./StackCheckBoxGroup.jsx";
 import useEditMode from "../../hooks/useEditMode.js";
 import DateInput from "./DateInput.jsx";
@@ -96,6 +95,24 @@ const ProjectUpsertPage = () => {
                 : [...prev.stackIds, id],
         }));
     };
+
+    const handleDelete = async () => {
+        if (!projectId) return;
+        if (!window.confirm("정말 이 프로젝트를 삭제하시겠습니까?")) return;
+
+        setSaving(true);
+        try {
+            await deleteProject(projectId);
+            alert("프로젝트가 삭제되었습니다.");
+            navigate(`/${username}/project`);
+        } catch (e) {
+            console.error(e);
+            alert("삭제 실패");
+        } finally {
+            setSaving(false);
+        }
+    };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -199,7 +216,7 @@ const ProjectUpsertPage = () => {
                 </Box>
                 <Box
                     display="flex"
-                    justifyContent="center"  // ✅ 항상 중앙 정렬
+                    justifyContent="center"
                     gap={2}
                     flexWrap="wrap"
                     mt={3}
@@ -209,9 +226,9 @@ const ProjectUpsertPage = () => {
                         type="submit"
                         disabled={saving || uploading}
                         sx={{
-                            minWidth: 120,           // ✅ 버튼 너비 키움
-                            height: 48,              // ✅ 버튼 높이 키움
-                            fontSize: "1rem",        // ✅ 글씨도 조금 크게
+                            minWidth: 120,
+                            height: 48,
+                            fontSize: "1rem",
                             borderColor: '#343a40',
                             color: '#343a40',
                             '&:hover': {
@@ -222,11 +239,28 @@ const ProjectUpsertPage = () => {
                     >
                         {saving || uploading ? "저장 중…" : isEdit ? "수정" : "등록"}
                     </Button>
+
+                    {isEdit && (
+                        <Button
+                            variant="outlined"
+                            onClick={handleDelete}
+                            disabled={saving || uploading}
+                            color="error"
+                            sx={{
+                                minWidth: 120,
+                                height: 48,
+                                fontSize: "1rem",
+                            }}
+                        >
+                            삭제
+                        </Button>
+                    )}
+
                     <Button
                         variant="outlined"
                         onClick={handleCancel}
                         disabled={saving || uploading}
-                        color="error"
+                        color="inherit"
                         sx={{
                             minWidth: 120,
                             height: 48,

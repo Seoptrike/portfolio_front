@@ -31,6 +31,10 @@ const DetailItem = ({ detail, editMode, onUpdate, onDelete }) => {
                 sx={{ px: { xs: 0.5, sm: 1 }, py: { xs: 1.25, md: 2 } }}
             >
                 <ListItemText
+                    slotProps={{
+                        primary: { component: 'div' },
+                        secondary: { component: 'div' },
+                    }}
                     primary={
                         isEditing ? (
                             <Stack

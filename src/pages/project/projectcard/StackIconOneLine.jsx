@@ -1,0 +1,55 @@
+// components/ProjectCard/StackIconsOneLine.jsx
+import React from "react";
+import { Box, Stack, Tooltip, Typography } from "@mui/material";
+import { ICON_MAP } from "../../../utils/iconMap";
+
+const StackIconsOneLine = ({ names = [], iconSize = 16, boxSize = 20 }) => {
+    return (
+        <Box
+            sx={{
+                width: "100%",
+                height: boxSize + 6,
+                overflowX: "auto",
+                overflowY: "hidden",
+                WebkitOverflowScrolling: "touch",
+                display: "flex",
+                justifyContent: "center",
+                "&::-webkit-scrollbar": { height: 6 },
+                "&::-webkit-scrollbar-thumb": { bgcolor: "divider", borderRadius: 3 },
+            }}
+        >
+            <Stack direction="row" spacing={0.5} sx={{ alignItems: "center", flexWrap: "nowrap", width: "max-content", pr: 0.5 }}>
+                {names.map((name, i) => {
+                    const entry = ICON_MAP?.[name] || {};
+                    const Icon = entry.Icon || entry.icon || entry;
+                    const color = entry.color;
+                    return (
+                        <Tooltip title={name} key={`${name}-${i}`} arrow>
+                            <Box
+                                component="span"
+                                sx={{
+                                    width: boxSize,
+                                    height: boxSize,
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    flex: "0 0 auto",
+                                }}
+                            >
+                                {Icon ? (
+                                    <Icon size={iconSize} color={color} />
+                                ) : (
+                                    <Typography variant="caption" sx={{ fontWeight: 700 }}>
+                                        {String(name).charAt(0).toUpperCase()}
+                                    </Typography>
+                                )}
+                            </Box>
+                        </Tooltip>
+                    );
+                })}
+            </Stack>
+        </Box>
+    );
+};
+
+export default StackIconsOneLine;

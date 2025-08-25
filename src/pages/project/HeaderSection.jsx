@@ -1,37 +1,27 @@
-import { Stack, Box, Typography, Button } from "@mui/material";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
-import React from "react";
-
+import NotesIcon from "@mui/icons-material/Notes";
+import HeroHeader from "../../components/common/HeroHeader";
 
 const HeaderSection = React.memo(function HeaderSection({ editMode, username }) {
     return (
-        <Stack
-            direction={{ xs: "column", sm: "row" }}
-            justifyContent="space-between"
-            alignItems={{ xs: "stretch", sm: "center" }}
-            spacing={2}
-            sx={{ my: 1 }}
-        >
-            <Box>
-                <Typography variant="body2" color="text.secondary">
-                    최근에 진행한 작업과 포트폴리오를 모아 보여줘요.
-                </Typography>
-            </Box>
-            {editMode && (
-                <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    component={RouterLink}
-                    to={`/${username}/project/insert`}
-                    sx={{ alignSelf: { xs: "stretch", sm: "center" } }}
-                >
-                    등록하러가기
-                </Button>
-            )}
-        </Stack>
+        <HeroHeader
+            title="프로젝트"
+            icon={<NotesIcon sx={{ fontSize: 18 }} />}
+            showChip
+            chipLabel={`@${username}`}
+            editMode={editMode}                
+            primaryActionLabel="등록하러가기"
+            primaryActionIcon={<AddIcon />}
+            actionButtonProps={{
+                component: RouterLink,
+                to: `/${username}/project/insert`,     // ⬅️ 라우팅 정상 동작
+                sx: { borderRadius: 999, px: 2 },
+            }}
+            sx={{ mb: 2.5 }}
+        />
     );
 });
-
 
 export default HeaderSection;
