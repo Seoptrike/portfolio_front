@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState, useCallback } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import { deleteProject, getUserProject } from "../../api/projectApi";
 import useEditMode from "../../hooks/useEditMode";

@@ -214,26 +214,35 @@ const ProjectUpsertPage = () => {
                         />
                     </FormControl>
                 </Box>
+                {/* 버튼 영역 */}
                 <Box
-                    display="flex"
-                    justifyContent="center"
-                    gap={2}
-                    flexWrap="wrap"
-                    mt={3}
+                    sx={{
+                        display: "flex",
+                        gap: { xs: 1, sm: 2 },
+                        mt: 3,
+                        // 모바일: 한 줄 고정 / 데스크탑: 필요시 줄바꿈 허용
+                        flexWrap: { xs: "nowrap", sm: "wrap" },
+                        alignItems: "stretch",
+                        justifyContent: { xs: "space-between", sm: "center" },
+                    }}
                 >
                     <Button
                         variant="outlined"
                         type="submit"
                         disabled={saving || uploading}
                         sx={{
-                            minWidth: 120,
-                            height: 48,
-                            fontSize: "1rem",
-                            borderColor: '#343a40',
-                            color: '#343a40',
-                            '&:hover': {
-                                backgroundColor: '#343a40',
-                                color: '#fff',
+                            // ✅ 모바일에서 3등분 + 작게
+                            flex: { xs: "1 1 0", sm: "0 0 auto" },
+                            minWidth: { xs: 0, sm: 120 },
+                            height: { xs: 40, sm: 48 },
+                            px: { xs: 1, sm: 2 },
+                            fontSize: { xs: "0.9rem", sm: "1rem" },
+                            whiteSpace: "nowrap",
+                            borderColor: "#343a40",
+                            color: "#343a40",
+                            "&:hover": {
+                                backgroundColor: "#343a40",
+                                color: "#fff",
                             },
                         }}
                     >
@@ -247,9 +256,12 @@ const ProjectUpsertPage = () => {
                             disabled={saving || uploading}
                             color="error"
                             sx={{
-                                minWidth: 120,
-                                height: 48,
-                                fontSize: "1rem",
+                                flex: { xs: "1 1 0", sm: "0 0 auto" },
+                                minWidth: { xs: 0, sm: 120 },
+                                height: { xs: 40, sm: 48 },
+                                px: { xs: 1, sm: 2 },
+                                fontSize: { xs: "0.9rem", sm: "1rem" },
+                                whiteSpace: "nowrap",
                             }}
                         >
                             삭제
@@ -262,9 +274,12 @@ const ProjectUpsertPage = () => {
                         disabled={saving || uploading}
                         color="inherit"
                         sx={{
-                            minWidth: 120,
-                            height: 48,
-                            fontSize: "1rem",
+                            flex: { xs: "1 1 0", sm: "0 0 auto" },
+                            minWidth: { xs: 0, sm: 120 },
+                            height: { xs: 40, sm: 48 },
+                            px: { xs: 1, sm: 2 },
+                            fontSize: { xs: "0.9rem", sm: "1rem" },
+                            whiteSpace: "nowrap",
                         }}
                     >
                         취소

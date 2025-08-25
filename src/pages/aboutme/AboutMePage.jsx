@@ -14,6 +14,7 @@ import AboutCard from './AboutCard';
 import AddCard from './AddCard';
 import AddEditForm from './AddEditForm';
 import AboutEmptyState from './AboutEmptyState';
+import HeaderSection from './HeaderSection';
 
 const AboutMePage = () => {
     const [aboutList, setAboutList] = useState([]);
@@ -115,35 +116,38 @@ const AboutMePage = () => {
         }
 
         return (
-            <Stack spacing={2.5}>
-                {aboutList.map((about) => (
-                    <AboutCard
-                        key={about.detail_id}
-                        about={about}
-                        editMode={editMode}
-                        isEditing={editingId === about.detail_id}
-                        editingValues={editingContent}
-                        onStartEdit={() => startEdit(about)}
-                        onChangeEdit={handleEditInputChange}
-                        onCancelEdit={cancelEdit}
-                        onSaveEdit={() => saveEdit(about.detail_id)}
-                        onDelete={() => removeDetail(about.detail_id)}
-                    />
-                ))}
-                {editMode && (
-                    isAdding ? (
-                        <AddEditForm
-                            mode="add"
-                            values={newAbout}
-                            onChange={handleAddInputChange}
-                            onCancel={handleAddCancel}
-                            onSave={handleAddSave}
+            <>
+                <HeaderSection username={username} />
+                <Stack spacing={2.5}>
+                    {aboutList.map((about) => (
+                        <AboutCard
+                            key={about.detail_id}
+                            about={about}
+                            editMode={editMode}
+                            isEditing={editingId === about.detail_id}
+                            editingValues={editingContent}
+                            onStartEdit={() => startEdit(about)}
+                            onChangeEdit={handleEditInputChange}
+                            onCancelEdit={cancelEdit}
+                            onSaveEdit={() => saveEdit(about.detail_id)}
+                            onDelete={() => removeDetail(about.detail_id)}
                         />
-                    ) : (
-                        <AddCard onClick={handleAddClick} />
-                    )
-                )}
-            </Stack>
+                    ))}
+                    {editMode && (
+                        isAdding ? (
+                            <AddEditForm
+                                mode="add"
+                                values={newAbout}
+                                onChange={handleAddInputChange}
+                                onCancel={handleAddCancel}
+                                onSave={handleAddSave}
+                            />
+                        ) : (
+                            <AddCard onClick={handleAddClick} />
+                        )
+                    )}
+                </Stack>
+            </>
         );
     };
 
