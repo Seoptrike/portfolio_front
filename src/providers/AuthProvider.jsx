@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { loginCheck, hostCheck } from '../api/authApi';
 import { AuthContext } from '../context/AuthContext';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 export default function AuthProvider({ children }) {
     const [isLogin, setIsLogin] = useState(false);
@@ -20,16 +20,16 @@ export default function AuthProvider({ children }) {
 
     const loginCheckHandler = async () => {
         const res = await loginCheck();
-        console.log(res.data)
+        // console.log(res.data)
         if (res.data.status === 'LOGIN') {
             const username = res.data.username;
             const userId = res.data.userId;
-            console.log("LOGIN 이름:" + res.data.username);
+            // console.log("LOGIN 이름:" + res.data.username);
             setIsLogin(true);
             setLoginId(userId);
             setLoginName(username);
             const urlUsername = extractUsernameFromPath(location.pathname);
-            console.log("URL 이름:" + extractUsernameFromPath(location.pathname));
+            // console.log("URL 이름:" + extractUsernameFromPath(location.pathname));
             if (urlUsername && username === urlUsername) {
                 const hostRes = await hostCheck(username);
                 setIsHost(hostRes.data === 'HOST');

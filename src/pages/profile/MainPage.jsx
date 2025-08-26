@@ -11,6 +11,7 @@ import EduHistoryItem from './career/EduHistoryItem';
 import useIsMobile from '../../hooks/useIsMobile';
 import { useLoading } from '../../context/LoadingContext';
 import CommonHeroBanner from '../../components/common/CommonHeroBanner';
+import HeroHeader from '../../components/common/HeroHeader';
 const MainPage = () => {
     const { username } = useParams();
     const { withLoading } = useLoading();
@@ -29,7 +30,6 @@ const MainPage = () => {
             navigate('/notfound');
             return;
         }
-        console.log(res.data);
         setUserCareers(res.data);
         setUserID(res.data.userID);
         setUserProject(res.data.projects)
@@ -116,9 +116,11 @@ const MainPage = () => {
                         onSuccess={() => CallTotalAPI()}
                     />
                 </Col>
-
                 {/* 3. 프로젝트: 모바일 3번째, 데스크탑 우상단 */}
                 <Col xs={12} lg={6} className="order-3 order-lg-2">
+                    {/* {!isMobile &&
+                        <HeroHeader title={"안녕하세요! 👋 한줄소개를 입력해주세요."} />
+                    } */}
                     <CommonHeroBanner title="프로젝트" size="compact" />
                     <ProjectDetailPage projects={userProject} />
                 </Col>

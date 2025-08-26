@@ -11,7 +11,7 @@ import "slick-carousel/slick/slick-theme.css";
 import 'handsontable/styles/handsontable.min.css';
 import 'handsontable/styles/ht-theme-main.min.css';
 import CommonSpinner from './components/common/CommonSpinner.jsx';
-
+import { Analytics } from "@vercel/analytics/react";
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>
@@ -19,6 +19,7 @@ createRoot(document.getElementById('root')).render(
             <AuthProvider>
                 <CommonSpinner/>
                 <RouterConfig />
+                <Analytics/>
             </AuthProvider>
         </LoadingProvider>
     </BrowserRouter>

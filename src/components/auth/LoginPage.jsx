@@ -73,7 +73,7 @@ const LoginPage = () => {
                                     <Form.Control type="password" name="password" value={password} onChange={onChangeForm} />
                                 </InputGroup>
                                 <Button style={{ backgroundColor: "orange", borderColor: "orange", color: 'white' }} className='w-100 mt-2' type='submit' ><b>로그인</b></Button>
-                                <div className='text-center mt-2'>
+                                {/* <div className='text-center mt-2'>
                                     <span>
                                         <a href='/auth/register'>회원가입</a>
                                     </span>
@@ -83,7 +83,7 @@ const LoginPage = () => {
                                     <span>
                                         <a href='/user/searchPass'>비밀번호 찾기</a>
                                     </span>
-                                </div>
+                                </div> */}
                             </form>
                         </div>
                     </Col>
