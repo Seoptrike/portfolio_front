@@ -57,9 +57,9 @@ const CareerAccordion = ({
                     />
                 }
                 sx={{
-                    px: { xs: 1, sm: 1.5, md: 2 },
+                    pl: { xs: 1.5, sm: 3, md: 5 }, // 👈 제목 들여쓰기
+                    pr: { xs: 1, sm: 1.5, md: 2.5 },
                     py: { xs: 0.75, sm: 1 },
-                    pr: { xs: 1, sm: 1.5, md: 2.5 }, // 우측 아이콘 여유
                     minHeight: 56,
                     "& .MuiAccordionSummary-content": {
                         my: 0.25,
@@ -81,7 +81,15 @@ const CareerAccordion = ({
                     py: { xs: 1, sm: 1.25 },
                 }}
             >
-                <Box component="ul" sx={{ p: 0, m: 0, listStyle: "none" }}>
+                <Box
+                    component="ul"
+                    sx={{
+                        p: 0,
+                        m: 0,
+                        listStyle: "none",
+                        pl: { xs: 0, sm: 3, md: 4 },
+                    }}
+                >
                     {(career.details ?? []).map((detail, i) => (
                         <React.Fragment
                             key={`${detail.detailId}-${detail.updatedAt ?? detail.content?.length ?? 0}`}
