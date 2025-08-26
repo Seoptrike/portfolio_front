@@ -83,7 +83,9 @@ const CareerAccordion = ({
             >
                 <Box component="ul" sx={{ p: 0, m: 0, listStyle: "none" }}>
                     {(career.details ?? []).map((detail, i) => (
-                        <React.Fragment key={detail.detailId}>
+                        <React.Fragment
+                            key={`${detail.detailId}-${detail.updatedAt ?? detail.content?.length ?? 0}`}
+                        >
                             <DetailItem
                                 detail={detail}
                                 editMode={editMode}

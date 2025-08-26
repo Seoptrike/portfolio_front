@@ -4,6 +4,7 @@ import { EditOutlined as EditIcon, DeleteOutline as DeleteIcon } from '@mui/icon
 import AddEditForm from './AddEditForm';
 import CommonHeroBanner from '../../components/common/CommonHeroBanner';
 import useIsMobile from '../../hooks/useIsMobile';
+import DOMPurify from 'dompurify';
 
 const AboutCard = ({
     about,
@@ -74,29 +75,32 @@ const AboutCard = ({
                     />
                 ) : (
                     <Typography
+                        component="div"
                         sx={{
-                            whiteSpace: "pre-wrap",
                             textAlign: "center",
-                            maxWidth: { md: 720, lg: 760, xl: 1200 },
+                            maxWidth: { md: 720, lg: 760, xl: 1400 },
                             mx: "auto",
                             fontSize: { xs: "0.98rem", md: "1.12rem", lg: "1.18rem" },
                             lineHeight: { xs: 1.7, md: 1.9 },
                             letterSpacing: { xs: "0.005em", md: "0.01em" },
-                            wordBreak: "keep-all",
-                            textWrap: "pretty",
+                            whiteSpace: "pre-wrap",      // 줄바꿈 + 자동개행
+                            wordBreak: "break-word",     // 긴 단어 줄바꿈
+                            overflowWrap: "anywhere",
                             px: { xs: 2, md: 0 },
                             py: { xs: 1.25, md: 0.5 },
                             borderRadius: { xs: 2, md: 0 },
                             color: "text.primary",
-                            "& br + br": {
-                                display: "block",
-                                content: '""',
-                                marginTop: { xs: "0.75rem", md: "1rem" },
-                            },
+                            "& p": { margin: "0.5em 0" },
+                            "& h2": { fontSize: "1.2rem", margin: "1em 0 .5em", fontWeight: 700 },
+                            "& h3": { fontSize: "1.05rem", margin: ".8em 0 .4em", fontWeight: 600 },
+                            "& ul, & ol": { display: "inline-block", textAlign: "left", margin: "0.5em auto", paddingLeft: "1.2em" },
+                            "& li": { margin: ".2em 0" },
+                            "& a": { textDecoration: "underline" },
                         }}
-                    >
-                        {about.content}
-                    </Typography>
+                        dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(about.content || "")
+                        }}
+                    />
                 )}
             </CardContent>
         </Card>
