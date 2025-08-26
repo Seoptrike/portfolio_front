@@ -78,7 +78,9 @@ const AboutCard = ({
                         component="div"
                         sx={{
                             textAlign: "center",
-                            maxWidth: { md: 720, lg: 760, xl: 1400 },
+                            width: '100%',
+                            // 최소 680px, 보통은 70vw 근처, 최대 1120px
+                            maxWidth: 'clamp(680px, 70vw, 1120px)',
                             mx: "auto",
                             fontSize: { xs: "0.98rem", md: "1.12rem", lg: "1.18rem" },
                             lineHeight: { xs: 1.7, md: 1.9 },
