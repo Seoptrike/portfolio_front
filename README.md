@@ -81,9 +81,18 @@ flowchart LR
 ---
 
 ## 향후 개선 계획 (Roadmap)
-- **Frontend**: 라우트 기반 코드 스플리팅(Lazy-loading)로 초기 로딩 최적화  
-- **Backend**: Swagger(OpenAPI)로 **API 문서 자동화**, `k6` 부하 테스트로 병목 구간 식별  
-- **공통**: JUnit 기반 **단위/통합 테스트 커버리지 확대**, **ERD 상세화**, **ADR(Architecture Decision Record)** 축적
+### Frontend
+- 컴포넌트 분리 및 폴더 구조 정리 (프리젠테이셔널/컨테이너 분리)
+- 주석/콘솔 로그 정리, 린팅/포매팅 규칙 강화 (ESLint + Prettier)
+- 라우트 기반 코드 스플리팅(Lazy-loading) 적용
+- 번들 사이즈 점검 및 최적화 (dynamic import, 이미지/아이콘 최적화)
+- 기본 성능/부하 점검 (Lighthouse, Web Vitals)
+
+### Backend
+- Dead Code 정리 및 패키지/레이어 구조 정돈
+- MyBatis 매퍼/네이밍 컨벤션 정비 (DTO/VO/엔티티 스키마 명확화)
+- Swagger(OpenAPI) 도입 및 API 문서 자동화
+- k6 기반 부하 테스트 시나리오 작성 및 병목 구간 식별/튜닝
 
 ---
 
