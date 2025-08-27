@@ -1,139 +1,112 @@
-import React, { useState } from 'react';
-import {
-    Card, CardActionArea, CardContent, CardActions,
-    IconButton, Typography, Box
-} from '@mui/material';
-import { SiNotion } from "react-icons/si";
-import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
-import { ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material';
+// ProjectDetailPage.jsx
+import React, { useMemo } from "react";
+import { Box, IconButton } from "@mui/material";
+import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 
-// ✅ Swiper로 교체
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import ProjectCard from "./projectcard/ProjectCard";
 
-const ProjectDetailPage = (projects) => {
-    const [openId, setOpenId] = useState(null);
-    const toggle = (id) => setOpenId(prev => (prev === id ? null : id));
-    const projectArray = Array.isArray(projects) ? projects : Object.values(projects);
-    const flatProjects = projectArray.flat();
-    const MAX_PER_VIEW = 3; // breakpoints에서 최댓값
-    const canLoop = flatProjects.length > MAX_PER_VIEW; // 최소 4장 필요
+const ProjectDetailPage = ({
+    projects = [],
+    editMode = false,
+    makeUpdate = () => () => { },
+    makeDelete = () => () => { },
+    isMobile = false,
+}) => {
+    // 배열/객체 혼용 안전 처리
+    const flat = useMemo(() => {
+        const arr = Array.isArray(projects) ? projects : Object.values(projects);
+        return arr.flat ? arr.flat() : arr;
+    }, [projects]);
+
+    const MAX_PER_VIEW = 3;               // 가장 넓은 구간에서 보여줄 카드 수
+    const canLoop = flat.length > MAX_PER_VIEW;
 
     return (
-        <div className="project-container">
+        <Box
+            sx={{
+                position: "relative",
+                mx: "auto",                               // ✅ 가운데 정렬
+                width: "100%",     // ✅ 데스크탑 상한(원하는 값으로 조절)
+                px: { xs: 0, sm: 1.5, md: 0 },            // ✅ 필요하면 모바일만 살짝 안쪽
+                overflow: "hidden",                       // 바깥 튀어나옴 차단
+                "& .swiper": { width: "100%" },
+                "& .swiper-wrapper": { alignItems: "stretch" },
+                "& .swiper-slide": { height: "auto", minWidth: 0 },
+            }}
+        >
             <Swiper
                 modules={[Navigation, Autoplay]}
-                // 🔁 무한 루프
                 loop={canLoop}
                 rewind={!canLoop}
-                // ⏱ 자동 재생 (원하면 끄기 가능)
                 autoplay={canLoop ? { delay: 3000, disableOnInteraction: false } : false}
-                // UX
                 speed={550}
-                grabCursor={true}
-                // 레이아웃
-                spaceBetween={-1}
+                grabCursor
+                // 기본값은 오프셋 0
+                slidesOffsetBefore={0}
+                slidesOffsetAfter={0}
+                spaceBetween={10}
                 slidesPerView={1}
                 breakpoints={{
-                    576: { slidesPerView: 1 },
-                    768: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 },
+                    0: { slidesPerView: 1, spaceBetween: 10, slidesOffsetBefore: 0, slidesOffsetAfter: 0 },
+                    600: { slidesPerView: 1, spaceBetween: 10, slidesOffsetBefore: 8, slidesOffsetAfter: 8 },  // 모바일만 살짝 안쪽
+                    900: { slidesPerView: 2, spaceBetween: 12, slidesOffsetBefore: 0, slidesOffsetAfter: 0 },
+                    1200: { slidesPerView: 3, spaceBetween: 12, slidesOffsetBefore: 0, slidesOffsetAfter: 0 },  // ✅ 데스크탑은 완전 풀폭
                 }}
-                navigation={{
-                    prevEl: '.custom-prev',
-                    nextEl: '.custom-next',
-                }}
-
-            // style={{ paddingBottom:  }}
+                navigation={{ prevEl: ".proj-prev", nextEl: ".proj-next" }}
+                style={{ paddingBottom: 8 }}
             >
-                {flatProjects.map(({ projectId, title, thumbnailUrl, notionUrl, githubUrl, deployUrl, description }) => (
-                    <SwiperSlide key={projectId}>
-                        <Box sx={{ px: 1.2 }}>
-                            <Card
-                                onClick={() => toggle(projectId)}
-                                sx={{
-                                    borderRadius: 3,
-                                    overflow: 'hidden',
-                                    boxShadow: '0 6px 20px rgba(0,0,0,0.08)',
-                                    transition: 'transform .22s ease, box-shadow .22s ease',
-                                    '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 12px 28px rgba(0,0,0,0.12)' },
-                                    cursor: 'pointer',
-                                }}
-                            >
-                                <CardActionArea sx={{ position: 'relative' }}>
-                                    <Box
-                                        component="img"
-                                        src={thumbnailUrl || '/images/seoportfolio_logo.png'}
-                                        alt={`${title} Thumbnail`}
-                                        sx={{ width: '100%', height: { xs: 180, sm: 200, md: 220 }, objectFit: 'cover', display: 'block' }}
-                                    />
-                                    <Box
-                                        sx={{
-                                            position: 'absolute',
-                                            inset: 0,
-                                            background: 'linear-gradient(180deg, rgba(0,0,0,0.0) 45%, rgba(0,0,0,0.55) 100%)',
-                                            display: 'flex',
-                                            alignItems: 'flex-end',
-                                            p: 2,
-                                        }}
-                                    >
-                                        <Typography variant="h6" sx={{ color: '#fff', fontWeight: 700, textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
-                                            {title}
-                                        </Typography>
-                                    </Box>
-                                </CardActionArea>
-
-                                {openId === projectId && (
-                                    <CardContent sx={{ pt: 2, pb: 1.5 }} onClick={(e) => e.stopPropagation()}>
-                                        <Typography variant="body2" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
-                                            {description}
-                                        </Typography>
-                                    </CardContent>
-                                )}
-
-                                <CardActions
-                                    sx={{
-                                        px: 2, py: 1.2, display: 'flex', justifyContent: 'space-between',
-                                        borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper',
-                                    }}
-                                >
-                                    <Box onClick={(e) => e.stopPropagation()} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                        {notionUrl && (
-                                            <IconButton component="a" href={notionUrl} target="_blank" rel="noopener noreferrer" size="small" title="Notion">
-                                                <SiNotion size={20} />
-                                            </IconButton>
-                                        )}
-                                        {githubUrl && (
-                                            <IconButton component="a" href={githubUrl} target="_blank" rel="noopener noreferrer" size="small" title="GitHub">
-                                                <FaGithub size={20} />
-                                            </IconButton>
-                                        )}
-                                        {deployUrl && (
-                                            <IconButton component="a" href={deployUrl} target="_blank" rel="noopener noreferrer" size="small" title="배포 링크">
-                                                <FaExternalLinkAlt size={18} />
-                                            </IconButton>
-                                        )}
-                                    </Box>
-
-                                    <Typography variant="caption" sx={{ color: 'text.secondary', userSelect: 'none' }}>
-                                        {openId === projectId ? '▲ 닫기' : '▼ 열기'}
-                                    </Typography>
-                                </CardActions>
-                            </Card>
+                {flat.map((p) => (
+                    <SwiperSlide key={p.projectId} style={{ height: "auto" }}>
+                        <Box sx={{ height: "100%" }}>
+                            <ProjectCard
+                                project={p}
+                                editMode={editMode}
+                                onUpdate={makeUpdate(p.projectId)}
+                                onDelete={makeDelete(p.projectId)}
+                                isMobile={isMobile}
+                            />
                         </Box>
                     </SwiperSlide>
                 ))}
-                <IconButton className="custom-prev" sx={{ position: 'absolute', top: '50%', left: 10, zIndex: 10 }}>
-                    <ArrowBackIosNew />
+
+                {/* 네비 버튼 */}
+                <IconButton
+                    className="proj-prev"
+                    sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: 6,
+                        zIndex: 2,
+                        transform: "translateY(-50%)",
+                        bgcolor: "background.paper",
+                        boxShadow: 1,
+                    }}
+                    size="small"
+                >
+                    <ArrowBackIosNew fontSize="small" />
                 </IconButton>
-                <IconButton className="custom-next" sx={{ position: 'absolute', top: '50%', right: 10, zIndex: 10 }}>
-                    <ArrowForwardIos />
+
+                <IconButton
+                    className="proj-next"
+                    sx={{
+                        position: "absolute",
+                        top: "50%",
+                        right: 6,
+                        zIndex: 2,
+                        transform: "translateY(-50%)",
+                        bgcolor: "background.paper",
+                        boxShadow: 1,
+                    }}
+                    size="small"
+                >
+                    <ArrowForwardIos fontSize="small" />
                 </IconButton>
             </Swiper>
-        </div>
+        </Box>
     );
 };
 

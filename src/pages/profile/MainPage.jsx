@@ -11,7 +11,7 @@ import EduHistoryItem from './career/EduHistoryItem';
 import useIsMobile from '../../hooks/useIsMobile';
 import { useLoading } from '../../context/LoadingContext';
 import CommonHeroBanner from '../../components/common/CommonHeroBanner';
-import HeroHeader from '../../components/common/HeroHeader';
+import OneLineIntroBanner from './OneLineIntroBanner';
 const MainPage = () => {
     const { username } = useParams();
     const { withLoading } = useLoading();
@@ -117,10 +117,7 @@ const MainPage = () => {
                     />
                 </Col>
                 {/* 3. 프로젝트: 모바일 3번째, 데스크탑 우상단 */}
-                <Col xs={12} lg={6} className="order-3 order-lg-2">
-                    {/* {!isMobile &&
-                        <HeroHeader title={"안녕하세요! 👋 한줄소개를 입력해주세요."} />
-                    } */}
+                <Col xs={12} lg={6} className="order-3 order-lg-2" >
                     <CommonHeroBanner title="프로젝트" size="compact" />
                     <ProjectDetailPage projects={userProject} />
                 </Col>

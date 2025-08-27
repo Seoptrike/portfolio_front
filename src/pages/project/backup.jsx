@@ -1,321 +1,154 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Accordion, ListGroup, Button, Form } from 'react-bootstrap';
-import { PencilSquare, Trash, PlusCircleDotted } from 'react-bootstrap-icons';
-import { useParams } from 'react-router-dom';
-import { deleteAchieve, fetchAchieveList, insertAchieve, updateAchieve } from '../../api/achievements';
-import { insertWorkExp } from '../../api/careerApi';
-import { AuthContext } from '../../context/AuthContext';
+import React, { useEffect, useState } from 'react'
+import { Col, Row, Modal } from 'react-bootstrap'
+import StackPage from './stack/StackPage';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getUserTotalData } from '../../api/userApi';
+import ProjectDetailPage from '../project/ProjectDetailPage';
 import useEditMode from '../../hooks/useEditMode';
-import dayjs from 'dayjs';
-import CommonCareerModal from '../profile/career/CommonCareerModal';
-import { clampEndYM, ymToFirstDay, ymToLastDay } from '../../utils/yearModule';
+import MypagePage from '../user/MypagePage';
+import WorkExperiencesItem from './career/WorkExperiencesItem';
+import EduHistoryItem from './career/EduHistoryItem';
+import useIsMobile from '../../hooks/useIsMobile';
+import { useLoading } from '../../context/LoadingContext';
 import CommonHeroBanner from '../../components/common/CommonHeroBanner';
-
-const CareerPage = () => {
+import OneLineIntroBanner from './OneLineIntroBanner';
+const MainPage = () => {
     const { username } = useParams();
-    const [careers, setCareers] = useState([]);
-    const [open, setOpen] = useState(false);
-    const { isHost } = useContext(AuthContext);
-    const { editMode, isEdit } = useEditMode();
-    const formatYM = (v) => v ? dayjs(v).format('YYYY.MM') : '';
-    const [form, setForm] = useState({
-        companyName: '',
-        position: '',
-        startDate: '',
-        endDate: ''
+    const { withLoading } = useLoading();
+    const navigate = useNavigate();
+    const [userCareers, setUserCareers] = useState({});
+    const [userID, setUserID] = useState();
+    const [userProject, setUserProject] = useState({});
+    const [userInfo, setUserInfo] = useState({});
+    const { editMode } = useEditMode();
+    const [showProfileModal, setShowProfileModal] = useState(false);
+    const isMobile = useIsMobile();
+
+    const CallTotalAPI = withLoading(async () => {
+        const res = await getUserTotalData(username)
+        if (res.data.userID === "NONE") {
+            navigate('/notfound');
+            return;
+        }
+        setUserCareers(res.data);
+        setUserID(res.data.userID);
+        setUserProject(res.data.projects)
+        setUserInfo(res.data.userInfo);
     });
-    const modalForm = {
-        title1: form.companyName ?? "",
-        title2: form.position ?? "",
-        startDate: form.startDate ?? "",
-        endDate: form.endDate ?? "",
-    };
-    // 현재 수정 중인 detail 항목의 ID를 저장합니다. null이면 수정 중인 항목이 없다는 의미입니다.
-    const [editingDetailId, setEditingDetailId] = useState(null);
-
-    // 수정 중인 detail 항목의 내용을 담을 form state입니다.
-    const [editingForm, setEditingForm] = useState({ title: '', content: '' });
-
-    // 상세 내용을 '추가' 중인 부모 경력(career)의 ID를 저장합니다.
-    const [addingDetailToWorkId, setAddingDetailToWorkId] = useState(null);
-
-    // 새로 추가할 상세 내용의 내용을 담을 form state입니다.
-    const [newDetailForm, setNewDetailForm] = useState({ title: '', content: '' });
-
-    const callAPI = async () => {
-        try {
-            const res = await fetchAchieveList(username);
-            setCareers(res.data);
-        } catch {
-            //navigate("/notfound")
-        }
-    }
-
-    useEffect(() => {
-        callAPI();
-    }, [username])
-
-    //모달 관련
-    const handleOpen = () => setOpen(true);
-
-    const handleClose = () => {
-        setOpen(false);
-        setForm({ companyName: '', position: '', startDate: '', endDate: '' });
-    };
-
-    const handleSubmit = async () => {
-        const payload = {
-            username: username,
-            companyName: modalForm.title1,
-            position: modalForm.title2,
-            startDate: ymToFirstDay(modalForm.startDate),
-            endDate: ymToLastDay(modalForm.endDate)
-        };
-        console.log(payload);
-        try {
-            await insertWorkExp(payload);
-            callAPI();
-            handleClose();
-        } catch (err) {
-            console.error('등록 실패:', err);
-        }
-    };
-
-    // '수정' 버튼을 눌렀을 때
-    const handleDetailEdit = (detail) => {
-        setEditingDetailId(detail.detailId);
-        setEditingForm({
-            title: detail.title,
-            content: detail.content
-        });
-    };
-
-    // 수정 내용 저장 
-    const handleSaveDetail = async (workId, detailId) => {
-        console.log(`${workId} 경력의 ${detailId} 상세 내용을 저장합니다.`, editingForm);
-        const payload = { ...editingForm, detailId: detailId };
-        await updateAchieve(payload)
-        // await updateWorkExpDetail(detailId, editingForm);
-        callAPI();
-        setEditingDetailId(null);
-    };
-
-    // 수정 취소
-    const handleCancelEdit = () => {
-        setEditingDetailId(null); // 수정 모드 해제
-        setEditingForm({ title: '', content: '' }); // 폼 초기화
-    };
-
-    // 수정 폼 내용 변경 시
-    const handleEditingFormChange = (e) => {
-        setEditingForm({
-            ...editingForm,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    // '상세 내용 추가하기' 버튼을 눌렀을 때
-    const handleDetailAdd = (workId) => {
-        setAddingDetailToWorkId(workId); // 추가 모드로 전환 (어떤 career에 추가할지 ID 저장)
-    };
-
-    // '추가' 취소
-    const handleCancelAdd = () => {
-        setAddingDetailToWorkId(null); // 추가 모드 해제
-        setNewDetailForm({ title: '', content: '' }); // 폼 초기화
-    };
-
-    // '추가' 폼 내용 변경 시
-    const handleNewDetailChange = (e) => {
-        setNewDetailForm({
-            ...newDetailForm,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    // '추가' 내용 저장 (API 연동 필요)
-    const handleSaveNewDetail = async (workId) => {
-        console.log(`${workId} 경력에 새로운 상세 내용을 저장합니다.`, newDetailForm);
-        const payload = { ...newDetailForm, workId: workId };
-        await insertAchieve(payload);
-        callAPI();
-        handleCancelAdd(); // 추가 모드 해제 및 폼 초기화
-    };
-
-    // '삭제하기'
-    const handleDetailDelete = async (detailId) => {
-        await deleteAchieve(detailId);
-        callAPI()
-    }
-
-    const handleModalChange = (e) => {
-        const { name, value } = e.target;
-        if (name === "title1") return setForm(f => ({ ...f, companyName: value }));
-        if (name === "title2") return setForm(f => ({ ...f, position: value }));
-        if (name === "endDate") return setForm(f => ({ ...f, endDate: clampEndYM(f.startDate, value) }));
-        setForm(f => ({ ...f, [name]: value })); // startDate 등 공통 필드
-    };
-
+    useEffect(() => { CallTotalAPI() }, [username])
     return (
-        <>
-            {careers.length > 0 ?
-                (<Accordion defaultActiveKey="0" alwaysOpen>
-                    {careers.map(career => (
-                        <Accordion.Item eventKey={career.workId} key={career.workId} className="mb-3 shadow-sm">
-                            <Accordion.Header>
-                                <div className="w-100">
-                                    <div className="d-flex justify-content-between">
-                                        <strong style={{ fontSize: '1.1rem' }}>{career.companyName}</strong>
-                                        <span className="text-muted">{formatYM(career.startDate)} ~ {formatYM(career.endDate)}</span>
-                                    </div>
-                                    <div className="text-muted small mt-1">{career.position}</div>
-                                </div>
-                            </Accordion.Header>
-                            <Accordion.Body>
-                                <ListGroup variant="flush">
-                                    {career.details.map(detail => (
-                                        <ListGroup.Item key={detail.detailId} className="px-0 py-3">
-                                            {editingDetailId === detail.detailId ? (
-                                                // ✅ 수정 모드일 때: 입력 폼을 보여줌
-                                                <div>
-                                                    <Form.Group className="mb-2">
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="title"
-                                                            value={editingForm.title}
-                                                            onChange={handleEditingFormChange}
-                                                            placeholder="제목"
-                                                        />
-                                                    </Form.Group>
-                                                    <Form.Group className="mb-3">
-                                                        <Form.Control
-                                                            as="textarea"
-                                                            rows={3}
-                                                            name="content"
-                                                            value={editingForm.content}
-                                                            onChange={handleEditingFormChange}
-                                                            placeholder="상세 내용"
-                                                        />
-                                                    </Form.Group>
-                                                    <div className="text-end">
-                                                        <Button variant="secondary" size="sm" className="me-2" onClick={handleCancelEdit}>
-                                                            취소
-                                                        </Button>
-                                                        <Button variant="primary" size="sm" onClick={() => handleSaveDetail(career.workId, detail.detailId)}>
-                                                            저장
-                                                        </Button>
-                                                    </div>
-                                                </div>
-
-                                            ) : (
-                                                // ✅ 일반 모드일 때: 기존 내용을 보여줌
-                                                <div className="d-flex justify-content-between align-items-start">
-                                                    <div className="me-3">
-                                                        <CommonHeroBanner title={detail.title} size={"compact"}/>
-                                                        <p className="mb-0 text-muted" style={{ whiteSpace: 'pre-line' }}>
-                                                            {detail.content}
-                                                        </p>
-                                                    </div>
-                                                    {editMode && (
-                                                        <div className="flex-shrink-0">
-                                                            <Button variant="light" size="sm" className="p-1 me-1" onClick={() => handleDetailEdit(detail)}>
-                                                                <PencilSquare />
-                                                            </Button>
-                                                            <Button variant="light" size="sm" className="p-1" onClick={() => handleDetailDelete(detail.detailId)}>
-                                                                <Trash />
-                                                            </Button>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </ListGroup.Item>
-                                    ))}
-                                    {editMode && (
-                                        <ListGroup.Item className="text-center p-3">
-                                            {addingDetailToWorkId === career.workId ? (
-                                                // ✅ 추가 모드일 때: 입력 폼을 보여줌
-                                                <div className="text-start">
-                                                    <h6 className="mb-3">상세 내용 추가</h6>
-                                                    <Form.Group className="mb-2">
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="title"
-                                                            value={newDetailForm.title}
-                                                            onChange={handleNewDetailChange}
-                                                            placeholder="제목"
-                                                        />
-                                                    </Form.Group>
-                                                    <Form.Group className="mb-3">
-                                                        <Form.Control
-                                                            as="textarea"
-                                                            rows={3}
-                                                            name="content"
-                                                            value={newDetailForm.content}
-                                                            onChange={handleNewDetailChange}
-                                                            placeholder="상세 내용"
-                                                        />
-                                                    </Form.Group>
-                                                    <div className="text-end">
-                                                        <Button variant="secondary" size="sm" className="me-2" onClick={handleCancelAdd}>
-                                                            취소
-                                                        </Button>
-                                                        <Button variant="primary" size="sm" onClick={() => handleSaveNewDetail(career.workId)}>
-                                                            추가
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                // ✅ 일반 모드일 때: '추가' 버튼을 보여줌
-                                                <Button variant="outline-secondary" className="w-100 border-2 border-dashed" onClick={() => handleDetailAdd(career.workId)}>
-                                                    <PlusCircleDotted size={20} className="me-2" />
-                                                    경력 상세 내용 추가하기
-                                                </Button>
-                                            )}
-                                        </ListGroup.Item>
-                                    )}
-                                </ListGroup>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    ))}
-                </Accordion>)
-                : isHost === true ? (
-                    // 2. 경력은 없지만, 페이지 주인일 경우 (isHost가 true)
-                    <div>
-                        <p className="text-center text-muted">아직 등록된 경력이 없습니다.</p>
-                        <div className="text-center mt-3">
-                            <Button onClick={handleOpen}>경력 추가하기</Button>
+        <div className="mt-4">
+            <Row
+                style={{ "--bs-gutter-x": "1.25rem", "--bs-gutter-y": "1.25rem" }} // g-3.5 느낌
+            >
+                {/* 1. 사진: 모바일 1번째, 데스크탑 좌상단 */}
+                <Col xs={12} lg={6} className="order-1 order-lg-1">
+                    {/* === 프로필 블록 시작 === */}
+                    <div className="profile-wrapper text-center" style={{ position: "relative" }}>
+                        <div style={{ position: "relative", display: "inline-block" }}>
+                            <img
+                                src={userInfo.photo ? userInfo.photo : "/images/vite.svg"}
+                                alt="Profile"
+                                style={{
+                                    width: isMobile ? 160 : 320,
+                                    height: isMobile ? 160 : 320,
+                                    objectFit: "cover",
+                                    borderRadius: "50%",
+                                    border: "1px solid #eee",
+                                    display: "block",
+                                }}
+                            />
+                            {editMode && (
+                                <button
+                                    type="button"
+                                    onClick={() => setShowProfileModal(true)}
+                                    aria-label="프로필 설정"
+                                    style={{
+                                        position: "absolute",
+                                        right: isMobile ? 4 : 12,
+                                        bottom: isMobile ? 4 : 12,
+                                        width: isMobile ? 36 : 44,
+                                        height: isMobile ? 36 : 44,
+                                        borderRadius: "50%",
+                                        border: "1px solid rgba(0,0,0,0.1)",
+                                        background: "#fff",
+                                        display: "grid",
+                                        placeItems: "center",
+                                        boxShadow: "0 2px 6px rgba(0,0,0,.2)",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    <span style={{ fontSize: 20, lineHeight: 1 }}>⚙️</span>
+                                </button>
+                            )}
                         </div>
-                    </div>
-                ) : (
-                    // 3. 경력도 없고, 페이지 주인도 아닐 경우
-                    <div className="text-center text-muted">
-                        <p>등록된 경력이 없습니다.</p>
-                    </div>
-                )}
-            <CommonCareerModal
-                show={open}
-                onHide={handleClose}
-                form={modalForm}                 // ✅ 어댑팅된 폼
-                handleChange={handleModalChange} // ✅ 어댑터 onChange
-                handleSubmit={handleSubmit}
-                isEdit={isEdit}
-                onDelete={() => handleDelete(editingId)} // 또는 form.workId 등 네가 쓰는 ID
-                labels={{
-                    title1: "회사",
-                    title2: "직무",
-                    startLabel: "입사(년-월)",
-                    endLabel: "퇴사(년-월)",
-                    editTitle: "경력 수정",
-                    addTitle: "경력 추가",
-                    save: "저장",
-                    update: "수정",
-                    delete: "삭제",
-                    cancel: "취소",
-                    guide: "재직 기간은 월까지 입력해 주세요.",
-                }}
-            />
-        </>
-    );
-};
 
-export default CareerPage;
+                        <Modal
+                            show={showProfileModal}
+                            onHide={() => setShowProfileModal(false)}
+                            size="lg"
+                            centered
+                            backdrop="static"
+                        >
+                            <Modal.Header closeButton>
+                                <Modal.Title>프로필 설정</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body style={{ padding: 0 }}>
+                                <MypagePage setShowProfileModal />
+                            </Modal.Body>
+                        </Modal>
+                    </div>
+                    {/* === 프로필 블록 끝 === */}
+                </Col>
+
+                {/* 2. 커리어: 모바일 2번째, 데스크탑 좌하단 */}
+                <Col xs={12} lg={6} className="order-2 order-lg-3">
+                    <EduHistoryItem
+                        userID={userID}
+                        username={username}
+                        data={userCareers.educationHistory}
+                        onSuccess={() => CallTotalAPI()}
+                    />
+                    <WorkExperiencesItem
+                        userID={userID}
+                        username={username}
+                        data={userCareers.workExperience}
+                        onSuccess={() => CallTotalAPI()}
+                    />
+                </Col>
+                {/* 3. 프로젝트: 모바일 3번째, 데스크탑 우상단 */}
+                <Col xs={12} lg={6} className="order-3 order-lg-2" >
+                    <CommonHeroBanner title="프로젝트" size="compact" />
+                    <ProjectDetailPage projects={userProject} />
+                </Col>
+
+                <Col xs={12} lg={6} className="order-1 order-lg-2 px-0">
+                    <OneLineIntroBanner
+                        value={userInfo?.oneLineIntro ?? ""}
+                        editMode={editMode}
+                        onSave={async (next) => {
+                            await updateProfile({ oneLineIntro: next });
+                            setProfile((p) => ({ ...p, oneLineIntro: next }));
+                        }}
+                        maxLength={60}
+                        align="left"
+                    />
+                </Col>
+
+                {/* 4. 스택: 모바일 4번째, 데스크탑 우하단 */}
+                <Col xs={12} lg={6} className="order-4 order-lg-4">
+                    <div className={isMobile ? "mb-1" : "mb-3"}>
+                        <CommonHeroBanner title="기술스택" size="compact" />
+                    </div>
+                    <StackPage
+                        userID={userID}
+                        username={username}
+                        stack={userCareers.stacks}
+                        onSuccess={() => CallTotalAPI()}
+                    />
+                </Col>
+            </Row>
+        </div>
+    )
+}
+export default MainPage

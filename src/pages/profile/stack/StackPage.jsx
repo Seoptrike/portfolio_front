@@ -6,7 +6,6 @@ import {
     SiDocker, SiNginx, SiAmazon, SiVercel, SiJira, SiNotion
 } from 'react-icons/si';
 import { FaNodeJs, FaJava, FaGithub } from 'react-icons/fa';
-import useIsMobile from '../../../hooks/useIsMobile';
 
 const ICON_MAP = {
     HTML: { Icon: SiHtml5, color: '#E34F26' }, CSS: { Icon: SiCss3, color: '#1572B6' },
@@ -22,8 +21,6 @@ const ICON_MAP = {
 };
 
 const StackPage = ({ stack = [] }) => {
-    const isMobile = useIsMobile();
-    // 전체 나열: 유효 항목만 추려서 이름순 정렬
     const list = useMemo(() => {
         const arr = (Array.isArray(stack) ? stack : [])
             .filter(s => s && typeof s.name === 'string' && s.name.trim().length > 0)
@@ -36,14 +33,20 @@ const StackPage = ({ stack = [] }) => {
     }, [stack]);
 
     return (
-        <div>
-            <div style={{
-                display: "grid",
-                gridTemplateColumns: isMobile
-                    ? "repeat(2, 1fr)"   // 모바일: 2칸
-                    : "repeat(5, 1fr)",  // 데스크탑: 4칸
-                gap: "0.6rem",
-            }}>
+        <Box>
+            <Box
+                sx={{
+                    display: 'grid',
+                    gap: 0.6,
+                    // ✅ 컨텐츠가 줄어들 수 있게 minmax(0,1fr) 사용
+                    gridTemplateColumns: {
+                        xs: 'repeat(2, minmax(0,1fr))',
+                        sm: 'repeat(3, minmax(0,1fr))',
+                        md: 'repeat(4, minmax(0,1fr))',  // ✅ 데스크탑: 4칸 (별점 너비 고려)
+                        xl: 'repeat(5, minmax(0,1fr))',  // 초광폭에서만 5칸
+                    },
+                }}
+            >
                 {list.map(s => {
                     const m = ICON_MAP[s.name] || {};
                     const Icon = m.Icon;
@@ -55,7 +58,7 @@ const StackPage = ({ stack = [] }) => {
                             key={s.stackId}
                             icon={
                                 Icon ? (
-                                    <Box component="span" sx={{ display: "flex", alignItems: "center" }}>
+                                    <Box component="span" sx={{ display: 'flex', alignItems: 'center' }}>
                                         <Icon size={18} color={color} />
                                     </Box>
                                 ) : null
@@ -63,24 +66,31 @@ const StackPage = ({ stack = [] }) => {
                             label={
                                 <Box
                                     sx={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        alignItems: "center", // ← 가운데 정렬
-                                        justifyContent: "center",
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
                                         gap: 0.25,
-                                        width: "100%",       // 전체 폭 맞춰서 가운데 정렬
+                                        width: '100%',
+                                        minWidth: 0,         // ✅ 칩 내부도 줄어들 수 있게
+                                        overflow: 'hidden',
                                     }}
                                 >
                                     <Typography
                                         sx={{
-                                            fontSize: "0.95rem",
+                                            fontSize: '0.95rem',
                                             fontWeight: 600,
                                             lineHeight: 1.15,
-                                            textAlign: "center", // 텍스트도 가운데
+                                            textAlign: 'center',
+                                            maxWidth: '100%',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap',
                                         }}
                                     >
                                         {s.name}
                                     </Typography>
+
                                     <Tooltip title={`사용 횟수: ${s.usageCount ?? 0}`} arrow>
                                         <Rating
                                             name={`rating-${s.stackId}`}
@@ -89,6 +99,11 @@ const StackPage = ({ stack = [] }) => {
                                             precision={1}
                                             readOnly
                                             size="small"
+                                            sx={{
+                                                // ✅ 별 크기/간격 살짝 축소해서 칩 폭에 잘 맞게
+                                                '& .MuiRating-icon': { fontSize: 16, mr: 0.25 },
+                                                '& .MuiRating-iconEmpty': { mr: 0.25 },
+                                            }}
                                         />
                                     </Tooltip>
                                 </Box>
@@ -96,32 +111,37 @@ const StackPage = ({ stack = [] }) => {
                             variant="outlined"
                             color="default"
                             sx={{
-                                width: "100%",
-                                height: "auto",
+                                width: '100%',
+                                maxWidth: '100%',
+                                minWidth: 0,          // ✅ grid item 줄어들 수 있게
+                                boxSizing: 'border-box',
+                                height: 'auto',
                                 py: 1,
                                 px: 1.2,
                                 borderRadius: 2,
-                                borderColor: "divider",
-                                bgcolor: "background.paper",
-                                boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-                                transition: "transform .18s ease, box-shadow .18s ease",
-                                "&:hover": {
-                                    transform: "translateY(-2px)",
-                                    boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
+                                borderColor: 'divider',
+                                bgcolor: 'background.paper',
+                                boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                                transition: 'transform .18s ease, box-shadow .18s ease',
+                                '&:hover': {
+                                    transform: 'translateY(-2px)',
+                                    boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
                                 },
-                                ".MuiChip-icon": { mr: 0.5 },
-                                ".MuiChip-label": {
-                                    display: "flex",
-                                    width: "100%",
-                                    justifyContent: "center", // 칩 전체 컨텐츠 가운데
+                                '.MuiChip-icon': { mr: 0.5 },
+                                '.MuiChip-label': {
+                                    display: 'flex',
+                                    width: '100%',
+                                    justifyContent: 'center',
                                     px: 0,
+                                    minWidth: 0,        // ✅ 라벨도 줄어듦
+                                    overflow: 'hidden',
                                 },
                             }}
                         />
                     );
                 })}
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 };
 
