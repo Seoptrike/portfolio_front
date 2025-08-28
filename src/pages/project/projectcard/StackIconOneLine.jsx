@@ -14,8 +14,17 @@ const StackIconsOneLine = ({ names = [], iconSize = 16, boxSize = 20 }) => {
                 WebkitOverflowScrolling: "touch",
                 display: "flex",
                 justifyContent: "center",
-                "&::-webkit-scrollbar": { height: 6 },
-                "&::-webkit-scrollbar-thumb": { bgcolor: "divider", borderRadius: 3 },
+                /* ✅ 스크롤바 숨기기 (크로스브라우저) */
+                scrollbarWidth: "none",        // Firefox
+                msOverflowStyle: "none",       // IE/Edge 레거시
+                "&::-webkit-scrollbar": {      // Chrome/Safari/Edge(Chromium)
+                    display: "none",
+                },
+
+                /* (옵션) 양 끝 페이드로 더 깔끔하게 보이기 */
+                position: "relative",
+                maskImage:
+                    "linear-gradient(to right, transparent 0, black 12px, black calc(100% - 12px), transparent 100%)",
             }}
         >
             <Stack direction="row" spacing={0.5} sx={{ alignItems: "center", flexWrap: "nowrap", width: "max-content", pr: 0.5 }}>

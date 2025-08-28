@@ -5,6 +5,7 @@ import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import { AuthContext } from '../../context/AuthContext';
 import { fetchGuestBookList, createGuestBook, deleteGuestBook, updateGuestBook } from '../../api/guestBookApi';
 import useEditMode from '../../hooks/useEditMode';
+import HeaderSection from './HeaderSection';
 
 const GuestBookPage = () => {
     // 1. 필요한 Hooks 및 Context 설정
@@ -101,6 +102,7 @@ const GuestBookPage = () => {
 
     return (
         <div>
+            <HeaderSection username={username}/>
             {/* --- 메시지 리스트 영역 --- */}
             <Card className="mb-4 shadow-sm">
 
