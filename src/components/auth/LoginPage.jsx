@@ -38,7 +38,6 @@ const LoginPage = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
-
                 const target = sessionStorage.getItem('target');
                 window.location.href = target || `/${username}`;
             }

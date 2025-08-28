@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { loginCheck, hostCheck } from '../api/authApi';
 import { AuthContext } from '../context/AuthContext';
 import { useLocation } from 'react-router-dom';
+import { useLoading } from '../context/LoadingContext';
 
 export default function AuthProvider({ children }) {
-    const [isLogin, setIsLogin] = useState(false);
+    const [isLogin, setIsLogin] = useState(null);  // null=미확정, true/false=확정
+    const [isAdmin, setIsAdmin] = useState(null);
     const [loginName, setLoginName] = useState('');
-    const [isHost, setIsHost] = useState(false);
     const [loginId, setLoginId] = useState('');
+    const [isHost, setIsHost] = useState(false);
+
     const location = useLocation();
 
     const extractUsernameFromPath = (pathname) => {
@@ -19,26 +22,35 @@ export default function AuthProvider({ children }) {
     };
 
     const loginCheckHandler = async () => {
-        const res = await loginCheck();
-        // console.log(res.data)
-        if (res.data.status === 'LOGIN') {
-            const username = res.data.username;
-            const userId = res.data.userId;
-            // console.log("LOGIN 이름:" + res.data.username);
-            setIsLogin(true);
-            setLoginId(userId);
-            setLoginName(username);
-            const urlUsername = extractUsernameFromPath(location.pathname);
-            // console.log("URL 이름:" + extractUsernameFromPath(location.pathname));
-            if (urlUsername && username === urlUsername) {
-                const hostRes = await hostCheck(username);
-                setIsHost(hostRes.data === 'HOST');
+        try {
+            const res = await loginCheck(); // axios withCredentials 전제
+            const data = res?.data;
+            if (data?.status === 'LOGIN') {
+                const { username, userId } = data;
+                const roles = data.roles || [];
+
+                setIsLogin(true);
+                setLoginId(userId);
+                setLoginName(username);
+
+                const admin = roles.includes('ROLE_ADMIN');
+                setIsAdmin(admin);
+
+                const urlUsername = extractUsernameFromPath(location.pathname);
+                setIsHost(admin || (urlUsername && username === urlUsername));
             } else {
+                setIsLogin(false);
+                setLoginId('');
+                setLoginName('');
+                setIsAdmin(false);
                 setIsHost(false);
             }
-        } else {
+        } catch (e) {
+            // 401 등 에러 처리
             setIsLogin(false);
+            setLoginId('');
             setLoginName('');
+            setIsAdmin(false);
             setIsHost(false);
         }
     };
@@ -47,8 +59,10 @@ export default function AuthProvider({ children }) {
         loginCheckHandler();
     }, [location.pathname]);
 
+    const authReady = isLogin !== null && isAdmin !== null;
+
     return (
-        <AuthContext.Provider value={{ isLogin, loginId, loginName, isHost, loginCheckHandler }}>
+        <AuthContext.Provider value={{ isLogin, loginId, loginName, isAdmin, isHost, loginCheckHandler, authReady }}>
             {children}
         </AuthContext.Provider>
     );

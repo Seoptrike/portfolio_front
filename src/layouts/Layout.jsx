@@ -1,13 +1,13 @@
 import React, { useContext, useLayoutEffect, useRef, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import { AuthContext } from "./context/AuthContext";
-import { logout } from "./api/authApi";
+import { AuthContext } from "../context/AuthContext";
+import { logout } from "../api/authApi";
 import { BsSearch, BsBoxArrowRight, BsBoxArrowInRight } from "react-icons/bs";
 
 const Layout = () => {
     const [expanded, setExpanded] = useState(false);
-    const { isLogin, loginName, loginCheckHandler } = useContext(AuthContext);
+    const { isLogin, loginName, loginCheckHandler, isAdmin } = useContext(AuthContext);
     const navigate = useNavigate();
     const navRef = useRef(null);
     const [navHeight, setNavHeight] = useState(64);
@@ -76,6 +76,17 @@ const Layout = () => {
                     <Navbar.Collapse>
                         <Nav className="ms-auto" style={{ alignItems: "center" }}>
                             {/* 검색 */}
+                            {isAdmin &&
+                                <Nav.Link
+                                    as={Link}
+                                    to="/admin"
+                                    onClick={() => setExpanded(false)}
+                                    className="text-md-start text-center"
+                                    style={{ display: "flex", alignItems: "center" }}
+                                >
+                                    <span>관리자모드</span>
+                                </Nav.Link>
+                            }
                             <Nav.Link
                                 as={Link}
                                 to="/search"
@@ -84,7 +95,7 @@ const Layout = () => {
                                 style={{ display: "flex", alignItems: "center" }}
                             >
                                 <span className="d-none d-md-inline">
-                                    찾기 <BsSearch size={18}/>
+                                    찾기 <BsSearch size={18} />
                                 </span>
                                 <span className="d-md-none">검색</span>
                             </Nav.Link>

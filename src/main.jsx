@@ -12,12 +12,14 @@ import 'handsontable/styles/handsontable.min.css';
 import 'handsontable/styles/ht-theme-main.min.css';
 import CommonSpinner from './components/common/CommonSpinner.jsx';
 import { Analytics } from "@vercel/analytics/react";
+import PageViewTracker from './analytics/PageViewTracker.jsx';
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>
         <LoadingProvider attachAxios={api}>
             <AuthProvider>
                 <CommonSpinner/>
+                <PageViewTracker/>
                 <RouterConfig />
                 <Analytics/>
             </AuthProvider>

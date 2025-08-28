@@ -1,17 +1,21 @@
-import React from 'react'
+import React, { Suspense, lazy } from "react";
+import { Route, Routes } from 'react-router-dom';
+
 import GuestBookPage from '../pages/guestbook/GuestBookPage';
 import AboutMePage from '../pages/aboutme/AboutMePage';
 import HomePage from '../pages/home/HomePage';
 import AuthRouter from '../routes/AuthRouter';
-import { Route, Routes } from 'react-router-dom';
 import MainPage from '../pages/profile/MainPage';
-import Layout from '../Layout';
+import Layout from '../layouts/Layout';
 import NotFound from '../components/common/NotFound';
 import ProjectRouter from './ProjectRouter';
 import ResumeListPage from '../pages/resume/ResumeListPage';
-import UserLayout from '../UserLayout';
+import UserLayout from '../layouts/UserLayout';
 import SearchPage from '../pages/search/SearchPage';
-import MypagePage from '../pages/user/MypagePage';
+import RequireAdmin from "./RequireAdmin";
+
+const AdminLayout = lazy(() => import("../layouts/AdminLayout"));
+const Dashboard = lazy(() => import("../pages/admin/Dashboard"));
 
 const RouterConfig = () => {
     return (
@@ -20,8 +24,8 @@ const RouterConfig = () => {
                 {/* 전역 스코프 */}
                 <Route index element={<HomePage />} />
                 <Route path="auth/*" element={<AuthRouter />} />
-                <Route path="search" element={<SearchPage/>}/>
-                <Route path=":username/mypage" element= {<MypagePage/>}/>
+                <Route path="search" element={<SearchPage />} />
+
                 {/* 유저 스코프 */}
                 <Route path=":username" element={<UserLayout />}>
                     <Route index element={<MainPage />} />              {/* /:username */}
@@ -30,11 +34,25 @@ const RouterConfig = () => {
                     <Route path="project/*" element={<ProjectRouter />} />
                     <Route path="resume" element={<ResumeListPage />} />
                 </Route>
+                {/* 관리자 스코프 */}
+                <Route
+                    path="admin/*"
+                    element={
+                        <RequireAdmin>
+                            <AdminLayout />
+                        </RequireAdmin>
+                    }
+                >
+                    <Route index element={<Dashboard />} />
+                    {/* 예시: /admin/projects */}
+                    {/* <Route path="projects" element={<AdminProjects />} /> */}
+                </Route>
 
                 {/* 그 외 */}
                 <Route path="notfound" element={<NotFound />} />
                 <Route path="*" element={<NotFound />} />             {/* 404 핸들링 */}
             </Route>
+
         </Routes>
     )
 }
