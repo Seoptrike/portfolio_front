@@ -44,8 +44,6 @@ const RouterConfig = () => {
                     }
                 >
                     <Route index element={<Dashboard />} />
-                    {/* 예시: /admin/projects */}
-                    {/* <Route path="projects" element={<AdminProjects />} /> */}
                 </Route>
 
                 {/* 그 외 */}

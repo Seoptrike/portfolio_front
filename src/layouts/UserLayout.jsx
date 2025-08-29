@@ -1,4 +1,3 @@
-// src/routes/UserLayout.jsx
 import React, { useContext } from "react";
 import { NavLink, Outlet, useParams } from "react-router-dom";
 import { FiUser, FiFileText, FiFolder, FiBriefcase, FiMessageCircle } from "react-icons/fi";
@@ -104,8 +103,9 @@ const UserLayout = () => {
                         zIndex: 1020,
                         marginBottom: "1rem",
                         borderRadius: "0.5rem",
-                        paddingLeft: "1rem",
-                        paddingRight: "1rem",
+                        paddingTop: "0.1rem",     // 상단 패딩 줄이기
+                        paddingBottom: "0.1rem",  // 하단 패딩 줄이기
+                        minHeight: "30px",
                     }}
                 >
                     <Navbar.Toggle />
