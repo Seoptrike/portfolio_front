@@ -5,6 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import Editor from "@toast-ui/editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
+import "./ToastUIEditor.css"
 
 const AddDetailForm = ({ onSubmit, onCancel }) => {
     const [form, setForm] = useState({ title: "", content: "" });

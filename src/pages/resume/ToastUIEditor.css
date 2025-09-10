@@ -1,0 +1,16 @@
+css/* ToastUIEditor.css */
+.toastui-editor-contents h2,
+.toastui-editor-md-preview h2 {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
+.toastui-editor-contents h1,
+.toastui-editor-contents h2,
+.toastui-editor-contents h3,
+.toastui-editor-contents h4,
+.toastui-editor-contents h5,
+.toastui-editor-contents h6 {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
