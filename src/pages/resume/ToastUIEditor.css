@@ -14,3 +14,14 @@ css/* ToastUIEditor.css */
     border-bottom: none !important;
     padding-bottom: 0 !important;
 }
+
+/* 블록쿼트 글씨 색상 검정색으로 변경 */
+.toastui-editor-contents blockquote,
+.toastui-editor-md-preview blockquote {
+    color: #000000 !important;
+}
+
+.toastui-editor-contents blockquote p,
+.toastui-editor-md-preview blockquote p {
+    color: #000000 !important;
+}
