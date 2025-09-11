@@ -29,13 +29,31 @@ const ProjectDetailPage = ({
         <Box
             sx={{
                 position: "relative",
-                mx: "auto",                               // ✅ 가운데 정렬
-                width: "100%",     // ✅ 데스크탑 상한(원하는 값으로 조절)
-                px: { xs: 0, sm: 1.5, md: 0 },            // ✅ 필요하면 모바일만 살짝 안쪽
-                overflow: "hidden",                       // 바깥 튀어나옴 차단
-                "& .swiper": { width: "100%" },
-                "& .swiper-wrapper": { alignItems: "stretch" },
-                "& .swiper-slide": { height: "auto", minWidth: 0 },
+                mx: "auto",
+                width: "100%",
+                px: { xs: 0, sm: 1.5, md: 0 },
+                overflow: "hidden",
+                background: "transparent",
+                "& .swiper": { 
+                    width: "100%",
+                    backgroundColor: "transparent",
+                    background: "transparent"
+                },
+                "& .swiper-wrapper": { 
+                    alignItems: "stretch",
+                    backgroundColor: "transparent",
+                    background: "transparent"
+                },
+                "& .swiper-slide": { 
+                    height: "auto", 
+                    minWidth: 0,
+                    backgroundColor: "transparent",
+                    background: "transparent"
+                },
+                "& .swiper-container": {
+                    backgroundColor: "transparent",
+                    background: "transparent"
+                }
             }}
         >
             <Swiper
@@ -73,7 +91,7 @@ const ProjectDetailPage = ({
                     </SwiperSlide>
                 ))}
 
-                {/* 네비 버튼 */}
+                {/* 네비 버튼 - 투명하게 숨김 */}
                 <IconButton
                     className="proj-prev"
                     sx={{
@@ -82,8 +100,8 @@ const ProjectDetailPage = ({
                         left: 6,
                         zIndex: 2,
                         transform: "translateY(-50%)",
-                        bgcolor: "background.paper",
-                        boxShadow: 1,
+                        opacity: 0,
+                        pointerEvents: "none"
                     }}
                     size="small"
                 >
@@ -98,8 +116,8 @@ const ProjectDetailPage = ({
                         right: 6,
                         zIndex: 2,
                         transform: "translateY(-50%)",
-                        bgcolor: "background.paper",
-                        boxShadow: 1,
+                        opacity: 0,
+                        pointerEvents: "none"
                     }}
                     size="small"
                 >

@@ -14,6 +14,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import HeaderSection from "./HeaderSection";
 import ProjectCard from "./projectcard/ProjectCard";
+import RectangleCard from "./projectcard/RectangleCard";
 import useIsMobile from "../../hooks/useIsMobile";
 
 // =====================
@@ -76,26 +77,34 @@ const ProjectListPage = () => {
             {hasProjects ? (
                 <Box
                     sx={{
-                        display: "grid",
-                        gap: 1.5,
-                        gridTemplateColumns: {
-                            xs: "repeat(1, 1fr)",    // 모바일: 2개
-                            sm: "repeat(3, 1fr)",    // 작은 태블릿: 3개
-                            md: "repeat(3, 1fr)",    // 큰 태블릿: 4개
-                            lg: "repeat(3, 1fr)",    // 데스크탑: 5개
-                        },
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 2,
                     }}
                 >
-                    {projects.map((project) => (
-                        <ProjectCard
-                            key={project.projectId}
-                            project={project}
-                            editMode={editMode}
-                            onUpdate={makeUpdate(project.projectId)}
-                            onDelete={makeDelete(project.projectId)}
-                            isMobile={isMobile}
-                        />
-                    ))}
+                    {projects.map((project) => {
+                        // 기존 ProjectCard에서 사용하는 props 구조 맞춤
+                        const stacks = Array.isArray(project.stackNames)
+                            ? project.stackNames.map((s) => (typeof s === "string" ? s : s?.name))
+                            : [];
+
+                        const links = {
+                            notion: project.notionUrl || project.notion_url,
+                            github: project.githubUrl || project.github_url,
+                            deploy: project.deployUrl || project.deploy_url,
+                        };
+
+                        return (
+                            <RectangleCard
+                                key={project.projectId}
+                                project={project}
+                                stacks={stacks}
+                                editMode={editMode}
+                                onUpdate={makeUpdate(project.projectId)}
+                                links={links}
+                            />
+                        );
+                    })}
                 </Box>
             ) : (
                 // --- 프로젝트가 없는 경우 ---

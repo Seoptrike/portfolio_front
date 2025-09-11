@@ -103,8 +103,8 @@ const UserLayout = () => {
                         zIndex: 1020,
                         marginBottom: "1rem",
                         borderRadius: "0.5rem",
-                        paddingTop: "0.1rem",     // 상단 패딩 줄이기
-                        paddingBottom: "0.1rem",  // 하단 패딩 줄이기
+                        paddingTop: "0.1rem",
+                        paddingBottom: "0.1rem",
                         minHeight: "30px",
                     }}
                 >

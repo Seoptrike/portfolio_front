@@ -41,7 +41,7 @@ const CommonHeroBanner = ({
     return (
         <div
             style={{
-                background: "#fff",
+                background: "transparent",
                 borderRadius: `${rounded}px`,
                 padding: `${py} ${px}`,
             }}

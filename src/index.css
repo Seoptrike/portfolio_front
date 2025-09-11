@@ -4,4 +4,21 @@ html {
 }
 body {
   overflow-y: auto; /* 필요 시 scroll 로 강제 고정도 가능 */
+  background: transparent;
+}
+
+/* Swiper 전역 배경 제거 */
+.swiper {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.swiper-wrapper {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.swiper-slide {
+  background: transparent !important;
+  background-color: transparent !important;
 }

@@ -113,19 +113,28 @@ const StackPage = ({ stack = [] }) => {
                             sx={{
                                 width: '100%',
                                 maxWidth: '100%',
-                                minWidth: 0,          // ✅ grid item 줄어들 수 있게
+                                minWidth: 0,
                                 boxSizing: 'border-box',
                                 height: 'auto',
                                 py: 1,
                                 px: 1.2,
-                                borderRadius: 2,
-                                borderColor: 'divider',
-                                bgcolor: 'background.paper',
-                                boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-                                transition: 'transform .18s ease, box-shadow .18s ease',
+                                borderRadius: 4,
+                                border: "1px solid rgba(0,0,0,0.2)",
+                                background: "transparent",
+                                boxShadow: `
+                                    0 4px 16px rgba(0,0,0,0.06),
+                                    inset 0 1px 0 rgba(255,255,255,0.9),
+                                    inset 0 -1px 0 rgba(0,0,0,0.05)
+                                `,
+                                transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                                transformStyle: "preserve-3d",
                                 '&:hover': {
-                                    transform: 'translateY(-2px)',
-                                    boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
+                                    transform: "translateY(-4px) rotateX(3deg) rotateY(1deg) scale(1.02)",
+                                    boxShadow: `
+                                        0 8px 24px rgba(0,0,0,0.1),
+                                        inset 0 1px 0 rgba(255,255,255,0.9),
+                                        inset 0 -1px 0 rgba(0,0,0,0.05)
+                                    `
                                 },
                                 '.MuiChip-icon': { mr: 0.5 },
                                 '.MuiChip-label': {
@@ -133,7 +142,7 @@ const StackPage = ({ stack = [] }) => {
                                     width: '100%',
                                     justifyContent: 'center',
                                     px: 0,
-                                    minWidth: 0,        // ✅ 라벨도 줄어듦
+                                    minWidth: 0,
                                     overflow: 'hidden',
                                 },
                             }}

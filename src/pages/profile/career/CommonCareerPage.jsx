@@ -5,6 +5,7 @@ import {
     TableContainer, Button, Box
 } from "@mui/material";
 import useEditMode from "../../../hooks/useEditMode";
+import useIsMobile from "../../../hooks/useIsMobile";
 import CommonHeroBanner from "../../../components/common/CommonHeroBanner";
 import { apiDatesToForm, formToApiDates, ymLt, clampEndYM } from "../../../utils/yearModule";
 import CommonCareerModal from "./CommonCareerModal";
@@ -52,6 +53,7 @@ const CommonCareerPage = ({
     }
 }) => {
     const { editMode } = useEditMode();
+    const isMobile = useIsMobile();
     const [open, setOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [form, setForm] = useState({
@@ -143,7 +145,28 @@ const CommonCareerPage = ({
                         sx={{
                             position: "absolute", right: { xs: 8, sm: 0 },
                             top: { xs: 8, sm: "50%" }, transform: { sm: "translateY(-50%)" },
-                            zIndex: 1
+                            zIndex: 1,
+                            border: "1px solid rgba(0,0,0,0.2)", // 희미한 회색 테두리
+                            color: "#212529",
+                            background: "linear-gradient(145deg, #ffffff, #f8f9fa)",
+                            boxShadow: `
+                                0 4px 12px rgba(0,0,0,0.15),
+                                inset 0 1px 2px rgba(255,255,255,0.9),
+                                inset 0 -1px 2px rgba(0,0,0,0.1)
+                            `,
+                            borderRadius: 2,
+                            fontWeight: 600,
+                            transition: "all 0.3s ease",
+                            "&:hover": {
+                                transform: { sm: "translateY(-50%) translateY(-2px)" },
+                                borderColor: "#fd7e14",
+                                backgroundColor: "rgba(255,193,7,0.1)",
+                                boxShadow: `
+                                    0 6px 18px rgba(0,0,0,0.2),
+                                    inset 0 1px 2px rgba(255,255,255,0.9),
+                                    inset 0 -1px 2px rgba(0,0,0,0.1)
+                                `
+                            }
                         }}
                     >
                         + 추가
@@ -152,14 +175,55 @@ const CommonCareerPage = ({
             </Box>
 
             {/* 테이블 */}
-            <Paper elevation={0} sx={{ borderRadius: 2, overflow: "hidden", border: 1, borderColor: "divider" }}>
+            <div style={{ padding: isMobile ? "0" : "0 20px" }}>
+                <Paper elevation={0} sx={{ 
+                    borderRadius: 4,
+                    overflow: "hidden", 
+                    border: "1px solid rgba(0,0,0,0.2)", // 희미한 회색 테두리
+                    background: `
+                        linear-gradient(145deg, #ffffff 0%, #fdfdfd 50%, #fafafa 100%),
+                        linear-gradient(45deg, rgba(255,193,7,0.05), rgba(220,53,69,0.02))
+                    `, // 더 밝은 3D 배경
+                    boxShadow: `
+                        0 8px 32px rgba(0,0,0,0.12),
+                        inset 0 1px 0 rgba(255,255,255,0.9),
+                        inset 0 -1px 0 rgba(0,0,0,0.05)
+                    `, // 3D 그림자
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                        transform: "translateY(-2px)",
+                        boxShadow: `
+                            0 12px 40px rgba(0,0,0,0.15),
+                            inset 0 1px 0 rgba(255,255,255,0.9),
+                            inset 0 -1px 0 rgba(0,0,0,0.05)
+                        `
+                    },
+                    "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: "4px", // 원래 두께로 롤백
+                        background: "linear-gradient(90deg, #ffc107, #fd7e14, #dc3545)",
+                        borderRadius: "4px 4px 0 0"
+                    }
+                }}>
                 <TableContainer>
                     <Table size="small" aria-label={`${title} table`}>
                         <TableHead>
-                            <TableRow>
-                                <TableCell sx={{ width: "38%", fontWeight: 600 }}>{headers.col1}</TableCell>
-                                <TableCell sx={{ width: "38%", fontWeight: 600 }}>{headers.col2}</TableCell>
-                                <TableCell sx={{ width: "24%", fontWeight: 600 }}>{headers.period}</TableCell>
+                            <TableRow sx={{
+                                background: "transparent", // 투명 배경
+                                "& .MuiTableCell-root": {
+                                    borderBottom: "1px solid rgba(0,0,0,0.08)", // 바디와 동일한 테두리
+                                    color: "inherit", // 기본 텍스트 색상
+                                    fontWeight: 700, // 볼드 유지
+                                    fontSize: { xs: "0.8rem", sm: "0.9rem" }
+                                }
+                            }}>
+                                <TableCell sx={{ width: "45%", paddingLeft: "40px !important" }}>{headers.col1}</TableCell>
+                                <TableCell sx={{ width: "25%" }}>{headers.col2}</TableCell>
+                                <TableCell sx={{ width: "30%", paddingRight: "40px !important" }}>{headers.period}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -169,9 +233,21 @@ const CommonCareerPage = ({
                                         key={row[idKey] ?? pickCol1(row)}
                                         hover
                                         onClick={editMode ? () => handleEdit(row) : undefined}
-                                        sx={{ cursor: editMode ? "pointer" : "default" }}
+                                        sx={{ 
+                                            cursor: editMode ? "pointer" : "default",
+                                            transition: "all 0.2s ease",
+                                            "&:hover": {
+                                                backgroundColor: "rgba(255,193,7,0.08)",
+                                                transform: editMode ? "translateX(4px)" : "none",
+                                                borderLeft: editMode ? "3px solid #ffc107" : "none"
+                                            },
+                                            "& .MuiTableCell-root": {
+                                                borderBottom: "1px solid rgba(0,0,0,0.08)",
+                                                transition: "all 0.2s ease"
+                                            }
+                                        }}
                                     >
-                                        <TableCell sx={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontSize: { xs: 12, sm: 13 } }}
+                                        <TableCell sx={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontSize: { xs: 12, sm: 13 }, paddingLeft: "40px !important" }}
                                             title={pickCol1(row)}
                                         >
                                             {pickCol1(row)}
@@ -181,7 +257,7 @@ const CommonCareerPage = ({
                                         >
                                             {pickCol2(row)}
                                         </TableCell>
-                                        <TableCell sx={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontSize: { xs: 12, sm: 13 } }}
+                                        <TableCell sx={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontSize: { xs: 12, sm: 13 }, paddingRight: "40px !important" }}
                                             title={`${formatYM(pickStart(row))} ~ ${pickEnd(row) ? formatYM(pickEnd(row)) : "현재"}`}
                                         >
                                             {formatYM(pickStart(row))} ~ {pickEnd(row) ? formatYM(pickEnd(row)) : "현재"}
@@ -190,7 +266,7 @@ const CommonCareerPage = ({
                                 ))
                             ) : (
                                 <TableRow>
-                                    <TableCell colSpan={3} align="center" sx={{ py: 4, color: "text.secondary", fontSize: { xs: 12, sm: 13 } }}>
+                                    <TableCell colSpan={3} align="center" sx={{ py: 4, color: "text.secondary", fontSize: { xs: 12, sm: 13 }, px: 3 }}>
                                         데이터가 없습니다.
                                     </TableCell>
                                 </TableRow>
@@ -198,7 +274,8 @@ const CommonCareerPage = ({
                         </TableBody>
                     </Table>
                 </TableContainer>
-            </Paper>
+                </Paper>
+            </div>
 
             {/* 공용 모달 */}
             <CommonCareerModal

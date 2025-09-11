@@ -24,16 +24,16 @@ const MobileCard = ({ project, stacks, editMode, onUpdate, links }) => {
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
-                    px: 1,
-                    py: 1,
+                    px: 0.75, // 패딩 축소 (1 → 0.75)
+                    py: 0.75, // 패딩 축소 (1 → 0.75)
                     gap: 0, // 칼럼 간 기본 간격 제거
                 }}
             >
                 {/* 왼쪽: 썸네일 (정사각형 1:1) */}
                 <Box
                     sx={{
-                        flex: "0 0 34%",
-                        maxWidth: 140,
+                        flex: "0 0 30%", // 크기 축소 (34% → 30%)
+                        maxWidth: 120, // 최대 크기 축소 (140 → 120)
                         flexShrink: 0,
                         display: "flex",
                         justifyContent: "flex-end",
@@ -100,7 +100,7 @@ const MobileCard = ({ project, stacks, editMode, onUpdate, links }) => {
                                 width: "100%",
                                 display: "flex",
                                 justifyContent: "center",
-                                transform: "scale(0.9)",
+                                transform: "scale(0.85)", // 더 작게 축소 (0.9 → 0.85)
                                 transformOrigin: "center top",
                                 mb: -1.5, // 히어로-날짜 간격 압축
                             }}
@@ -123,7 +123,12 @@ const MobileCard = ({ project, stacks, editMode, onUpdate, links }) => {
                             <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ ...clamp(2), whiteSpace: "pre-line", mt: 0.25 }}
+                                sx={{ 
+                                    ...clamp(2), 
+                                    whiteSpace: "pre-line", 
+                                    mt: 0.25,
+                                    fontSize: "0.8rem" // 폰트 크기 축소
+                                }}
                             >
                                 {project.description}
                             </Typography>
@@ -139,26 +144,26 @@ const MobileCard = ({ project, stacks, editMode, onUpdate, links }) => {
                     {/* 하단: 초소형(dense) URL 버튼 — 가운데 정렬 */}
                     <Stack
                         direction="row"
-                        spacing={0.5}
+                        spacing={0.4} // 간격 축소 (0.5 → 0.4)
                         sx={{
-                            mt: 0.75,
+                            mt: 0.5, // 마진 축소 (0.75 → 0.5)
                             justifyContent: "center",  // 🔸 가운데 정렬
                             flexWrap: "nowrap",
                             overflowX: "auto",
                             overflowY: "hidden",
                             WebkitOverflowScrolling: "touch",
-                            minHeight: 28,
+                            minHeight: 24, // 높이 축소 (28 → 24)
                             "&::-webkit-scrollbar": { height: 6 },
                             "&::-webkit-scrollbar-thumb": { bgcolor: "divider", borderRadius: 3 },
 
                             // dense 버튼 스타일
                             "& .MuiButton-root": {
                                 whiteSpace: "nowrap",
-                                minHeight: 26,
+                                minHeight: 22, // 높이 축소 (26 → 22)
                                 lineHeight: 1,
-                                px: 0.6,
-                                py: 0.2,
-                                fontSize: "0.7rem",
+                                px: 0.5, // 패딩 축소 (0.6 → 0.5)
+                                py: 0.1, // 패딩 축소 (0.2 → 0.1)
+                                fontSize: "0.65rem", // 폰트 크기 축소 (0.7rem → 0.65rem)
                                 borderColor: "text.secondary",
                                 color: "text.primary",
                             },
@@ -166,8 +171,8 @@ const MobileCard = ({ project, stacks, editMode, onUpdate, links }) => {
                                 borderColor: "text.primary",
                                 bgcolor: "action.hover",
                             },
-                            "& .MuiButton-startIcon": { mr: 0.4 },
-                            "& .MuiButton-startIcon svg": { fontSize: 13 },
+                            "& .MuiButton-startIcon": { mr: 0.3 }, // 마진 축소 (0.4 → 0.3)
+                            "& .MuiButton-startIcon svg": { fontSize: 12 }, // 아이콘 크기 축소 (13 → 12)
                         }}
                         onClick={(e) => e.stopPropagation()}
                     >
