@@ -148,9 +148,9 @@ const MobileCard = ({ project, stacks, editMode, onUpdate, links }) => {
                         sx={{
                             mt: 0.5, // 마진 축소 (0.75 → 0.5)
                             justifyContent: "center",  // 🔸 가운데 정렬
-                            flexWrap: "nowrap",
-                            overflowX: "auto",
-                            overflowY: "hidden",
+                            alignItems: "center",
+                            flexWrap: "wrap",
+                            gap: 0.4,
                             WebkitOverflowScrolling: "touch",
                             minHeight: 24, // 높이 축소 (28 → 24)
                             "&::-webkit-scrollbar": { height: 6 },

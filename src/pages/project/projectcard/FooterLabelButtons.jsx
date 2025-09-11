@@ -27,7 +27,7 @@ const FooterLabelButtons = ({ notion, github, deploy, onClickStop = true }) => {
                 variant="outlined" color="inherit" size="small"
                 startIcon={<NotesIcon sx={{ fontSize: { xs: 14, sm: 16 } }} />}
                 href={notion} target="_blank" rel="noopener noreferrer"
-                onClick={stop} sx={{...btnSx, flex: 1}}
+                onClick={stop} sx={btnSx}
             >
                 Notion
             </Button>
@@ -41,7 +41,7 @@ const FooterLabelButtons = ({ notion, github, deploy, onClickStop = true }) => {
                 variant="outlined" color="inherit" size="small"
                 startIcon={<GitHubIcon sx={{ fontSize: { xs: 14, sm: 16 } }} />}
                 href={github} target="_blank" rel="noopener noreferrer"
-                onClick={stop} sx={{...btnSx, flex: 1}}
+                onClick={stop} sx={btnSx}
             >
                 GitHub
             </Button>
@@ -55,18 +55,13 @@ const FooterLabelButtons = ({ notion, github, deploy, onClickStop = true }) => {
                 variant="outlined" color="inherit" size="small"
                 startIcon={<OpenInNewIcon sx={{ fontSize: { xs: 14, sm: 16 } }} />}
                 href={deploy} target="_blank" rel="noopener noreferrer"
-                onClick={stop} sx={{...btnSx, flex: 1}}
+                onClick={stop} sx={btnSx}
             >
                 배포링크
             </Button>
         );
     }
     
-    // 3개가 안되면 빈 공간 추가
-    while (buttons.length < 3) {
-        buttons.push(<div key={`empty-${buttons.length}`} style={{flex: 1}}></div>);
-    }
-
     return <>{buttons}</>;
 };
 

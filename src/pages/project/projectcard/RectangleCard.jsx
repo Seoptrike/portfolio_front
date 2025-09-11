@@ -176,10 +176,11 @@ const RectangleCard = ({ project, stacks, editMode, onUpdate, links }) => {
                         {isMobile && (
                             <Box sx={{ 
                                 display: "flex",
-                                justifyContent: "space-between", // 3등분으로 균등 배치
+                                justifyContent: "center", // 가운데 정렬
+                                alignItems: "center",
                                 width: "100%",
-                                gap: { xs: 0.5, sm: 1 }, // 모바일에서 간격 축소
-                                overflow: "hidden" // 넘치는 내용 숨김
+                                gap: { xs: 0.4, sm: 1 }, // 모바일에서 간격 축소
+                                flexWrap: "wrap"
                             }}>
                                 <FooterLabelButtons notion={notion} github={github} deploy={deploy} />
                             </Box>
