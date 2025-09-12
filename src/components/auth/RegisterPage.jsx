@@ -140,9 +140,35 @@ const RegisterPage = () => {
         }
     };
 
+    // 전화번호 포맷팅 함수 (3-4-4 형식)
+    const formatPhoneNumber = (value) => {
+        // 숫자만 추출
+        const numbers = value.replace(/\D/g, '');
+        
+        // 11자리를 초과하면 자르기
+        if (numbers.length > 11) {
+            return phone; // 기존 값 유지
+        }
+
+        // 3-4-4 형식으로 포맷팅
+        if (numbers.length <= 3) {
+            return numbers;
+        } else if (numbers.length <= 7) {
+            return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+        } else {
+            return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7)}`;
+        }
+    };
+
+    const handlePhoneChange = (e) => {
+        const formatted = formatPhoneNumber(e.target.value);
+        setPhone(formatted);
+    };
+
     const validate = () => {
         if (!username || username.length < 3) return "아이디는 3자 이상이어야 합니다.";
         if (!password || password.length < 6) return "비밀번호는 6자 이상이어야 합니다.";
+        if (phone && phone.replace(/\D/g, '').length !== 11) return "휴대폰 번호는 11자리 숫자여야 합니다.";
         if (githubUrl && !/^https?:\/\/(www\.)?github\.com\/.+/i.test(githubUrl))
             return "GitHub URL 형식이 올바르지 않습니다.";
         return "";
@@ -171,8 +197,9 @@ const RegisterPage = () => {
                 photoUrlId = uploaded?.fileId ?? null;
             }
 
-            // 2) 회원가입 요청
-            await apiRegister({ username, password, phone, githubUrl, photo, photoUrlId });
+            // 2) 회원가입 요청 (전화번호는 숫자만 전송)
+            const phoneNumbers = phone ? phone.replace(/\D/g, '') : '';
+            await apiRegister({ username, password, phone: phoneNumbers, githubUrl, photo, photoUrlId });
 
             await Swal.fire({ icon: "success", title: "회원가입 완료!", timer: 1200, showConfirmButton: false });
             navigate("/auth/login");
@@ -255,9 +282,16 @@ const RegisterPage = () => {
                             type="tel"
                             name="phone"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            placeholder="숫자만 입력해주세요"
+                            onChange={handlePhoneChange}
+                            placeholder="010-1234-5678"
+                            maxLength="13"
                         />
+                        <div style={styles.hint}>
+                            {phone && phone.replace(/\D/g, '').length !== 11 && phone.length > 0 
+                                ? "11자리 숫자를 입력해주세요" 
+                                : "\u00A0"
+                            }
+                        </div>
                     </div>
 
                     {/* GitHub URL */}

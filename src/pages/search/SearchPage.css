@@ -1,0 +1,213 @@
+/* Search Page CSS */
+.search-page {
+    min-height: calc(100vh - 80px);
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: 2rem 0;
+}
+
+.search-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* 헤더 */
+.search-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.search-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #2d3748;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.search-subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* 검색 폼 */
+.search-form-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.search-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-input-group {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.search-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-btn-custom {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    white-space: nowrap;
+}
+
+.search-btn-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* 검색 결과 */
+.search-results {
+    min-height: 300px;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.result-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+}
+
+.result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.result-header {
+    margin-bottom: 1.5rem;
+}
+
+.result-username {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.result-name {
+    color: #666;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.result-link {
+    display: inline-block;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+}
+
+.result-link:hover {
+    color: white;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+}
+
+/* 결과 없음 */
+.no-results {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.no-results p {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 1rem;
+}
+
+.no-results span {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .search-page {
+        padding: 1rem 0;
+    }
+    
+    .search-container {
+        padding: 0 1rem;
+    }
+    
+    .search-title {
+        font-size: 2.2rem;
+    }
+    
+    .search-form-container {
+        padding: 1.5rem;
+    }
+    
+    .search-input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-btn-custom {
+        margin-top: 1rem;
+    }
+    
+    .results-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .result-card {
+        padding: 1.5rem;
+    }
+}

@@ -6,6 +6,7 @@ import useIsMobile from '../../hooks/useIsMobile';
 import { useLoading } from '../../context/LoadingContext';
 import MobileMainLayout from './MobileMainLayout';
 import DesktopMainLayout from './DesktopMainLayout';
+import ScrollableMainLayout from './ScrollableMainLayout';
 const MainPage = () => {
     const { username } = useParams();
     const { withLoading } = useLoading();
@@ -44,6 +45,6 @@ const MainPage = () => {
 
     return isMobile ? 
         <MobileMainLayout {...commonProps} /> : 
-        <DesktopMainLayout {...commonProps} />
+        <ScrollableMainLayout {...commonProps} />
 }
 export default MainPage

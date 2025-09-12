@@ -4,6 +4,7 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { AuthContext } from "../context/AuthContext";
 import { logout } from "../api/authApi";
 import { BsSearch, BsBoxArrowRight, BsBoxArrowInRight } from "react-icons/bs";
+import "./Layout.css";
 
 const Layout = () => {
     const [expanded, setExpanded] = useState(false);
@@ -74,57 +75,58 @@ const Layout = () => {
                     <Navbar.Toggle />
 
                     <Navbar.Collapse>
-                        <Nav className="ms-auto" style={{ alignItems: "center" }}>
-                            {/* 검색 */}
-                            {isAdmin &&
-                                <Nav.Link
-                                    as={Link}
-                                    to="/admin"
-                                    onClick={() => setExpanded(false)}
-                                    className="text-md-start text-center"
-                                    style={{ display: "flex", alignItems: "center" }}
+                        <Nav className="ms-auto" style={{ alignItems: "center", gap: "0.5rem" }}>
+                            {/* 관리자 모드 */}
+                            {isAdmin && (
+                                <button
+                                    className="nav-custom-btn admin-btn"
+                                    onClick={() => {
+                                        setExpanded(false);
+                                        navigate("/admin");
+                                    }}
                                 >
-                                    <span>관리자모드</span>
-                                </Nav.Link>
-                            }
-                            <Nav.Link
-                                as={Link}
-                                to="/search"
-                                onClick={() => setExpanded(false)}
-                                className="text-md-start text-center"
-                                style={{ display: "flex", alignItems: "center" }}
+                                    관리자모드
+                                </button>
+                            )}
+                            
+                            {/* 검색 */}
+                            <button
+                                className="nav-custom-btn search-btn"
+                                onClick={() => {
+                                    setExpanded(false);
+                                    navigate("/search");
+                                }}
                             >
                                 <span className="d-none d-md-inline">
-                                    찾기 <BsSearch size={18} />
+                                    검색 <BsSearch size={16} />
                                 </span>
                                 <span className="d-md-none">검색</span>
-                            </Nav.Link>
+                            </button>
 
+                            {/* 로그인/로그아웃 */}
                             {isLogin ? (
-                                <Button
-                                    variant="outline-light"
-                                    size="sm"
+                                <button
+                                    className="nav-custom-btn logout-btn"
                                     onClick={handleLogout}
-                                    className="ms-2 text-md-start text-center"
-                                    style={{ display: "flex", alignItems: "center" }}
                                 >
                                     <span className="d-none d-md-inline">
-                                        로그아웃 <BsBoxArrowRight size={18} />
+                                        로그아웃 <BsBoxArrowRight size={16} />
                                     </span>
                                     <span className="d-md-none">로그아웃</span>
-                                </Button>
+                                </button>
                             ) : (
-                                <Nav.Link
-                                    as={Link}
-                                    to="/auth/login"
-                                    className="ms-2 text-md-start text-center"
-                                    style={{ display: "flex", alignItems: "center" }}
+                                <button
+                                    className="nav-custom-btn login-btn"
+                                    onClick={() => {
+                                        setExpanded(false);
+                                        navigate("/auth/login");
+                                    }}
                                 >
                                     <span className="d-none d-md-inline">
-                                        로그인 <BsBoxArrowInRight size={18} />
+                                        로그인 <BsBoxArrowInRight size={16} />
                                     </span>
                                     <span className="d-md-none">로그인</span>
-                                </Nav.Link>
+                                </button>
                             )}
                         </Nav>
                     </Navbar.Collapse>
