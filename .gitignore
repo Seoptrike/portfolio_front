@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Markdown files (except README)
+*.md
+!README.md
+
+# HTML files (except index.html)
+*.html
+!index.html
