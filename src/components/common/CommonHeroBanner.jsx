@@ -3,6 +3,7 @@ import useIsMobile from "../../hooks/useIsMobile";
 
 const CommonHeroBanner = ({
     title,
+    icon,                    // optional icon
     eyebrow,                 // optional small label
     size ,        // "compact" | "section" | "hero"
     rounded = 16,
@@ -69,8 +70,22 @@ const CommonHeroBanner = ({
                         lineHeight: 1.12,
                         letterSpacing: "-0.015em",
                         color: "#0f172a",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: icon ? (isMobile ? "0.5rem" : "0.7rem") : 0,
                     }}
                 >
+                    {icon && (
+                        <span 
+                            style={{
+                                fontSize: isMobile ? titleClamp[size].mobile : titleClamp[size].desktop,
+                                lineHeight: 1,
+                            }}
+                        >
+                            {icon}
+                        </span>
+                    )}
                     {title}
                 </h1>
 

@@ -130,13 +130,27 @@ const CommonCareerPage = ({
         }
     };
 
+    // 타이틀에 따른 아이콘 매핑
+    const getIconByTitle = (title) => {
+        const iconMap = {
+            '학력': '🎓',
+            '경력': '💼',
+            '자격증': '📜',
+            '수상': '🏆',
+            '활동': '🌟',
+            '프로젝트': '🚀',
+            '기술스택': '⚡'
+        };
+        return iconMap[title] || '📋';
+    };
+
     return (
         <Box>
             {/* 헤더: 가운데 배너 + 오른쪽 추가 버튼 */}
             <Box sx={{ position: "relative", my: 1 }}>
                 <Grid container justifyContent="center" alignItems="center">
                     <Grid size="auto">
-                        <CommonHeroBanner title={title} size="compact" />
+                        <CommonHeroBanner title={title} icon={getIconByTitle(title)} size="compact" />
                     </Grid>
                 </Grid>
                 {editMode && (

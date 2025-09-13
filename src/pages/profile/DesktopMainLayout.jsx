@@ -147,14 +147,14 @@ const DesktopMainLayout = ({
 
                     {/* 프로젝트 */}
                     <div className="mb-4">
-                        <CommonHeroBanner title="프로젝트" size="compact" />
+                        <CommonHeroBanner title="프로젝트" icon="🚀" size="compact" />
                         <ProjectDetailPage projects={userProject} />
                     </div>
 
                     {/* 기술스택 */}
                     <div>
                         <div className="mb-3">
-                            <CommonHeroBanner title="기술스택" size="compact" />
+                            <CommonHeroBanner title="기술스택" icon="⚡" size="compact" />
                         </div>
                         <StackPage
                             userID={userID}

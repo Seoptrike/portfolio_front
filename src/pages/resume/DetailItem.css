@@ -1,0 +1,118 @@
+/* DetailItem 마크다운 뷰어 모바일 최적화 */
+
+/* 모바일 기본 스타일 */
+@media (max-width: 767px) {
+    .toastui-editor-contents {
+        font-size: 0.9rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    .toastui-editor-contents h1,
+    .toastui-editor-contents h2,
+    .toastui-editor-contents h3,
+    .toastui-editor-contents h4,
+    .toastui-editor-contents h5,
+    .toastui-editor-contents h6 {
+        font-size: 1.1rem !important;
+        margin-bottom: 0.8rem !important;
+        margin-top: 1.2rem !important;
+        line-height: 1.4 !important;
+    }
+    
+    .toastui-editor-contents p {
+        font-size: 0.9rem !important;
+        line-height: 1.6 !important;
+        margin-bottom: 0.8rem !important;
+    }
+    
+    .toastui-editor-contents ul,
+    .toastui-editor-contents ol {
+        font-size: 0.9rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    .toastui-editor-contents ul li,
+    .toastui-editor-contents ol li {
+        font-size: 0.9rem !important;
+        line-height: 1.6 !important;
+        margin-bottom: 0.4rem !important;
+    }
+    
+    .toastui-editor-contents code {
+        font-size: 0.85rem !important;
+        padding: 0.2rem 0.4rem !important;
+    }
+    
+    .toastui-editor-contents pre {
+        font-size: 0.85rem !important;
+        line-height: 1.5 !important;
+        overflow-x: auto !important;
+    }
+    
+    .toastui-editor-contents pre code {
+        font-size: 0.85rem !important;
+    }
+    
+    .toastui-editor-contents blockquote {
+        font-size: 0.9rem !important;
+        line-height: 1.6 !important;
+        padding: 0.8rem 1rem !important;
+        margin: 1rem 0 !important;
+    }
+    
+    .toastui-editor-contents table {
+        font-size: 0.85rem !important;
+    }
+    
+    .toastui-editor-contents table th,
+    .toastui-editor-contents table td {
+        padding: 0.5rem !important;
+        font-size: 0.85rem !important;
+    }
+}
+
+/* 태블릿 스타일 */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .toastui-editor-contents {
+        font-size: 0.95rem !important;
+        line-height: 1.7 !important;
+    }
+    
+    .toastui-editor-contents h1,
+    .toastui-editor-contents h2,
+    .toastui-editor-contents h3,
+    .toastui-editor-contents h4,
+    .toastui-editor-contents h5,
+    .toastui-editor-contents h6 {
+        font-size: 1.15rem !important;
+        margin-bottom: 0.8rem !important;
+        margin-top: 1.2rem !important;
+    }
+    
+    .toastui-editor-contents p {
+        font-size: 0.95rem !important;
+        line-height: 1.7 !important;
+    }
+    
+    .toastui-editor-contents ul li,
+    .toastui-editor-contents ol li {
+        font-size: 0.95rem !important;
+        line-height: 1.7 !important;
+    }
+    
+    .toastui-editor-contents code {
+        font-size: 0.9rem !important;
+    }
+    
+    .toastui-editor-contents pre code {
+        font-size: 0.9rem !important;
+    }
+}
+
+/* 데스크톱 스타일 (기본값 유지) */
+@media (min-width: 1024px) {
+    .toastui-editor-contents {
+        font-size: 0.95rem !important;
+        line-height: 1.8 !important;
+    }
+}

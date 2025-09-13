@@ -8,6 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import Viewer from "@toast-ui/editor/dist/toastui-editor-viewer";
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+import "./DetailItem.css";
 
 const DetailItem = ({ detail, editMode, onUpdate, onDelete }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -197,30 +198,13 @@ const DetailItem = ({ detail, editMode, onUpdate, onDelete }) => {
                         >
                             미리보기
                         </Typography>
-                        <Box
-                            sx={{
-                                flex: 1,
-                                // 토스트 뷰어 내부 타이포 살짝 정리
-                                "& .toastui-editor-contents": {
-                                    fontSize: "0.95rem",
-                                    lineHeight: 1.7,
-                                },
-                            }}
-                        >
+                        <Box sx={{ flex: 1 }}>
                             <div ref={previewElRef} />
                         </Box>
                     </Box>
                 </Stack>
             ) : (
-                <Box
-                    sx={{
-                        mt: 1,
-                        "& .toastui-editor-contents": {
-                            fontSize: "0.95rem",
-                            lineHeight: 1.8,
-                        },
-                    }}
-                >
+                <Box sx={{ mt: 1 }}>
                     <div ref={displayElRef} />
                 </Box>
             )}

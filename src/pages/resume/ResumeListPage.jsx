@@ -169,9 +169,7 @@ const ResumeListPage = () => {
             <HeroHeader
                 title="경력 기술서"
                 icon={
-                    <NotesIcon
-                        sx={{ fontSize: 18, color: (t) => t.palette.primary.contrastText }}
-                    />
+                    <span style={{ fontSize: '18px' }}>📝</span>
                 }
                 showChip
                 chipLabel={`@${username}`}
