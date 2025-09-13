@@ -8,7 +8,7 @@ const detectIdKey = (rows, candidates) =>
     (Array.isArray(rows) && rows.length > 0 &&
         candidates.find((k) => k in rows[0])) || candidates[0];
 
-const EduHistoryItem = ({ userID, username, data = [], onSuccess }) => {
+const EduHistoryItem = ({ userID, username, data = [], onSuccess, hideTopBar = false }) => {
     const idKey = detectIdKey(data, ["educationId", "id"]);
 
     return (
@@ -17,6 +17,7 @@ const EduHistoryItem = ({ userID, username, data = [], onSuccess }) => {
             rows={data}
             idKey={idKey}
             username={username}
+            hideTopBar={hideTopBar}
             headers={{ col1: "학교", col2: "전공", period: "재학 기간" }}
             pickCol1={(r) => r.schoolName}
             pickCol2={(r) => r.major}

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { NavLink, Outlet, useParams, useLocation } from "react-router-dom";
 import { FiUser, FiFileText, FiFolder, FiBriefcase, FiMessageCircle } from "react-icons/fi";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import { AuthContext } from "../context/AuthContext";
@@ -9,6 +9,9 @@ import useIsMobile from "../hooks/useIsMobile";
 import { FaCog, FaSave } from "react-icons/fa";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import IntegratedNavigation from "../components/common/IntegratedNavigation";
+import "./UserLayout.css";
+import "../components/common/IntegratedNavigation.css";
 
 const HeaderEditFAB = ({ isHost }) => {
     const { editMode, setEditMode } = useEditMode();
@@ -81,9 +84,26 @@ const UserLayout = () => {
     const { username } = useParams();
     const { isHost } = useContext(AuthContext);
     const isMobile = useIsMobile(); // <768px
+    const location = useLocation();
+    const { editMode } = useEditMode();
+    
+    // 현재 경로에 따른 페이지 정보 결정
+    const getCurrentPageInfo = () => {
+        const path = location.pathname;
+        if (path.endsWith('/about')) return { title: '자기소개서', actionRoute: '/aboutme/insert' };
+        if (path.includes('/project')) return { title: '프로젝트', actionRoute: '/project/insert' };
+        if (path.endsWith('/resume')) return { title: '경력 기술서', actionRoute: '/resume/insert' };
+        if (path.endsWith('/guestbook')) return { title: '방명록', actionRoute: '/guestbook/insert' };
+        return null; // 메인페이지는 통합 네비게이션 안 보임
+    };
+
+    const pageInfo = getCurrentPageInfo();
+
+    // 스크롤페이지 여부 확인 (URL에 scroll=true 파라미터가 있으면 스크롤페이지)
+    const isScrollPage = new URLSearchParams(location.search).get('scroll') === 'true';
 
     const desktopLinks = (username) => [
-        { to: ".", label: <span style={{ fontSize: "1.25rem", fontWeight: "bold" }}>@{username}</span>, end: true, strong: true },
+        { to: ".", label: `@${username}`, end: true, strong: true },
         { to: "about", label: "자기소개서" },
         { to: "project", label: "프로젝트" },
         { to: "resume", label: "경력기술서" },
@@ -92,50 +112,38 @@ const UserLayout = () => {
 
     return (
         <EditModeProvider isHost={isHost} username={username} persist={false}>
-            {/* 데스크톱: Navbar + Collapse (기존) */}
-            {!isMobile && (
-                <Navbar
-                    variant="light"
-                    expand="lg"
-                    style={{
-                        position: "sticky",
-                        top: 0,
-                        zIndex: 1020,
-                        marginBottom: "1rem",
-                        borderRadius: "0.5rem",
-                        paddingTop: "0.1rem",
-                        paddingBottom: "0.1rem",
-                        minHeight: "30px",
-                    }}
-                >
-                    <Navbar.Toggle />
-                    <Navbar.Collapse className="w-100">
-                        {/* 한 줄에 Nav(좌) + 버튼(우) */}
-                        <div className="d-flex align-items-center w-100">
-                            {/* ✅ Nav가 전체 폭을 먹고 */}
-                            <Nav className="flex-grow-1 d-flex w-100">
-                                {desktopLinks(username).map(({ to, label, end, strong }) => (
-                                    <Nav.Link
-                                        key={to}
-                                        as={NavLink}
-                                        to={to}
-                                        end={end}
-                                        className="flex-fill text-center"
-                                        style={({ isActive }) => ({
-                                            fontWeight: isActive ? 700 : 400,
-                                            color: isActive ? "#212529" : "#495057",
-                                            borderBottom: isActive ? "2px solid #212529" : "2px solid transparent",
-                                            textDecoration: "none",
-                                            padding: "0.5rem 0",
-                                        })}
-                                    >
-                                        {strong ? <strong>{label}</strong> : label}
-                                    </Nav.Link>
-                                ))}
-                            </Nav>
-                        </div>
-                    </Navbar.Collapse>
-                </Navbar>
+            {/* 데스크톱: 통합 네비게이션 (메인페이지가 아닐 때만) */}
+            {!isMobile && pageInfo && (
+                <IntegratedNavigation
+                    username={username}
+                    currentPageTitle={pageInfo.title}
+                    editMode={editMode}
+                    actionRoute={pageInfo.actionRoute}
+                />
+            )}
+            
+            {/* 데스크톱: 3D glassmorphism 네비게이션 (메인페이지일 때, 스크롤페이지 제외) */}
+            {!isMobile && !pageInfo && !isScrollPage && (
+                <div className="integrated-navigation">
+                    <div className="nav-color-bar"></div>
+                    <div className="nav-container">
+                        {/* 중앙: 네비게이션 링크들 */}
+                        <nav className="nav-links">
+                            {desktopLinks(username).map(({ to, label, end, strong }) => (
+                                <NavLink
+                                    key={to}
+                                    to={to}
+                                    end={end}
+                                    className={({ isActive }) =>
+                                        `nav-link ${isActive ? 'active' : ''}`
+                                    }
+                                >
+                                    {strong ? <strong>{label}</strong> : label}
+                                </NavLink>
+                            ))}
+                        </nav>
+                    </div>
+                </div>
             )}
 
             {/* 모바일: Collapse 제거, 가로 스크롤 탭 + FAB */}
@@ -171,8 +179,8 @@ const UserLayout = () => {
                 </>
             )}
             <HeaderEditFAB isHost={isHost} />
-            <div className="mt-3">
-                <Outlet context={{ username }} />
+            <div className="mt-3 page-content">
+                <Outlet context={{ username }} key={location.pathname} />
             </div>
         </EditModeProvider>
     );

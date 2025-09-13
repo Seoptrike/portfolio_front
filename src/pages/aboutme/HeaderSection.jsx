@@ -7,7 +7,7 @@ const HeaderSection = React.memo(function HeaderSection({ editMode, username }) 
             title="자기소개서"
             editMode={editMode}
             username={username}
-            actionRoute="/project/insert"
+            actionRoute="/aboutme/insert"
         />
     );
 });

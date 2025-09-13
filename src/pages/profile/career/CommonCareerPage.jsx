@@ -17,6 +17,7 @@ const CommonCareerPage = ({
     rows = [],
     idKey,
     username,
+    hideTopBar = false, // 상단 컬러바 숨기기 옵션
     // 테이블 헤더 라벨
     headers = { col1: "항목1", col2: "항목2", period: "기간" },
     // 행 → 셀 값 추출 방법 (도메인별 주입)
@@ -220,7 +221,11 @@ const CommonCareerPage = ({
                         right: 0,
                         height: "4px", // 원래 두께로 롤백
                         background: "linear-gradient(90deg, #ffc107, #fd7e14, #dc3545)",
-                        borderRadius: "4px 4px 0 0"
+                        borderRadius: "4px 4px 0 0",
+                        display: hideTopBar ? "none" : "block"
+                    },
+                    "&:hover::before": {
+                        display: "block !important" // 호버시에는 항상 표시
                     }
                 }}>
                 <TableContainer>

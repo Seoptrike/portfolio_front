@@ -71,8 +71,16 @@ const FloatingUserLayout = ({
                         <h4 className="profile-name">김인섭</h4>
                         <p className="profile-role">Backend Developer</p>
                         <div className="profile-contact">
-                            {userInfo.email && (
-                                <div 
+                            {/* 임시 이메일 주소 - 백엔드에서 데이터 받으면 userInfo.email로 변경 */}
+                            <div
+                                className="contact-item"
+                                onClick={() => window.location.href = `mailto:dlstjq977@gmail.com`}
+                            >
+                                <span className="contact-icon">📧</span>
+                                <span className="contact-text">dlstjq977@gmail.com</span>
+                            </div>
+                            {userInfo.email && userInfo.email !== 'dlstjq977@gmail.com' && (
+                                <div
                                     className="contact-item"
                                     onClick={() => window.location.href = `mailto:${userInfo.email}`}
                                 >

@@ -1,0 +1,112 @@
+/* UserLayout Navigation Styling */
+
+/* 페이지 전환 시 깜빡임 방지 - 특정 컴포넌트만 */
+.page-content {
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.user-navbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1020 !important;
+    margin-bottom: 1rem !important;
+    border-radius: 16px !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    min-height: 60px !important;
+    border: 1px solid rgba(0,0,0,0.2) !important;
+    background: 
+        linear-gradient(145deg, #ffffff 0%, #fdfdfd 50%, #fafafa 100%),
+        linear-gradient(45deg, rgba(255,193,7,0.05), rgba(220,53,69,0.02)) !important;
+    box-shadow: 
+        0 8px 32px rgba(0,0,0,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        inset 0 -1px 0 rgba(0,0,0,0.05) !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease !important;
+}
+
+
+.user-navbar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ffc107, #fd7e14, #dc3545);
+    border-radius: 16px 16px 0 0;
+    z-index: 1;
+}
+
+.user-navbar:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 12px 40px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        inset 0 -1px 0 rgba(0,0,0,0.05) !important;
+    transition: all 0.3s ease;
+}
+
+/* Username styling */
+.user-navbar .navbar-nav .nav-link strong {
+    background: linear-gradient(145deg, #212529, #495057);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800 !important;
+}
+
+/* Active link styling */
+.user-navbar .navbar-nav .nav-link[aria-current="page"] {
+    color: #fd7e14 !important;
+    border-bottom: 3px solid #ffc107 !important;
+    background: linear-gradient(145deg, rgba(255,193,7,0.1), rgba(255,193,7,0.05));
+    border-radius: 8px 8px 0 0;
+}
+
+/* Hover effects */
+.user-navbar .navbar-nav .nav-link:hover {
+    color: #fd7e14 !important;
+    background: linear-gradient(145deg, rgba(255,193,7,0.05), rgba(255,193,7,0.02));
+    border-radius: 8px;
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+/* Mobile navigation styling */
+.mobile-nav-tab {
+    border: 1px solid rgba(0,0,0,0.2);
+    background: 
+        linear-gradient(145deg, #ffffff 0%, #fdfdfd 50%, #fafafa 100%),
+        linear-gradient(45deg, rgba(255,193,7,0.05), rgba(220,53,69,0.02));
+    box-shadow: 
+        0 4px 16px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        inset 0 -1px 0 rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-nav-tab::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ffc107, #fd7e14, #dc3545);
+}
+
+.mobile-nav-tab .nav-link-active {
+    color: #fd7e14 !important;
+    background: linear-gradient(145deg, rgba(255,193,7,0.15), rgba(255,193,7,0.08));
+    border-bottom: 3px solid #ffc107;
+}
+
+.mobile-nav-tab .nav-link-hover:hover {
+    background: linear-gradient(145deg, rgba(255,193,7,0.08), rgba(255,193,7,0.04));
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}

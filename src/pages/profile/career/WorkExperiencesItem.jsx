@@ -3,7 +3,7 @@ import { formToApiDates } from '../../../utils/yearModule';
 import { insertWorkExp, updateWorkExp, deleteWorkExp } from '../../../api/careerApi';
 import CommonCareerPage from "./CommonCareerPage";
 
-const WorkExperiencesItem = ({ userID, username, data = [], onSuccess }) => {
+const WorkExperiencesItem = ({ userID, username, data = [], onSuccess, hideTopBar = false }) => {
     const idKey = "workId";
 
     return (
@@ -12,6 +12,7 @@ const WorkExperiencesItem = ({ userID, username, data = [], onSuccess }) => {
             rows={data}
             idKey={idKey}
             username={username}
+            hideTopBar={hideTopBar}
             headers={{ col1: "회사", col2: "직무", period: "재직 기간" }}
             pickCol1={(r) => r.companyName}
             pickCol2={(r) => r.position}

@@ -23,7 +23,8 @@ import NotesIcon from "@mui/icons-material/Notes";
 import EmptyState from "./EmptyState";
 import CareerAccordion from "./CareerAccordion";
 import CommonCareerModal from "../profile/career/CommonCareerModal";
-import HeroHeader from "../../components/common/HeroHeader";
+import HeaderSection from "../../components/common/HeaderSection";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const normalizeCareer = (w) => ({
     ...w,
@@ -35,6 +36,7 @@ const ResumeListPage = () => {
     const { username } = useParams();
     const { isHost } = useContext(AuthContext);
     const { editMode } = useEditMode();
+    const isMobile = useIsMobile();
 
     const [careers, setCareers] = useState([]);
     const [open, setOpen] = useState(false);
@@ -165,20 +167,15 @@ const ResumeListPage = () => {
                 "--ring": "0 1px 0 rgba(0,0,0,0.04), 0 8px 28px rgba(0,0,0,0.06)",
             }}
         >
-            {/* Hero Header (공용) */}
-            <HeroHeader
-                title="경력 기술서"
-                icon={
-                    <span style={{ fontSize: '18px' }}>📝</span>
-                }
-                showChip
-                chipLabel={`@${username}`}
-                editMode={editMode}
-                onPrimaryAction={handleOpen}
-                primaryActionLabel="추가"
-                primaryActionIcon={<AddIcon />}
-                sx={{ mb: 2.5 }}
-            />
+            {/* Header Section (모바일에서만 표시) */}
+            {isMobile && (
+                <HeaderSection
+                    title="경력 기술서"
+                    editMode={editMode}
+                    username={username}
+                    onPrimaryAction={handleOpen}
+                />
+            )}
 
             {/* Content Card List */}
             {careers.length === 0 ? (
