@@ -6,15 +6,34 @@ import { logout } from "../api/authApi";
 import { BsSearch, BsBoxArrowRight, BsBoxArrowInRight } from "react-icons/bs";
 import "./Layout.css";
 
+/**
+ * 메인 레이아웃 컴포넌트
+ * 네비게이션 바와 메인 콘텐츠 영역을 제공하는 최상위 레이아웃
+ *
+ * 기능:
+ * - 반응형 네비게이션 바 (고정 위치)
+ * - 로그인/로그아웃 기능
+ * - 관리자 모드 접근
+ * - 검색 기능
+ * - 최대 너비 제한 (1440px)
+ *
+ * @component
+ * @returns {JSX.Element} 레이아웃 컴포넌트
+ */
 const Layout = () => {
+    // 네비게이션 바 확장 상태
     const [expanded, setExpanded] = useState(false);
+    // 인증 관련 상태 및 함수들
     const { isLogin, loginName, loginCheckHandler, isAdmin } = useContext(AuthContext);
     const navigate = useNavigate();
+    // 네비게이션 바 높이 계산을 위한 ref
     const navRef = useRef(null);
+    // 동적으로 계산되는 네비게이션 바 높이
     const [navHeight, setNavHeight] = useState(64);
 
-    // 원하는 최대 폭(px)
+    // 레이아웃 최대 너비 설정
     const MAX_WIDTH = 1440;
+    // 메인 콘텐츠 래퍼 스타일
     const wrapperStyle = {
         maxWidth: MAX_WIDTH,
         margin: '0 auto',
@@ -23,6 +42,11 @@ const Layout = () => {
         paddingRight: '1rem',
         paddingLeft: '1rem',
     };
+
+    /**
+     * 네비게이션 바 높이를 동적으로 계산하여 메인 콘텐츠의 패딩 조정
+     * 창 크기 변경 시에도 높이를 재계산
+     */
     useLayoutEffect(() => {
         const el = navRef.current;
         if (!el) return;
@@ -32,6 +56,12 @@ const Layout = () => {
         return () => window.removeEventListener("resize", setHeight);
     }, []);
 
+    /**
+     * 로그아웃 처리 함수
+     * - API 호출을 통한 로그아웃
+     * - 로컬 스토리지에서 사용자명 제거
+     * - 로그인 상태 체크 후 홈페이지로 이동
+     */
     const handleLogout = async () => {
         await logout();
         localStorage.removeItem("username");

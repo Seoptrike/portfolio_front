@@ -5,6 +5,7 @@ import AddEditForm from './AddEditForm';
 import CommonHeroBanner from '../../components/common/CommonHeroBanner';
 import useIsMobile from '../../hooks/useIsMobile';
 import DOMPurify from 'dompurify';
+import { AuthContext } from '../../context/AuthContext';
 
 const AboutCard = ({
     about,
@@ -18,6 +19,50 @@ const AboutCard = ({
     onDelete,
 }) => {
     const { isMobile } = useIsMobile();
+
+    // sessionStorage 변경을 감지하기 위한 state
+    const [companyName, setCompanyName] = React.useState(() => {
+        return sessionStorage.getItem('company') || '귀사';
+    });
+
+    // sessionStorage 변경 감지
+    React.useEffect(() => {
+        const handleStorageChange = () => {
+            setCompanyName(sessionStorage.getItem('company') || '귀사');
+        };
+
+        // storage 이벤트 리스너 추가
+        window.addEventListener('storage', handleStorageChange);
+
+        // 주기적으로 체크 (같은 탭에서의 변경 감지용)
+        const interval = setInterval(handleStorageChange, 1000);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            clearInterval(interval);
+        };
+    }, []);
+
+    // 템플릿 변수 치환 함수
+    const replaceTemplateVariables = (content) => {
+        if (!content) return '';
+
+        console.log('원본 content:', content);
+        console.log('companyName:', companyName);
+
+        const templateVars = {
+            '{회사이름}': companyName,
+        };
+
+        let processedContent = content;
+        Object.entries(templateVars).forEach(([template, value]) => {
+            console.log('치환 중:', template, '→', value);
+            processedContent = processedContent.replace(new RegExp(template, 'g'), value);
+        });
+
+        console.log('치환 후 content:', processedContent);
+        return processedContent;
+    };
 
     return (
         <Card variant="outlined" sx={{ borderRadius: 3 }}>
@@ -79,8 +124,8 @@ const AboutCard = ({
                         sx={{
                             textAlign: "center",
                             width: '100%',
-                            // 최소 680px, 보통은 70vw 근처, 최대 1120px
-                            maxWidth: 'clamp(680px, 70vw, 1120px)',
+                            // 조금 더 여유있게 조정 - 최소 770px, 보통 78vw, 최대 1120px
+                            maxWidth: 'clamp(770px, 78vw, 1120px)',
                             mx: "auto",
                             fontSize: { xs: "0.98rem", md: "1.12rem", lg: "1.18rem" },
                             lineHeight: { xs: 1.7, md: 1.9 },
@@ -100,7 +145,7 @@ const AboutCard = ({
                             "& a": { textDecoration: "underline" },
                         }}
                         dangerouslySetInnerHTML={{
-                            __html: DOMPurify.sanitize(about.content || "")
+                            __html: DOMPurify.sanitize(replaceTemplateVariables(about.content) || "")
                         }}
                     />
                 )}

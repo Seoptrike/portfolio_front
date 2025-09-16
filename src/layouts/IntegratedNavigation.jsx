@@ -2,9 +2,10 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { getNavigationItems, getPageConfig, getPageKeyByTitle } from "../config/pageConfig";
 import "./IntegratedNavigation.css";
 
-const IntegratedNavigation = ({ 
+const IntegratedNavigation = ({
     username,
     currentPageTitle,
     editMode,
@@ -12,24 +13,14 @@ const IntegratedNavigation = ({
     actionRoute,
     primaryActionLabel = "등록하러가기"
 }) => {
-    // 페이지별 아이콘 매핑
+    // 페이지별 아이콘 매핑 (통합 설정 사용)
     const getIconByTitle = (title) => {
-        const iconMap = {
-            '방명록': '💬',
-            '자기소개서': '👨‍💻', 
-            '프로젝트': '🚀',
-            '경력 기술서': '📝'
-        };
-        return iconMap[title] || '📋';
+        const pageKey = getPageKeyByTitle(title);
+        const config = getPageConfig(pageKey);
+        return config.emoji || '📋';
     };
 
-    const navigationItems = [
-        { to: ".", label: `@${username}`, title: "메인페이지" },
-        { to: "about", label: "자기소개서", title: "자기소개서" },
-        { to: "project", label: "프로젝트", title: "프로젝트" },
-        { to: "resume", label: "경력기술서", title: "경력 기술서" },
-        { to: "guestbook", label: "방명록", title: "방명록" },
-    ];
+    const navigationItems = getNavigationItems(username);
 
     return (
         <div className="integrated-navigation">

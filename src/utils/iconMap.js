@@ -1,4 +1,10 @@
-// src/constants/iconMap.js
+/**
+ * 기술 스택 아이콘 매핑 유틸리티
+ * 각 기술 스택에 해당하는 아이콘과 색상을 정의하여 일관성 있는 UI 제공
+ *
+ * @fileoverview 프로젝트에서 사용되는 기술 스택들의 아이콘과 브랜드 색상 매핑 정보
+ */
+
 import {
     SiHtml5, SiCss3, SiJavascript, SiReact, SiVuedotjs, SiExpress,
     SiSpringboot, SiSpring, SiPython, SiMysql, SiPostgresql, SiMongodb,
@@ -6,6 +12,19 @@ import {
 } from 'react-icons/si';
 import { FaNodeJs, FaJava, FaGithub } from 'react-icons/fa';
 
+/**
+ * 기술 스택명과 해당 아이콘, 브랜드 색상을 매핑하는 객체
+ *
+ * 각 기술 스택에 대해 다음 정보를 포함:
+ * - Icon: React Icons 컴포넌트
+ * - color: 해당 기술의 공식 브랜드 색상 (HEX 코드)
+ *
+ * @type {Object.<string, {Icon: React.ComponentType, color: string}>}
+ *
+ * @example
+ * const { Icon, color } = ICON_MAP['React'];
+ * return <Icon style={{ color }} />;
+ */
 export const ICON_MAP = {
     HTML: { Icon: SiHtml5, color: '#E34F26' },
     CSS: { Icon: SiCss3, color: '#1572B6' },

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { register as apiRegister } from "../../api/authApi";
-import ImagePicker from "../common/ImagePicker";
+import ImagePicker from "../../components/common/ImagePicker";
 import useImageKitUpload from "../../hooks/useImageKitUpload.js";
 
 const RegisterPage = () => {

@@ -4,6 +4,10 @@ export const fetchGuestBookList = (username) =>{
         return axios.get(`/api/guest/${username}`)
 }
 
+export const fetchCombinedGuestBookList = (username) => {
+        return axios.get(`/api/guest/${username}/combined`)
+}
+
 export const createGuestBook = (data) => {
   return axios.post('/api/guest', data);
 };

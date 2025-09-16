@@ -1,9 +1,28 @@
-// src/pages/HomePage.jsx
+/**
+ * 메인 홈페이지 컴포넌트
+ * 포트폴리오 플랫폼의 랜딩 페이지로 프로젝트 소개와 주요 기능을 안내
+ *
+ * @fileoverview Seopotfolio 플랫폼의 메인 페이지 - 프로젝트 소개, 기술 스택, 기능 소개 등을 포함
+ */
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './HomePage.css';
 
+/**
+ * 홈페이지 메인 컴포넌트
+ *
+ * 주요 기능:
+ * - 플랫폼 소개 및 프로젝트 목표 설명
+ * - 기술 스택 및 아키텍처 정보 표시
+ * - 주요 기능들의 시각적 소개
+ * - 로그인 및 샘플 포트폴리오 링크 제공
+ *
+ * @component
+ * @returns {JSX.Element} 홈페이지 컴포넌트
+ */
 const HomePage = () => {
+    // 환경변수에서 기본 포트폴리오 사용자명 가져오기
     const portfolioUsername = import.meta.env.VITE_PORTFOLIO_USERNAME || 'kis';
     
     return (

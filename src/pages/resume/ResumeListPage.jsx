@@ -161,12 +161,10 @@ const ResumeListPage = () => {
     };
 
     return (
-        <Box
-            sx={{
-                "--cardRadius": "16px",
-                "--ring": "0 1px 0 rgba(0,0,0,0.04), 0 8px 28px rgba(0,0,0,0.06)",
-            }}
-        >
+        <div style={{
+            minHeight: '100vh',
+            background: 'linear-gradient(135deg, rgba(255, 138, 0, 0.02) 0%, rgba(255, 193, 7, 0.01) 25%, rgba(220, 53, 69, 0.02) 50%, rgba(13, 110, 253, 0.01) 75%, rgba(111, 66, 193, 0.02) 100%)'
+        }}>
             {/* Header Section (모바일에서만 표시) */}
             {isMobile && (
                 <HeaderSection
@@ -178,31 +176,37 @@ const ResumeListPage = () => {
             )}
 
             {/* Content Card List */}
-            {careers.length === 0 ? (
+            <div>
+                {careers.length === 0 ? (
                 <Fade in>
                     <Box>
                         <EmptyState isHost={isHost} onOpen={handleOpen} />
                     </Box>
                 </Fade>
             ) : (
-                <Stack spacing={1.25}>
+                <Stack spacing={2}>
                     {careers.map((career, idx) => (
-                        <Paper
-                            key={`${career.workId}-${career.rev ?? 0}`} // ← rev로 확실히 리마운트
-                            elevation={0}
-                            sx={{
-                                borderRadius: "var(--cardRadius)",
-                                border: "1px solid",
-                                borderColor: "divider",
-                                p: { xs: 0.25, sm: 0.5 },
-                                boxShadow: "var(--ring)",
-                                "&:hover": {
-                                    boxShadow:
-                                        "0 1px 0 rgba(0,0,0,0.04), 0 10px 32px rgba(0,0,0,0.08)",
-                                },
-                                transition: "box-shadow .2s ease",
-                            }}
-                        >
+                        <div
+                                key={`${career.workId}-${career.rev ?? 0}`}
+                                style={{
+                                    background: 'rgba(255, 255, 255, 0.9)',
+                                    borderRadius: '20px',
+                                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                                    backdropFilter: 'blur(10px)',
+                                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                                    overflow: 'hidden',
+                                    transition: 'all 0.3s ease',
+                                    cursor: 'pointer'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(-4px)';
+                                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.15)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+                                }}
+                            >
                             <CareerAccordion
                                 defaultExpanded={idx === 0}
                                 career={career}
@@ -211,30 +215,50 @@ const ResumeListPage = () => {
                                 onUpdateDetail={handleUpdateDetail}
                                 onCreateDetail={handleCreateDetail}
                                 onDeleteDetail={handleDeleteDetail}
-                            />
-                        </Paper>
-                    ))}
-                </Stack>
-            )}
+                                />
+                            </div>
+                        ))}
+                    </Stack>
+                )}
+            </div>
 
-            {/* Mobile FAB */}
+            {/* Modern FAB */}
             {editMode && (
-                <Fab
-                    color="primary"
-                    aria-label="add"
+                <button
                     onClick={(e) => {
                         e.currentTarget.blur();
                         handleOpen();
                     }}
-                    sx={{
+                    style={{
                         position: "fixed",
-                        right: 16,
-                        bottom: 16,
-                        display: { xs: "inline-flex", md: "none" },
+                        right: "1.5rem",
+                        bottom: "1.5rem",
+                        width: "60px",
+                        height: "60px",
+                        borderRadius: "50%",
+                        background: 'linear-gradient(135deg, #007bff, #6610f2)',
+                        border: 'none',
+                        color: 'white',
+                        fontSize: '1.5rem',
+                        cursor: 'pointer',
+                        boxShadow: '0 8px 25px rgba(0, 123, 255, 0.4)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'all 0.3s ease',
+                        zIndex: 1000
+                    }}
+                    onMouseEnter={(e) => {
+                        e.target.style.transform = 'translateY(-3px) scale(1.05)';
+                        e.target.style.boxShadow = '0 12px 35px rgba(0, 123, 255, 0.5)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.target.style.transform = 'translateY(0) scale(1)';
+                        e.target.style.boxShadow = '0 8px 25px rgba(0, 123, 255, 0.4)';
                     }}
                 >
-                    <AddIcon />
-                </Fab>
+                    ✨
+                </button>
             )}
 
             {/* Modal */}
@@ -258,7 +282,7 @@ const ResumeListPage = () => {
                     }}
                 />
             )}
-        </Box>
+        </div>
     );
 };
 

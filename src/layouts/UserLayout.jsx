@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { NavLink, Outlet, useParams, useLocation } from "react-router-dom";
-import { FiUser, FiFileText, FiFolder, FiBriefcase, FiMessageCircle } from "react-icons/fi";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import { AuthContext } from "../context/AuthContext";
 import EditModeProvider from "../providers/EditModeProvider";
@@ -9,9 +8,10 @@ import useIsMobile from "../hooks/useIsMobile";
 import { FaCog, FaSave } from "react-icons/fa";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import IntegratedNavigation from "../components/common/IntegratedNavigation";
+import IntegratedNavigation from "./IntegratedNavigation";
+import { PAGE_CONFIG, PAGE_KEYS, EDIT_MODE_TEXT, getPageKeyByRoute } from "../config/pageConfig";
 import "./UserLayout.css";
-import "../components/common/IntegratedNavigation.css";
+import "./IntegratedNavigation.css";
 
 const HeaderEditFAB = ({ isHost }) => {
     const { editMode, setEditMode } = useEditMode();
@@ -43,7 +43,7 @@ const HeaderEditFAB = ({ isHost }) => {
         >
             <OverlayTrigger
                 placement="left"
-                overlay={<Tooltip>{editMode ? "수정 종료" : "수정 하기"}</Tooltip>}
+                overlay={<Tooltip>{editMode ? EDIT_MODE_TEXT.EDIT_END : EDIT_MODE_TEXT.EDIT_START}</Tooltip>}
             >
                 <span>
                     {editMode ? <FaSave size="50%" color="#fff" /> : <FaCog size="50%" color="#fff" />}
@@ -86,14 +86,14 @@ const UserLayout = () => {
     const isMobile = useIsMobile(); // <768px
     const location = useLocation();
     const { editMode } = useEditMode();
-    
+
     // 현재 경로에 따른 페이지 정보 결정
     const getCurrentPageInfo = () => {
         const path = location.pathname;
-        if (path.endsWith('/about')) return { title: '자기소개서', actionRoute: '/aboutme/insert' };
-        if (path.includes('/project')) return { title: '프로젝트', actionRoute: '/project/insert' };
-        if (path.endsWith('/resume')) return { title: '경력 기술서', actionRoute: '/resume/insert' };
-        if (path.endsWith('/guestbook')) return { title: '방명록', actionRoute: '/guestbook/insert' };
+        if (path.endsWith('/about')) return PAGE_CONFIG[PAGE_KEYS.ABOUT];
+        if (path.includes('/project')) return PAGE_CONFIG[PAGE_KEYS.PROJECT];
+        if (path.endsWith('/resume')) return PAGE_CONFIG[PAGE_KEYS.RESUME];
+        if (path.endsWith('/guestbook')) return PAGE_CONFIG[PAGE_KEYS.GUESTBOOK];
         return null; // 메인페이지는 통합 네비게이션 안 보임
     };
 
@@ -104,10 +104,10 @@ const UserLayout = () => {
 
     const desktopLinks = (username) => [
         { to: ".", label: `@${username}`, end: true, strong: true },
-        { to: "about", label: "자기소개서" },
-        { to: "project", label: "프로젝트" },
-        { to: "resume", label: "경력기술서" },
-        { to: "guestbook", label: "방명록" },
+        { to: "about", label: PAGE_CONFIG[PAGE_KEYS.ABOUT].label },
+        { to: "project", label: PAGE_CONFIG[PAGE_KEYS.PROJECT].label },
+        { to: "resume", label: PAGE_CONFIG[PAGE_KEYS.RESUME].label },
+        { to: "guestbook", label: PAGE_CONFIG[PAGE_KEYS.GUESTBOOK].label },
     ];
 
     return (
@@ -121,7 +121,7 @@ const UserLayout = () => {
                     actionRoute={pageInfo.actionRoute}
                 />
             )}
-            
+
             {/* 데스크톱: 3D glassmorphism 네비게이션 (메인페이지일 때, 스크롤페이지 제외) */}
             {!isMobile && !pageInfo && !isScrollPage && (
                 <div className="integrated-navigation">
@@ -169,11 +169,21 @@ const UserLayout = () => {
                                 alignItems: "stretch"
                             }}
                         >
-                            <IconTab to="." label={`@${username}`}><FiUser size={22} /></IconTab>
-                            <IconTab to="about" label="자기소개서"><FiFileText size={22} /></IconTab>
-                            <IconTab to="project" label="프로젝트"><FiFolder size={22} /></IconTab>
-                            <IconTab to="resume" label="경력기술서"><FiBriefcase size={22} /></IconTab>
-                            <IconTab to="guestbook" label="방명록"><FiMessageCircle size={22} /></IconTab>
+                            <IconTab to="." label={`@${username}`}>
+                                {React.createElement(PAGE_CONFIG[PAGE_KEYS.PROFILE].icon, { size: 22 })}
+                            </IconTab>
+                            <IconTab to="about" label={PAGE_CONFIG[PAGE_KEYS.ABOUT].label}>
+                                {React.createElement(PAGE_CONFIG[PAGE_KEYS.ABOUT].icon, { size: 22 })}
+                            </IconTab>
+                            <IconTab to="project" label={PAGE_CONFIG[PAGE_KEYS.PROJECT].label}>
+                                {React.createElement(PAGE_CONFIG[PAGE_KEYS.PROJECT].icon, { size: 22 })}
+                            </IconTab>
+                            <IconTab to="resume" label={PAGE_CONFIG[PAGE_KEYS.RESUME].label}>
+                                {React.createElement(PAGE_CONFIG[PAGE_KEYS.RESUME].icon, { size: 22 })}
+                            </IconTab>
+                            <IconTab to="guestbook" label={PAGE_CONFIG[PAGE_KEYS.GUESTBOOK].label}>
+                                {React.createElement(PAGE_CONFIG[PAGE_KEYS.GUESTBOOK].icon, { size: 22 })}
+                            </IconTab>
                         </div>
                     </nav>
                 </>
