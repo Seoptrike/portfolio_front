@@ -13,6 +13,7 @@ import ResumeListPage from '../pages/resume/ResumeListPage';
 import UserLayout from '../layouts/UserLayout';
 import SearchPage from '../pages/search/SearchPage';
 import RequireAdmin from "./RequireAdmin";
+import CompanyRedirect from '../components/common/CompanyRedirect';
 
 const AdminLayout = lazy(() => import("../layouts/AdminLayout"));
 const Dashboard = lazy(() => import("../pages/admin/Dashboard"));
@@ -25,6 +26,7 @@ const RouterConfig = () => {
                 <Route index element={<HomePage />} />
                 <Route path="auth/*" element={<AuthRouter />} />
                 <Route path="search" element={<SearchPage />} />
+                <Route path="company" element={<CompanyRedirect />} />
 
                 {/* 유저 스코프 */}
                 <Route path=":username" element={<UserLayout />}>
