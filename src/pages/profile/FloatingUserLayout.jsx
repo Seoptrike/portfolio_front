@@ -69,7 +69,7 @@ const FloatingUserLayout = ({
                     </div>
                     <div className="profile-info">
                         <h4 className="profile-name">김인섭</h4>
-                        <p className="profile-role">Backend Developer</p>
+                        <p className="profile-role">Fullstack Developer</p>
                         <div className="profile-contact">
                             {/* 임시 이메일 주소 - 백엔드에서 데이터 받으면 userInfo.email로 변경 */}
                             <div

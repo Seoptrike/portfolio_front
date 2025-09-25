@@ -20,88 +20,9 @@ const ScrollableMainLayout = ({
     setShowProfileModal,
     CallTotalAPI
 }) => {
-    // ScrollableMainLayout.css 스타일을 인라인으로 이동 - 상단 컬러바 제거
-    const scrollableLayoutStyle = {
-        position: 'relative',
-        overflowX: 'hidden'
-    };
-
-    const heroSectionStyle = {
-        position: 'relative',
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'hidden'
-    };
-
-    // CSS 스타일 적용 제거 (일단 모든 스타일 해제)
-
-
-    const heroBackgroundStyle = {
-        position: 'absolute',
-        inset: '0',
-        zIndex: '-1'
-    };
-
-    const heroGradientStyle = {
-        position: 'absolute',
-        inset: '0',
-        background: 'linear-gradient(135deg, rgba(255, 138, 0, 0.1) 0%, rgba(255, 193, 7, 0.05) 25%, rgba(220, 53, 69, 0.1) 50%, rgba(13, 110, 253, 0.05) 75%, rgba(111, 66, 193, 0.1) 100%)'
-    };
-
-    const heroParticlesStyle = {
-        position: 'absolute',
-        inset: '0'
-    };
-
-    const heroContentStyle = {
-        maxWidth: '1200px',
-        width: '100%',
-        padding: '0 2rem',
-        textAlign: 'center'
-    };
-
-    const heroProfileStyle = {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '4rem',
-        marginBottom: '4rem'
-    };
-
-    const profileImageWrapperStyle = {
-        position: 'relative',
-        flexShrink: 0
-    };
-
-    const profileImageStyle = {
-        width: '280px',
-        height: '280px',
-        borderRadius: '50%',
-        objectFit: 'cover',
-        border: '4px solid rgba(255, 255, 255, 0.8)',
-        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15), inset 0 4px 8px rgba(255, 255, 255, 0.9)',
-        transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-    };
-
-    const heroTextStyle = {
-        flex: 1,
-        textAlign: 'left',
-        maxWidth: '600px'
-    };
-
-    const heroTitleStyle = {
-        fontSize: '3.5rem',
-        fontWeight: '800',
-        lineHeight: '1.2',
-        color: '#1a1a1a',
-        marginBottom: '1.5rem'
-    };
     const [activeSection, setActiveSection] = useState('hero');
     const navigate = useNavigate();
 
-    // 스크롤 위치에 따른 액티브 섹션 업데이트
     useEffect(() => {
         const handleScroll = () => {
             const sections = ['hero', 'about', 'career', 'projects', 'techstack'];
@@ -123,20 +44,9 @@ const ScrollableMainLayout = ({
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // 스무스 스크롤
-    const scrollToSection = (sectionId) => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    };
 
     return (
         <div className="scrollable-layout">
-
             {/* Hero Section */}
             <section id="hero" className="hero-section">
                 <div className="hero-background">
