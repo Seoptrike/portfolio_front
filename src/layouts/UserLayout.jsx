@@ -85,6 +85,7 @@ const UserLayout = () => {
     const { isHost } = useContext(AuthContext);
     const isMobile = useIsMobile(); // <768px
     const location = useLocation();
+    const { editMode } = useEditMode();
 
     // 현재 경로에 따른 페이지 정보 결정
     const getCurrentPageInfo = () => {
@@ -116,6 +117,7 @@ const UserLayout = () => {
                 <IntegratedNavigation
                     username={username}
                     currentPageTitle={pageInfo.title}
+                    editMode={editMode}
                     actionRoute={pageInfo.actionRoute}
                 />
             )}
