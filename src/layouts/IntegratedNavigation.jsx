@@ -3,16 +3,17 @@ import { NavLink } from "react-router-dom";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { getNavigationItems, getPageConfig, getPageKeyByTitle } from "../config/pageConfig";
+import useEditMode from "../hooks/useEditMode";
 import "./IntegratedNavigation.css";
 
 const IntegratedNavigation = ({
     username,
     currentPageTitle,
-    editMode,
     onPrimaryAction,
     actionRoute,
     primaryActionLabel = "등록하러가기"
 }) => {
+    const { editMode } = useEditMode();
     // 페이지별 아이콘 매핑 (통합 설정 사용)
     const getIconByTitle = (title) => {
         const pageKey = getPageKeyByTitle(title);
