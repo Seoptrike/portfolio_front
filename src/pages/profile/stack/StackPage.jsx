@@ -3,7 +3,9 @@ import { Box, Chip, Typography, Rating, Tooltip } from '@mui/material';
 import {
     SiHtml5, SiCss3, SiJavascript, SiReact, SiVuedotjs, SiExpress,
     SiSpring, SiSpringboot, SiPython, SiMysql, SiPostgresql, SiMongodb,
-    SiDocker, SiNginx, SiAmazon, SiVercel, SiJira, SiNotion
+    SiDocker, SiNginx, SiAmazon, SiVercel, SiJira, SiNotion,
+    SiKubernetes, SiHelm, SiGitlab, SiArgo, SiRedis,
+    SiOpentelemetry, SiGrafana, SiElasticsearch, SiLogstash, SiKibana
 } from 'react-icons/si';
 import { FaNodeJs, FaJava, FaGithub } from 'react-icons/fa';
 
@@ -18,6 +20,13 @@ const ICON_MAP = {
     Docker: { Icon: SiDocker, color: '#2496ED' }, Nginx: { Icon: SiNginx, color: '#009639' },
     AWS: { Icon: SiAmazon, color: '#FF9900' }, Vercel: { Icon: SiVercel, color: '#000' },
     GitHub: { Icon: FaGithub, color: '#000' }, Jira: { Icon: SiJira, color: '#0052CC' }, Notion: { Icon: SiNotion, color: '#000' },
+    Kubernetes: { Icon: SiKubernetes, color: '#326CE5' }, Helm: { Icon: SiHelm, color: '#0F1689' },
+    GitLab: { Icon: SiGitlab, color: '#FC6D26' }, ArgoCD: { Icon: SiArgo, color: '#EF7B4D' },
+    Redis: { Icon: SiRedis, color: '#FF4438' }, OpenTelemetry: { Icon: SiOpentelemetry, color: '#000' },
+    Grafana: { Icon: SiGrafana, color: '#F46800' }, Elasticsearch: { Icon: SiElasticsearch, color: '#00BFB3' },
+    Logstash: { Icon: SiLogstash, color: '#00BFB3' }, Kibana: { Icon: SiKibana, color: '#E8478B' },
+    'Spring WebFlux': { Icon: SiSpring, color: '#6DB33F' }, 'Spring Cloud Gateway': { Icon: SiSpring, color: '#6DB33F' },
+    'Spring Batch': { Icon: SiSpring, color: '#6DB33F' }, JPA: { Icon: FaJava, color: '#f89820' },
 };
 
 const StackPage = ({ stack = [] }) => {
