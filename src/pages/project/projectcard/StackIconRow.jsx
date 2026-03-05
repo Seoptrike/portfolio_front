@@ -22,7 +22,7 @@ const StackIconsRow = ({ names = [], max = 12, iconSize = 18, boxSize = 22 }) =>
             {items.map((name, i) => {
                 const entry = ICON_MAP?.[name];
                 const Icon = entry?.Icon;
-                const color = entry.color;
+                const color = entry?.color;
                 return (
                     <Tooltip title={name} key={`${name}-${i}`} arrow>
                         <Box

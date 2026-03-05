@@ -31,7 +31,7 @@ const StackIconsOneLine = ({ names = [], iconSize = 16, boxSize = 20 }) => {
                 {names.map((name, i) => {
                     const entry = ICON_MAP?.[name];
                     const Icon = entry?.Icon;
-                    const color = entry.color;
+                    const color = entry?.color;
                     return (
                         <Tooltip title={name} key={`${name}-${i}`} arrow>
                             <Box
