@@ -29,8 +29,8 @@ const StackIconsOneLine = ({ names = [], iconSize = 16, boxSize = 20 }) => {
         >
             <Stack direction="row" spacing={0.5} sx={{ alignItems: "center", flexWrap: "nowrap", width: "max-content", pr: 0.5 }}>
                 {names.map((name, i) => {
-                    const entry = ICON_MAP?.[name] || {};
-                    const Icon = entry.Icon || entry.icon || entry;
+                    const entry = ICON_MAP?.[name];
+                    const Icon = entry?.Icon;
                     const color = entry.color;
                     return (
                         <Tooltip title={name} key={`${name}-${i}`} arrow>

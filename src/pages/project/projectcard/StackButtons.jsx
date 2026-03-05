@@ -24,8 +24,8 @@ const StackButtons = ({ names = [], max = 8 }) => {
             }}
         >
             {items.map((name, i) => {
-                const entry = ICON_MAP?.[name] || {};
-                const Icon = entry.Icon || entry.icon || entry;
+                const entry = ICON_MAP?.[name];
+                const Icon = entry?.Icon;
                 const color = entry.color;
                 
                 return (
