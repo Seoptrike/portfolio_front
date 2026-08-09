@@ -33,36 +33,19 @@ const HeaderSection = React.memo(function HeaderSection({
         <Paper
             elevation={0}
             sx={{
-                borderRadius: 4,
-                overflow: "hidden", 
-                border: "1px solid rgba(0,0,0,0.2)",
-                background: `
-                    linear-gradient(145deg, #ffffff 0%, #fdfdfd 50%, #fafafa 100%),
-                    linear-gradient(45deg, rgba(255,193,7,0.05), rgba(220,53,69,0.02))
-                `,
-                boxShadow: `
-                    0 8px 32px rgba(0,0,0,0.12),
-                    inset 0 1px 0 rgba(255,255,255,0.9),
-                    inset 0 -1px 0 rgba(0,0,0,0.05)
-                `,
-                transition: "all 0.3s ease",
-                "&:hover": {
-                    transform: "translateY(-2px)",
-                    boxShadow: `
-                        0 12px 40px rgba(0,0,0,0.15),
-                        inset 0 1px 0 rgba(255,255,255,0.9),
-                        inset 0 -1px 0 rgba(0,0,0,0.05)
-                    `
-                },
+                borderRadius: 3,
+                overflow: "hidden",
+                border: "1px solid var(--border)",
+                background: "var(--surface)",
                 "&::before": {
                     content: '""',
                     position: "absolute",
                     top: 0,
                     left: 0,
                     right: 0,
-                    height: "4px",
-                    background: "linear-gradient(90deg, #ffc107, #fd7e14, #dc3545)",
-                    borderRadius: "4px 4px 0 0"
+                    height: "2px",
+                    background: "var(--accent)",
+                    opacity: 0.7
                 },
                 position: "relative",
                 ...sx
@@ -80,20 +63,15 @@ const HeaderSection = React.memo(function HeaderSection({
                     <Stack direction="row" spacing={1.25} alignItems="center" sx={{ minWidth: 0 }}>
                         <Box
                             sx={{
-                                width: 44,
-                                height: 44,
-                                borderRadius: "50%",
-                                background: "linear-gradient(145deg, #ffffff, #f0f0f0)",
+                                width: 40,
+                                height: 40,
+                                borderRadius: 2,
+                                background: "var(--surface-2)",
                                 display: "grid",
                                 placeItems: "center",
-                                boxShadow: `
-                                    0 4px 12px rgba(0,0,0,0.15),
-                                    inset 0 2px 4px rgba(255,255,255,0.9),
-                                    inset 0 -2px 4px rgba(0,0,0,0.1)
-                                `,
-                                fontSize: "20px",
+                                fontSize: "18px",
                                 flexShrink: 0,
-                                border: "1px solid rgba(0,0,0,0.1)"
+                                border: "1px solid var(--border)"
                             }}
                         >
                             {getIconByTitle(title)}
@@ -106,10 +84,7 @@ const HeaderSection = React.memo(function HeaderSection({
                                     fontWeight: 800,
                                     letterSpacing: "-0.015em",
                                     lineHeight: 1.15,
-                                    background: "linear-gradient(145deg, #212529, #495057)",
-                                    backgroundClip: "text",
-                                    WebkitBackgroundClip: "text",
-                                    WebkitTextFillColor: "transparent"
+                                    color: "var(--text)"
                                 }}
                             >
                                 {title}
@@ -121,11 +96,10 @@ const HeaderSection = React.memo(function HeaderSection({
                             size="small"
                             sx={{
                                 fontWeight: 600,
-                                color: "#495057",
-                                borderColor: "transparent",
-                                background: "linear-gradient(145deg, rgba(255,193,7,0.2), rgba(255,193,7,0.1))",
-                                boxShadow: "0 2px 6px rgba(255,193,7,0.3)",
-                                border: "1px solid rgba(255,193,7,0.3)"
+                                color: "var(--accent)",
+                                background: "var(--accent-subtle)",
+                                border: "1px solid var(--accent-border)",
+                                fontFamily: "var(--font-mono)"
                             }}
                         />
                     </Stack>
@@ -136,31 +110,20 @@ const HeaderSection = React.memo(function HeaderSection({
                             component={onPrimaryAction ? "button" : RouterLink}
                             to={onPrimaryAction ? undefined : `/${username}${actionRoute}`}
                             onClick={onPrimaryAction}
-                            variant="contained"
+                            variant="outlined"
                             startIcon={<AddIcon />}
                             sx={{
                                 borderRadius: 999,
                                 px: 2.5,
                                 py: 1,
-                                border: "1px solid rgba(0,0,0,0.2)",
-                                color: "#212529",
-                                background: "linear-gradient(145deg, #ffffff, #f8f9fa)",
-                                boxShadow: `
-                                    0 4px 12px rgba(0,0,0,0.15),
-                                    inset 0 1px 2px rgba(255,255,255,0.9),
-                                    inset 0 -1px 2px rgba(0,0,0,0.1)
-                                `,
+                                border: "1px solid var(--accent-border)",
+                                color: "var(--accent)",
+                                background: "transparent",
                                 fontWeight: 600,
-                                transition: "all 0.3s ease",
+                                whiteSpace: "nowrap",
                                 "&:hover": {
-                                    transform: "translateY(-2px)",
-                                    borderColor: "#fd7e14",
-                                    backgroundColor: "rgba(255,193,7,0.1)",
-                                    boxShadow: `
-                                        0 6px 18px rgba(0,0,0,0.2),
-                                        inset 0 1px 2px rgba(255,255,255,0.9),
-                                        inset 0 -1px 2px rgba(0,0,0,0.1)
-                                    `
+                                    borderColor: "var(--accent)",
+                                    backgroundColor: "var(--accent-subtle)"
                                 }
                             }}
                         >

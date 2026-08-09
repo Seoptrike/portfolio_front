@@ -1,341 +1,317 @@
-/* HomePage CSS */
+/* HomePage — 프로젝트 소개 랜딩
+   모든 셀렉터를 .home-page 아래로 한정한다.
+   (예전엔 .login-btn 같은 전역 이름이 상단 네비 버튼까지 물들였다) */
 
 .home-page {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #ff8a00 0%, #e52e71 100%);
     min-height: 100vh;
-    padding: 0;
-    line-height: 1.6;
+    padding: var(--space-6) 0;
+    line-height: var(--leading-normal);
+    background:
+        radial-gradient(900px 500px at 20% -10%, rgba(255, 138, 0, 0.06), transparent 65%),
+        var(--bg);
 }
 
-.home-container {
-    max-width: 1200px;
+.home-page .home-container {
+    max-width: 1100px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    padding: 3rem;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-7);
 }
 
-.header {
+/* ---------- 헤더 ---------- */
+
+.home-page .header {
     text-align: center;
-    margin-bottom: 3rem;
-    padding-bottom: 2rem;
-    border-bottom: 2px solid #f0f0f0;
+    margin-bottom: var(--space-7);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border);
 }
 
-.header h1 {
-    font-size: 3rem;
-    color: #2d3748;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, #ff8a00, #e52e71);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+.home-page .header h1 {
+    font-size: var(--text-3xl);
+    color: var(--text);
+    margin-bottom: var(--space-3);
     font-weight: 800;
 }
 
-.header .subtitle {
-    font-size: 1.4rem;
-    color: #666;
-    font-weight: 600;
-    margin-bottom: 2rem;
+.home-page .header .subtitle {
+    font-size: var(--text-lg);
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: var(--space-6);
 }
 
-.header-buttons {
+.home-page .header-buttons {
     display: flex;
-    gap: 1rem;
+    gap: var(--space-3);
     justify-content: center;
     flex-wrap: wrap;
 }
 
-.header-btn {
-    padding: 0.8rem 2rem;
-    border-radius: 12px;
-    border: none;
-    font-size: 1rem;
+.home-page .header-btn {
+    padding: 0.7rem 1.6rem;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    font-size: var(--text-sm);
     font-weight: 600;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: background-color var(--duration) var(--ease),
+                border-color var(--duration) var(--ease),
+                color var(--duration) var(--ease);
     cursor: pointer;
     display: inline-block;
 }
 
-.login-btn {
-    background: linear-gradient(135deg, #ff8a00, #e52e71);
-    color: white;
+/* 주 동작 하나만 액센트를 채운다 */
+.home-page .login-btn {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--text-on-accent);
 }
 
-.login-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 138, 0, 0.3);
-    color: white;
+.home-page .login-btn:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: var(--text-on-accent);
     text-decoration: none;
 }
 
-.portfolio-btn {
-    background: white;
-    color: #ff8a00;
-    border: 2px solid #ff8a00;
+.home-page .portfolio-btn {
+    background: transparent;
+    color: var(--accent);
+    border-color: var(--accent-border);
 }
 
-.portfolio-btn:hover {
-    background: #ff8a00;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 138, 0, 0.3);
+.home-page .portfolio-btn:hover {
+    background: var(--accent-subtle);
+    color: var(--accent-hover);
     text-decoration: none;
 }
 
-.developer-info {
-    background: linear-gradient(135deg, #2d3748, #1a202c);
-    color: white;
-    padding: 1.5rem;
-    border-radius: 15px;
+/* ---------- 개발자 정보 ---------- */
+
+.home-page .developer-info {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: var(--space-5);
+    border-radius: var(--radius);
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-6);
 }
 
-.developer-info h3 {
-    margin-bottom: 1rem;
-    font-size: 1.3rem;
+.home-page .developer-info h3 {
+    margin-bottom: var(--space-3);
+    font-size: var(--text-lg);
 }
 
-.contact {
+.home-page .contact {
     display: flex;
-    gap: 2rem;
+    gap: var(--space-3);
     justify-content: center;
-    margin-top: 1rem;
+    margin-top: var(--space-3);
     flex-wrap: wrap;
 }
 
-.contact-item {
+.home-page .contact-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.8rem 1.2rem;
-    border-radius: 10px;
-    transition: all 0.3s ease;
+    gap: var(--space-2);
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius);
+    transition: border-color var(--duration) var(--ease),
+                color var(--duration) var(--ease);
     text-decoration: none;
-    color: white;
+    color: var(--text-muted);
     font-weight: 500;
+    font-size: var(--text-sm);
 }
 
-.contact-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    color: white;
+.home-page .contact-item:hover {
+    border-color: var(--accent-border);
+    color: var(--accent);
     text-decoration: none;
 }
 
-.intro {
-    background: linear-gradient(135deg, #f7fafc, #edf2f7);
-    padding: 2.5rem;
-    border-radius: 15px;
-    margin-bottom: 3rem;
-    border-left: 5px solid #ff8a00;
+/* ---------- 본문 섹션 ---------- */
+
+.home-page .intro {
+    background: var(--surface-2);
+    padding: var(--space-6);
+    border-radius: var(--radius);
+    margin-bottom: var(--space-7);
+    border-left: 3px solid var(--accent);
 }
 
-.intro h2 {
-    color: #2d3748;
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
+.home-page .intro h2 {
+    color: var(--text);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-xl);
 }
 
-.intro p {
-    color: #4a5568;
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
+.home-page .intro p {
+    color: var(--text-muted);
+    font-size: var(--text-base);
+    margin-bottom: var(--space-3);
 }
 
-.project-goal {
-    background: white;
-    padding: 2.5rem;
-    border-radius: 15px;
-    margin-bottom: 3rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e2e8f0;
+.home-page .project-goal,
+.home-page .section {
+    background: var(--surface-2);
+    padding: var(--space-6);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: var(--space-7);
 }
 
-.project-goal h2 {
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    color: #2d3748;
+.home-page .section {
+    transition: border-color var(--duration) var(--ease);
 }
 
-.architecture {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
+.home-page .section:hover {
+    border-color: var(--border-strong);
 }
 
-.section {
-    background: white;
-    padding: 2.5rem;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e2e8f0;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.section:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-}
-
-.section h3 {
-    color: #2d3748;
-    margin-bottom: 1.5rem;
-    font-size: 1.4rem;
+.home-page .project-goal h2,
+.home-page .section h3 {
+    color: var(--text);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-xl);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-2);
 }
 
-.section .icon {
-    font-size: 1.8rem;
+.home-page .architecture {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: var(--space-5);
+    margin-bottom: var(--space-7);
 }
 
-.section ul {
+.home-page .architecture .section {
+    margin-bottom: 0;
+}
+
+.home-page .section .icon {
+    font-size: var(--text-xl);
+}
+
+.home-page .section ul {
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.section li {
-    color: #4a5568;
-    padding: 0.8rem 0;
-    border-bottom: 1px solid #f7fafc;
+.home-page .section li {
+    color: var(--text-muted);
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--border);
     position: relative;
-    padding-left: 2rem;
-    font-size: 1rem;
+    padding-left: var(--space-6);
+    font-size: var(--text-sm);
 }
 
-.section li:before {
+.home-page .section li:before {
     content: "→";
     position: absolute;
     left: 0;
-    color: #ff8a00;
+    color: var(--accent);
     font-weight: bold;
-    font-size: 1.2rem;
 }
 
-.section li:last-child {
+.home-page .section li:last-child {
     border-bottom: none;
 }
 
-.tech-stack {
-    background: white;
-    margin-bottom: 3rem;
-}
+/* ---------- 기술 스택 ---------- */
 
-.tech-stack h3 {
-    color: #2d3748;
-}
-
-.tech-grid {
+.home-page .tech-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-4);
+    margin-top: var(--space-4);
 }
 
-.tech-item {
-    background: rgba(255, 138, 0, 0.05);
-    padding: 1.5rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 138, 0, 0.1);
+.home-page .tech-item {
+    background: var(--surface-3);
+    padding: var(--space-4);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
 }
 
-.tech-item h4 {
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-    color: #2d3748;
+.home-page .tech-item h4 {
+    margin-bottom: var(--space-3);
+    font-size: var(--text-base);
+    color: var(--text);
 }
 
-.features {
-    background: white;
-    margin-bottom: 3rem;
-}
-
-.features h3 {
-    color: #2d3748;
-}
-
-.features ul li:before {
+.home-page .features ul li:before {
     content: "✓";
-    color: #48bb78;
-    font-size: 1.3rem;
+    color: var(--success);
 }
 
-.future-plans {
-    background: white;
-    margin-bottom: 3rem;
-}
-
-.future-plans h3 {
-    color: #2d3748;
-}
-
-.future-plans ul li:before {
+.home-page .future-plans ul li:before {
     content: "🚀";
-    font-size: 1.2rem;
+    font-size: var(--text-sm);
 }
 
-.badge {
+/* ---------- 배지 · 푸터 ---------- */
+
+.home-page .badge {
     display: inline-block;
-    background: rgba(255, 138, 0, 0.1);
-    color: #ff8a00;
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
+    background: var(--accent-subtle);
+    color: var(--accent);
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
     margin: 0.2rem;
-    font-weight: 500;
-    border: 1px solid rgba(255, 138, 0, 0.2);
+    font-weight: 600;
+    border: 1px solid var(--accent-border);
+    font-family: var(--font-mono);
 }
 
-.highlight {
-    background: linear-gradient(135deg, #ffeaa7, #fab1a0);
-    padding: 0.2rem 0.5rem;
-    border-radius: 5px;
+.home-page .highlight {
+    background: var(--accent-subtle);
+    color: var(--accent);
+    padding: 0.1rem 0.4rem;
+    border-radius: var(--radius-sm);
     font-weight: 600;
 }
 
-.footer {
+.home-page .footer {
     text-align: center;
-    padding-top: 2rem;
-    border-top: 2px solid #f0f0f0;
-    color: #666;
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border);
+    color: var(--text-subtle);
+    font-size: var(--text-sm);
 }
 
 @media (max-width: 768px) {
     .home-page {
-        padding: 0;
+        padding: var(--space-3) 0;
     }
-    
-    .home-container {
-        padding: 1.5rem;
+
+    .home-page .home-container {
+        padding: var(--space-4);
+        border-radius: var(--radius);
     }
-    
-    .header h1 {
-        font-size: 2.2rem;
+
+    .home-page .header h1 {
+        font-size: var(--text-2xl);
     }
-    
-    .architecture {
+
+    .home-page .architecture,
+    .home-page .tech-grid {
         grid-template-columns: 1fr;
     }
 
-    .contact {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .tech-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .header-buttons {
+    .home-page .contact,
+    .home-page .header-buttons {
         flex-direction: column;
         align-items: center;
     }

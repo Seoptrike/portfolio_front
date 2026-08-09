@@ -19,6 +19,7 @@ const EduHistoryItem = ({ userID, username, data = [], onSuccess, hideTopBar = f
             username={username}
             hideTopBar={hideTopBar}
             headers={{ col1: "학교", col2: "전공", period: "재학 기간" }}
+            ongoingText="재학중"
             pickCol1={(r) => r.schoolName}
             pickCol2={(r) => r.major}
             pickStart={(r) => r.startDate}
@@ -51,7 +52,8 @@ const EduHistoryItem = ({ userID, username, data = [], onSuccess, hideTopBar = f
                 update: "수정",
                 delete: "삭제",
                 cancel: "취소",
-                guide: "재학 기간은 월까지 입력해 주세요.",
+                guide: "재학 기간은 월까지 입력해 주세요. 아직 다니는 중이라면 '재학중'을 체크하세요.",
+                ongoing: "재학중",
             }}
         />
     );

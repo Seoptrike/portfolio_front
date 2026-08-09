@@ -57,7 +57,7 @@ const ScrollableMainLayout = ({
                     <div className="hero-profile">
                         <div className="profile-image-wrapper">
                             <img
-                                src={userInfo.photo ? userInfo.photo : "/images/vite.svg"}
+                                src={userInfo.photo ? userInfo.photo : "/images/avatar-default.svg"}
                                 alt="Profile"
                                 className="profile-image"
                             />
@@ -113,7 +113,7 @@ const ScrollableMainLayout = ({
                     <div className="about-content">
                         <div className="about-text">
                             <div className="intro-banner">
-                                {userInfo.intro && <h3>{userInfo.intro}</h3>}
+                                {userInfo.oneLineBanner && <h3>{userInfo.oneLineBanner}</h3>}
                                 <p>
                                     전직 요리사에서 인테리어 시공를 거쳐 개발자로 전향한 특별한 경험을 가지고 있습니다.<br/>
                                     현재도 개발 관련 업무를 하고 있지만, 보다 더 전문적인 환경에서 기술적 도전과 성장을 추구하고 싶어<br/>

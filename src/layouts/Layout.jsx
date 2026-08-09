@@ -73,8 +73,7 @@ const Layout = () => {
         <div>
             <Navbar
                 ref={navRef}
-                bg="dark"
-                variant="dark"
+                className="app-navbar"
                 expand="lg"
                 fixed="top"
                 expanded={expanded}

@@ -1,7 +1,7 @@
 import React from "react";
 import {
     Dialog, DialogTitle, DialogContent, DialogActions,
-    Stack, TextField, Button, Typography
+    Stack, TextField, Button, Typography, FormControlLabel, Checkbox
 } from "@mui/material";
 import useIsMobile from "../../../hooks/useIsMobile";
 
@@ -30,16 +30,26 @@ const CommonCareerModal = ({
         update: "수정",
         delete: "삭제",
         cancel: "취소",
-        guide: "기간은 월까지 입력해 주세요."
+        guide: "기간은 월까지 입력해 주세요.",
+        ongoing: "진행 중"      // 예: 재직중 / 재학중
     }
 }) => {
     const isMobile = useIsMobile();
     const invalidRange =
         Boolean(form?.startDate && form?.endDate) && form.endDate < form.startDate;
 
+    // 종료월이 비어 있으면 "진행 중"으로 간주한다 (서버에는 endDate=null로 저장됨)
+    const isOngoing = !form?.endDate;
+
     const onChangeMonth = (name) => (value) => {
         const v = value ? value.format("YYYY-MM") : "";
         handleChange({ target: { name, value: v } });
+    };
+
+    // 체크 시 종료월을 비우고, 해제 시 이번 달로 되돌린다
+    const onToggleOngoing = (e) => {
+        const next = e.target.checked ? "" : dayjs().format("YYYY-MM");
+        handleChange({ target: { name: "endDate", value: next } });
     };
 
     return (
@@ -98,6 +108,7 @@ const CommonCareerModal = ({
                                 name="endDate" type="month"
                                 value={form.endDate || ""}
                                 onChange={handleChange}
+                                disabled={isOngoing}
                                 fullWidth size="small" InputLabelProps={{ shrink: true }}
                                 error={invalidRange}
                                 helperText={invalidRange ? "종료월은 시작월 이후여야 해요" : ""}
@@ -129,8 +140,11 @@ const CommonCareerModal = ({
                                     value={form.endDate ? dayjs(form.endDate) : null}
                                     onChange={onChangeMonth("endDate")}
                                     minDate={form.startDate ? dayjs(form.startDate) : undefined}
+                                    disabled={isOngoing}
                                     sx={{ flex: 1 }}
                                     slotProps={{
+                                        // 값을 지워 "진행 중"으로 되돌릴 수 있게 X 버튼 노출
+                                        field: { clearable: true, onClear: () => onChangeMonth("endDate")(null) },
                                         textField: {
                                             size: "small",
                                             error: invalidRange,
@@ -141,6 +155,11 @@ const CommonCareerModal = ({
                             </Stack>
                         </LocalizationProvider>
                     )}
+
+                    <FormControlLabel
+                        control={<Checkbox checked={isOngoing} onChange={onToggleOngoing} size="small" />}
+                        label={labels.ongoing ?? "진행 중"}
+                    />
                 </Stack>
             </DialogContent>
 

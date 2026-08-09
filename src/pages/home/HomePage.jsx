@@ -142,9 +142,14 @@ const HomePage = () => {
                             <span>📧</span>
                             <span>dlstjq977@gmail.com</span>
                         </a>
-                        <a href="tel:010-4111-0342" className="contact-item">
-                            <span>📱</span>
-                            <span>010-4111-0342</span>
+                        <a
+                            href="https://github.com/Seoptrike"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="contact-item"
+                        >
+                            <span>🔗</span>
+                            <span>github.com/Seoptrike</span>
                         </a>
                     </div>
                 </div>

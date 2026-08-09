@@ -9,7 +9,7 @@ import { FaCog, FaSave } from "react-icons/fa";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import IntegratedNavigation from "./IntegratedNavigation";
-import { PAGE_CONFIG, PAGE_KEYS, EDIT_MODE_TEXT, getPageKeyByRoute } from "../config/pageConfig";
+import { PAGE_CONFIG, PAGE_KEYS, EDIT_MODE_TEXT } from "../config/pageConfig";
 import "./UserLayout.css";
 import "./IntegratedNavigation.css";
 

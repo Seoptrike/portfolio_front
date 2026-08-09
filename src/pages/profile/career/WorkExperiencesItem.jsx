@@ -14,6 +14,7 @@ const WorkExperiencesItem = ({ userID, username, data = [], onSuccess, hideTopBa
             username={username}
             hideTopBar={hideTopBar}
             headers={{ col1: "회사", col2: "직무", period: "재직 기간" }}
+            ongoingText="재직중"
             pickCol1={(r) => r.companyName}
             pickCol2={(r) => r.position}
             pickStart={(r) => r.startDate}
@@ -46,7 +47,8 @@ const WorkExperiencesItem = ({ userID, username, data = [], onSuccess, hideTopBa
                 update: "수정",
                 delete: "삭제",
                 cancel: "취소",
-                guide: "재직 기간은 월까지 입력해 주세요.",
+                guide: "재직 기간은 월까지 입력해 주세요. 현재 다니는 회사라면 '재직중'을 체크하세요.",
+                ongoing: "재직중",
             }}
         />
     );

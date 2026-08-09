@@ -1,8 +1,10 @@
 import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
 
-const SectionHeader = ({ company, position, start, end }) => {
-    const period = start && end ? `${start} ~ ${end}` : start || end || "";
+const SectionHeader = ({ company, position, start, end, ongoing = false }) => {
+    // 종료일이 없으면(=재직중) 끝을 "재직중"으로 표기한다
+    const endText = ongoing ? "재직중" : end;
+    const period = start && endText ? `${start} ~ ${endText}` : start || endText || "";
 
     return (
         <Box

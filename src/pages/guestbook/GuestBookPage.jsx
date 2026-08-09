@@ -10,7 +10,7 @@ import HeaderSection from './HeaderSection';
 const GuestBookPage = () => {
     // 1. 필요한 Hooks 및 Context 설정
     const { username } = useParams(); // URL에서 방명록 주인의 username 가져오기
-    const { isHost, loginName } = useContext(AuthContext); // 로그인한 사용자 정보와 주인 여부
+    const { isHost } = useContext(AuthContext); // 포트폴리오 주인 여부
     const { editMode } = useEditMode();
 
     // 카테고리 매핑
@@ -46,12 +46,23 @@ const GuestBookPage = () => {
     const [editingId, setEditingId] = useState(null); // 수정 중인 항목의 ID (null이면 수정 중 아님)
     const [editingText, setEditingText] = useState(''); // 수정 중인 항목의 새 메시지
 
+    // 폼 입력 공통 스타일 (세 곳에서 재사용)
+    const fieldStyle = {
+        borderRadius: 'var(--radius)',
+        border: '1px solid var(--border-strong)',
+        background: 'var(--surface-2)',
+        color: 'var(--text)',
+        padding: '0.7rem 1rem',
+        fontSize: 'var(--text-base)',
+    };
+    const labelStyle = { fontWeight: 600, color: 'var(--text-muted)' };
+
     // 3. 데이터 로딩 함수 (단순화)
     const fetchList = async () => {
         try {
             const response = await fetchGuestBookList(username);
             setList(response.data);
-        } catch (error) {
+        } catch {
             navigate("/notfound")
         }
     };
@@ -206,13 +217,11 @@ const GuestBookPage = () => {
             {/* 주인이 아닐 때 항상 폼을 보여줌 (로그인 여부 무관) */}
             {!isHost && (
                 <div className="feedback-form-container" style={{
-                    background: 'linear-gradient(135deg, rgba(255, 138, 0, 0.05) 0%, rgba(255, 193, 7, 0.02) 25%, rgba(220, 53, 69, 0.05) 50%, rgba(13, 110, 253, 0.02) 75%, rgba(111, 66, 193, 0.05) 100%)',
-                    borderRadius: '20px',
-                    padding: '2rem',
-                    marginTop: '2rem',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    backdropFilter: 'blur(10px)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+                    background: 'var(--surface)',
+                    borderRadius: 'var(--radius-lg)',
+                    padding: 'var(--space-6)',
+                    marginTop: 'var(--space-6)',
+                    border: '1px solid var(--border)'
                 }}>
                     {/* 헤더 섹션 */}
                     <div className="text-center mb-4">
@@ -229,11 +238,8 @@ const GuestBookPage = () => {
                                 💬
                             </div>
                             <h2 style={{
-                                background: 'linear-gradient(135deg, #ff8a00, #ffc107)',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                backgroundClip: 'text',
-                                fontWeight: 'bold',
+                                color: 'var(--text)',
+                                fontWeight: 700,
                                 margin: 0
                             }}>
                                 피드백 남기기
@@ -243,14 +249,14 @@ const GuestBookPage = () => {
 
                     {/* 정보 카드 */}
                     <div style={{
-                        background: 'rgba(255, 138, 0, 0.1)',
-                        border: '1px solid rgba(255, 138, 0, 0.2)',
-                        borderRadius: '12px',
-                        padding: '1rem',
-                        marginBottom: '2rem',
+                        background: 'var(--accent-subtle)',
+                        border: '1px solid var(--accent-border)',
+                        borderRadius: 'var(--radius)',
+                        padding: 'var(--space-4)',
+                        marginBottom: 'var(--space-6)',
                         textAlign: 'center'
                     }}>
-                        <small style={{ color: '#000000', fontWeight: '500' }}>
+                        <small style={{ color: 'var(--text-muted)', fontWeight: 500 }}>
                             💡 익명으로 피드백을 남겨주세요. 포트폴리오 개선에 큰 도움이 됩니다!
                         </small>
                     </div>
@@ -258,7 +264,7 @@ const GuestBookPage = () => {
                     <Form onSubmit={handleSubmit}>
                         {/* 이름 입력 */}
                         <div className="mb-4">
-                            <Form.Label style={{ fontWeight: '600', color: '#495057' }}>
+                            <Form.Label style={labelStyle}>
                                 표시할 이름
                             </Form.Label>
                             <Form.Control
@@ -266,37 +272,19 @@ const GuestBookPage = () => {
                                 placeholder="이름을 입력하지 않으면 '익명'으로 표시됩니다"
                                 value={guestName}
                                 onChange={(e) => setGuestName(e.target.value)}
-                                style={{
-                                    borderRadius: '12px',
-                                    border: '2px solid #e9ecef',
-                                    padding: '0.75rem 1rem',
-                                    fontSize: '1rem',
-                                    transition: 'all 0.3s ease',
-                                    background: 'rgba(255, 255, 255, 0.8)'
-                                }}
-                                onFocus={(e) => e.target.style.borderColor = '#ff8a00'}
-                                onBlur={(e) => e.target.style.borderColor = '#e9ecef'}
+                                style={fieldStyle}
                             />
                         </div>
 
                         {/* 카테고리 선택 */}
                         <div className="mb-4">
-                            <Form.Label style={{ fontWeight: '600', color: '#495057' }}>
+                            <Form.Label style={labelStyle}>
                                 피드백 카테고리
                             </Form.Label>
                             <Form.Select
                                 value={feedbackCategory}
                                 onChange={(e) => setFeedbackCategory(e.target.value)}
-                                style={{
-                                    borderRadius: '12px',
-                                    border: '2px solid #e9ecef',
-                                    padding: '0.75rem 1rem',
-                                    fontSize: '1rem',
-                                    transition: 'all 0.3s ease',
-                                    background: 'rgba(255, 255, 255, 0.8)'
-                                }}
-                                onFocus={(e) => e.target.style.borderColor = '#ff8a00'}
-                                onBlur={(e) => e.target.style.borderColor = '#e9ecef'}
+                                style={fieldStyle}
                             >
                                 <option value="">카테고리 선택 (선택사항)</option>
                                 <option value="기술 스택">💻 기술 스택</option>
@@ -312,7 +300,7 @@ const GuestBookPage = () => {
 
                         {/* 메시지 입력 */}
                         <div className="mb-4">
-                            <Form.Label style={{ fontWeight: '600', color: '#495057' }}>
+                            <Form.Label style={labelStyle}>
                                 피드백 내용
                             </Form.Label>
                             <Form.Control
@@ -322,18 +310,7 @@ const GuestBookPage = () => {
                                 name="message"
                                 value={newMessage}
                                 onChange={handleChange}
-                                style={{
-                                    borderRadius: '12px',
-                                    border: '2px solid #e9ecef',
-                                    padding: '1rem',
-                                    fontSize: '1rem',
-                                    transition: 'all 0.3s ease',
-                                    minHeight: '150px',
-                                    background: 'rgba(255, 255, 255, 0.8)',
-                                    resize: 'vertical'
-                                }}
-                                onFocus={(e) => e.target.style.borderColor = '#ff8a00'}
-                                onBlur={(e) => e.target.style.borderColor = '#e9ecef'}
+                                style={{ ...fieldStyle, minHeight: '150px', resize: 'vertical' }}
                             />
                         </div>
 
@@ -341,27 +318,17 @@ const GuestBookPage = () => {
                         <Button
                             type="submit"
                             style={{
-                                background: 'linear-gradient(135deg, #ff8a00, #ffc107)',
-                                border: 'none',
-                                borderRadius: '12px',
-                                padding: '1rem 2rem',
-                                fontSize: '1.1rem',
-                                fontWeight: '600',
+                                background: 'var(--accent)',
+                                border: '1px solid var(--accent)',
+                                borderRadius: 'var(--radius)',
+                                padding: '0.85rem 2rem',
+                                fontSize: 'var(--text-base)',
+                                fontWeight: 700,
                                 width: '100%',
-                                transition: 'all 0.3s ease',
-                                boxShadow: '0 4px 15px rgba(255, 138, 0, 0.3)',
-                                color: '#ffffff'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.target.style.transform = 'translateY(-2px)';
-                                e.target.style.boxShadow = '0 6px 20px rgba(255, 138, 0, 0.4)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.target.style.transform = 'translateY(0)';
-                                e.target.style.boxShadow = '0 4px 15px rgba(255, 138, 0, 0.3)';
+                                color: 'var(--text-on-accent)'
                             }}
                         >
-                            ✨ 익명 피드백 등록하기
+                            익명 피드백 등록하기
                         </Button>
                     </Form>
                 </div>

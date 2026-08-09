@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
-import { deleteProject, getUserProject } from "../../api/projectApi";
+import { getUserProject } from "../../api/projectApi";
 import useEditMode from "../../hooks/useEditMode";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -13,9 +13,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import HeaderSection from "./HeaderSection";
-import ProjectCard from "./projectcard/ProjectCard";
 import RectangleCard from "./projectcard/RectangleCard";
-import useIsMobile from "../../hooks/useIsMobile";
 
 // =====================
 // Page (Container + Data)
@@ -25,7 +23,6 @@ const ProjectListPage = () => {
     const { editMode } = useEditMode();
     const { username } = useParams();
     const { isHost } = useContext(AuthContext);
-    const isMobile = useIsMobile();
     const navigate = useNavigate();
 
     // --- 프로젝트 데이터 가져오기 ---
@@ -33,7 +30,7 @@ const ProjectListPage = () => {
         try {
             const res = await getUserProject(username);
             setProjects(res?.data ?? []);
-        } catch (err) {
+        } catch {
             navigate("/notfound");
         }
     }, [username, navigate]);
@@ -46,21 +43,6 @@ const ProjectListPage = () => {
     const makeUpdate = useCallback(
         (projectId) => () => navigate(`/${username}/project/update/${projectId}`),
         [navigate, username]
-    );
-
-    const makeDelete = useCallback(
-        (projectId) => async () => {
-            if (!window.confirm("정말 삭제할까요?")) return;
-            try {
-                await deleteProject(projectId);
-                await fetchProjects();
-                alert("삭제 완료!");
-            } catch (e) {
-                console.error(e);
-                alert("삭제 실패");
-            }
-        },
-        [fetchProjects]
     );
 
     const hasProjects = (projects?.length ?? 0) > 0;

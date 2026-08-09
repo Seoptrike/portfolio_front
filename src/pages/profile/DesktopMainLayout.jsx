@@ -35,7 +35,7 @@ const DesktopMainLayout = ({
                             transform: "translateZ(20px)" 
                         }}>
                             <img
-                                src={userInfo.photo ? userInfo.photo : "/images/vite.svg"}
+                                src={userInfo.photo ? userInfo.photo : "/images/avatar-default.svg"}
                                 alt="Profile"
                                 style={{
                                     width: 320,

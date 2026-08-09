@@ -90,8 +90,9 @@ const ResumeListPage = () => {
             username,
             companyName: modalForm.title1,
             position: modalForm.title2,
-            startDate: modalForm.startDate ? `${modalForm.startDate}-01` : "",
-            endDate: modalForm.endDate ? `${modalForm.endDate}-01` : "",
+            startDate: modalForm.startDate ? `${modalForm.startDate}-01` : null,
+            // 비어 있으면 재직중 → 서버에는 null로 보낸다 (빈 문자열은 날짜 파싱 실패)
+            endDate: modalForm.endDate ? `${modalForm.endDate}-01` : null,
         });
 
         const w = normalizeCareer(saved?.data ?? saved);
@@ -275,10 +276,14 @@ const ResumeListPage = () => {
                         title2: "직책",
                         startLabel: "입사(년-월)",
                         endLabel: "퇴사(년-월)",
+                        editTitle: "경력 수정",
                         addTitle: "경력 추가",
                         save: "저장",
+                        update: "수정",
+                        delete: "삭제",
                         cancel: "취소",
-                        guide: "기간은 월까지 입력해 주세요.",
+                        guide: "재직 기간은 월까지 입력해 주세요. 현재 다니는 회사라면 '재직중'을 체크하세요.",
+                        ongoing: "재직중",
                     }}
                 />
             )}

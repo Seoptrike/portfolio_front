@@ -98,7 +98,7 @@ const MypagePage = (setShowProfileModal) => {
         );
     }
 
-    const shownPhoto = photoUrl ? `${photoUrl}?tr=w-180,h-180,fo-auto,q=auto` : "/images/vite.svg";
+    const shownPhoto = photoUrl ? `${photoUrl}?tr=w-180,h-180,fo-auto,q=auto` : "/images/avatar-default.svg";
 
     return (
         <Row className="justify-content-center">

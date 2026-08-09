@@ -18,51 +18,14 @@ const AboutCard = ({
     onSaveEdit,
     onDelete,
 }) => {
-    const { isMobile } = useIsMobile();
+    const isMobile = useIsMobile();
 
-    // sessionStorage 변경을 감지하기 위한 state
-    const [companyName, setCompanyName] = React.useState(() => {
-        return sessionStorage.getItem('company') || '귀사';
-    });
-
-    // sessionStorage 변경 감지
-    React.useEffect(() => {
-        const handleStorageChange = () => {
-            setCompanyName(sessionStorage.getItem('company') || '귀사');
-        };
-
-        // storage 이벤트 리스너 추가
-        window.addEventListener('storage', handleStorageChange);
-
-        // 주기적으로 체크 (같은 탭에서의 변경 감지용)
-        const interval = setInterval(handleStorageChange, 1000);
-
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-            clearInterval(interval);
-        };
-    }, []);
+    // /company?company=X 진입 시 CompanyRedirect가 저장해 둔 값 (마운트 시점에 이미 확정)
+    const companyName = sessionStorage.getItem('company') || '귀사';
 
     // 템플릿 변수 치환 함수
-    const replaceTemplateVariables = (content) => {
-        if (!content) return '';
-
-        console.log('원본 content:', content);
-        console.log('companyName:', companyName);
-
-        const templateVars = {
-            '{회사이름}': companyName,
-        };
-
-        let processedContent = content;
-        Object.entries(templateVars).forEach(([template, value]) => {
-            console.log('치환 중:', template, '→', value);
-            processedContent = processedContent.replace(new RegExp(template, 'g'), value);
-        });
-
-        console.log('치환 후 content:', processedContent);
-        return processedContent;
-    };
+    const replaceTemplateVariables = (content) =>
+        (content || '').replaceAll('{회사이름}', companyName);
 
     return (
         <Card variant="outlined" sx={{ borderRadius: 3 }}>

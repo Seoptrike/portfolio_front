@@ -71,7 +71,8 @@ const CareerAccordion = ({
                     company={career.companyName}
                     position={career.position}
                     start={formatYM(career.startDate)}
-                    end={formatYM(career.endDate)}
+                    end={career.endDate ? formatYM(career.endDate) : ""}
+                    ongoing={!career.endDate}
                 />
             </AccordionSummary>
 

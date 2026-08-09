@@ -1,4 +1,67 @@
-/* DetailItem 마크다운 뷰어 모바일 최적화 */
+/* DetailItem 마크다운 뷰어 — 다크 테마 보정 + 모바일 최적화 */
+
+/* Toast UI 뷰어는 기본이 라이트라 다크 배경에서 흰 판으로 튄다 */
+.toastui-editor-contents {
+    color: var(--text) !important;
+    background: transparent !important;
+}
+
+.toastui-editor-contents h1,
+.toastui-editor-contents h2,
+.toastui-editor-contents h3,
+.toastui-editor-contents h4,
+.toastui-editor-contents h5,
+.toastui-editor-contents h6 {
+    color: var(--text) !important;
+    border-bottom-color: var(--border) !important;
+}
+
+.toastui-editor-contents p,
+.toastui-editor-contents li,
+.toastui-editor-contents td,
+.toastui-editor-contents th {
+    color: var(--text-muted) !important;
+}
+
+.toastui-editor-contents a {
+    color: var(--accent) !important;
+}
+
+.toastui-editor-contents code {
+    background: var(--surface-3) !important;
+    color: var(--accent) !important;
+}
+
+.toastui-editor-contents pre {
+    background: var(--surface-2) !important;
+    border: 1px solid var(--border) !important;
+}
+
+.toastui-editor-contents pre code {
+    background: transparent !important;
+    color: var(--text) !important;
+}
+
+.toastui-editor-contents blockquote {
+    border-left-color: var(--accent) !important;
+    background: var(--surface-2) !important;
+    color: var(--text-muted) !important;
+}
+
+.toastui-editor-contents table th {
+    background: var(--surface-2) !important;
+    color: var(--text) !important;
+}
+
+.toastui-editor-contents table th,
+.toastui-editor-contents table td {
+    border-color: var(--border) !important;
+}
+
+.toastui-editor-contents hr {
+    border-color: var(--border) !important;
+}
+
 
 /* 모바일 기본 스타일 */
 @media (max-width: 767px) {

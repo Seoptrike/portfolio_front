@@ -1,18 +1,11 @@
-import React, { Suspense, useMemo, useState } from 'react';
+import React, { Suspense, useState, lazy } from 'react';
 import { Card, CardContent, CardActions, Stack, TextField, Button } from '@mui/material';
 import { SaveOutlined as SaveIcon, Close as CloseIcon } from '@mui/icons-material';
-import LocalTinyEditor from '../../components/common/LocalTinyEditor.jsx';
-//const LocalTinyEditor = React.lazy(() => import('../../components/common/LocalTinyEditor.jsx'));
+
+// TinyMCE는 편집할 때만 필요하므로 지연 로드 (초기 번들에서 분리)
+const LocalTinyEditor = lazy(() => import('../../components/common/LocalTinyEditor.jsx'));
 
 const AddEditForm = ({ mode = 'add', values, onChange, onCancel, onSave }) => {
-    // content만 별도로 TinyMCE에서 받아옴
-    // const handleEditorChange = (html) => {
-    //     const clean = DOMPurify.sanitize(html, {
-    //         ALLOWED_TAGS: ['p', 'h2', 'h3', 'strong', 'em', 'u', 'ul', 'ol', 'li', 'a', 'br'],
-    //         ALLOWED_ATTR: ['href', 'target', 'rel']
-    //     });
-    //     onChange({ target: { name: 'content', value: clean } });
-    // };
     const [openEditor, setOpenEditor] = useState(true);
     const handleEditorChange = (html) =>
         onChange({ target: { name: 'content', value: html } });

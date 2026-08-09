@@ -1,20 +1,25 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" href="/images/favicon-64.png" />
     <title>Seopotfolio</title>
+    <!-- JS·CSS 로드 전 흰 화면이 번쩍이는 것을 막는다 (tokens.css의 --bg와 동일 값) -->
+    <style>
+        html { background: #0b0e14; }
+    </style>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-33MX7XDL8B"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-33MX7XDL8B', { send_page_view: false });
+    </script>
 </head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-33MX7XDL8B"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-33MX7XDL8B', { send_page_view: false });
-</script>
 
 <body>
     <div id="root"></div>

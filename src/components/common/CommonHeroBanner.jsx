@@ -9,7 +9,7 @@ const CommonHeroBanner = ({
     rounded = 16,
     maxW = 1200,
     padY, padX,
-    accent = "linear-gradient(90deg,#ff8a00,#ff3d00)", // orange 계열 포인트 바
+    accent = "var(--accent)", // 포인트 바
 }) => {
     const isMobile = useIsMobile();
 
@@ -55,7 +55,7 @@ const CommonHeroBanner = ({
                             fontSize: "clamp(0.72rem, 1.2vw, 0.85rem)",
                             letterSpacing: "0.08em",
                             textTransform: "uppercase",
-                            color: "#6b7280",
+                            color: "var(--text-subtle)",
                         }}
                     >
                         {eyebrow}
@@ -69,7 +69,7 @@ const CommonHeroBanner = ({
                         fontWeight: 800,
                         lineHeight: 1.12,
                         letterSpacing: "-0.015em",
-                        color: "#0f172a",
+                        color: "var(--text)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",

@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { login } from "../../api/authApi";
 import useIsMobile from "../../hooks/useIsMobile";
 import { useNavigate } from "react-router-dom";
+import "./authForm.css";
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
@@ -45,136 +46,47 @@ const LoginPage = () => {
 
     const disabled = loading || !username || !password;
 
-    // ===== inline styles =====
+    // 스타일은 authForm.css의 토큰 기반 클래스를 사용한다
     const styles = {
-        page: {
-            minHeight: "100vh",
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            paddingTop: isMobile ? 0 : "clamp(48px, 12vh, 160px)",
-            background:
-                "radial-gradient(1000px 600px at 10% 0%, #fff7ed 0, transparent 60%), " +
-                "radial-gradient(800px 500px at 100% 10%, #eff6ff 0, transparent 60%), " +
-                "linear-gradient(180deg, #f8fafc, #eef2f7)",
-            padding: 16,
-        },
-        card: {
-            width: 420,
-            borderRadius: 16,
-            padding: 20,
-            background: "rgba(255,255,255,.78)",
-            border: "1px solid rgba(0,0,0,.06)",
-            boxShadow: "0 20px 50px rgba(15,23,42,.08)",
-            backdropFilter: "blur(12px)",
-        },
-        brandWrap: { display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 16 },
-        brandRow: { display: "inline-flex", alignItems: "center", gap: 10, fontWeight: 800, fontSize: 18, color: "#111827" },
-        subtle: { color: "#6b7280", fontSize: 12, marginTop: 4 },
-        alert: {
-            background: "rgba(224, 49, 49, .08)",
-            border: "1px solid rgba(224, 49, 49, .25)",
-            color: "#8a1c1c",
-            padding: "8px 10px",
-            borderRadius: 10,
-            fontSize: 13,
-            marginBottom: 12,
-        },
-        label: { display: "block", fontSize: 12, fontWeight: 700, marginBottom: 6, color: "#111827" },
-        input: {
-            width: "100%",
-            padding: "10px 12px",
-            borderRadius: 10,
-            border: "1px solid #e5e7eb",
-            outline: "none",
-            fontSize: 14,
-            background: "#fff",
-            color: "#111827",
-        },
-        inputRow: { display: "block", position: "relative", marginBottom: 6 }, // ✅ 바뀐 부분
-        eyeBtn: {
-            position: "absolute",
-            right: 8,
-            top: "50%",
-            transform: "translateY(-50%)",
-            border: "none",
-            background: "transparent",
-            padding: 6,
-            lineHeight: 0,
-            cursor: "pointer",
-            color: "#6b7280",
-        },
-        hint: { color: "#6b7280", fontSize: 12, minHeight: 18, marginBottom: 12 },
-        btn: {
-            width: "100%",
-            height: 44,
-            borderRadius: 12,
-            border: "1px solid #ff8a00",
-            background: "#ff8a00",
-            color: "#fff",
-            fontWeight: 800,
-            fontSize: 14,
-            cursor: "pointer",
-        },
-        btnDisabled: { opacity: 0.6, cursor: "not-allowed" },
-        spinnerDot: {
-            display: "inline-block",
-            width: 6,
-            height: 6,
-            marginLeft: 6,
-            borderRadius: "50%",
-            background: "rgba(255,255,255,.9)",
-            animation: "blink 1s infinite ease-in-out",
-        },
-        secondaryBtn: {
-            width: "100%",
-            height: 44,
-            borderRadius: 12,
-            border: "1px solid #e5e7eb",
-            background: "#fff",
-            color: "#111827",
-            fontWeight: 700,
-            fontSize: 14,
-            cursor: "pointer",
-            marginTop: 8,
-        },
+        page: { paddingTop: isMobile ? 16 : "clamp(48px, 12vh, 160px)" },
     };
 
     return (
-        <div style={styles.page}>
-            <style>{`@keyframes blink {0%,80%,100%{opacity:.2} 40%{opacity:1}}`}</style>
-
-            <div style={styles.card}>
+        <div className="auth-page" style={styles.page}>
+            <div className="auth-card">
                 {/* 브랜드 */}
-                <div style={styles.brandWrap}>
-                    <div style={styles.brandRow}>
+                <div className="auth-brand">
+                    <div className="auth-brand-row">
                         <img src="/images/seoportfolio_logo.png" alt="logo" width={28} height={28} />
                         <span>Seopotfolio</span>
                     </div>
-                    <div style={styles.subtle}>계정에 로그인하세요</div>
+                    <div className="auth-subtle">계정에 로그인하세요</div>
                 </div>
 
                 {/* 에러 */}
-                {error ? <div style={styles.alert}>{error}</div> : null}
+                {error ? <div className="auth-alert">{error}</div> : null}
 
                 {/* 폼 */}
                 <form onSubmit={onSubmit} autoComplete="on">
-                    <label style={styles.label}>아이디</label>
-                    <input
-                        style={{ ...styles.input, marginBottom: 12, height: 40 }}
-                        type="text"
-                        name="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        autoComplete="username"
-                        autoFocus
-                        placeholder="아이디를 입력하세요"
-                    />
-
-                    <label style={styles.label}>비밀번호</label>
-                    <div style={styles.inputRow}>
+                    <div className="auth-field">
+                        <label className="auth-label">아이디</label>
                         <input
-                            style={{ ...styles.input, height: 40, paddingRight: 42 }} // ✅ 아이콘 자리 확보
+                            className="auth-input"
+                            type="text"
+                            name="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            autoComplete="username"
+                            autoFocus
+                            placeholder="아이디를 입력하세요"
+                        />
+                    </div>
+
+                    <label className="auth-label" style={{ marginBottom: 8 }}>비밀번호</label>
+                    <div className="auth-input-row">
+                        <input
+                            className="auth-input"
+                            style={{ paddingRight: 42 }} // 아이콘 자리 확보
                             type={showPw ? "text" : "password"}
                             name="password"
                             value={password}
@@ -185,12 +97,13 @@ const LoginPage = () => {
                             aria-describedby="caps-hint"
                         />
 
-                        {/* ✅ 눈 아이콘 토글 버튼 */}
+                        {/* 눈 아이콘 토글 버튼 */}
                         <button
                             type="button"
                             onClick={() => setShowPw((v) => !v)}
                             disabled={loading}
-                            style={{ ...styles.eyeBtn, color: showPw ? "#111827" : "#6b7280" }}
+                            className="auth-eye-btn"
+                            data-active={showPw}
                             aria-label={showPw ? "비밀번호 숨기기" : "비밀번호 보기"}
                             title={showPw ? "비밀번호 숨기기" : "비밀번호 보기"}
                         >
@@ -212,17 +125,17 @@ const LoginPage = () => {
                         </button>
                     </div>
 
-                    <div id="caps-hint" style={styles.hint} role="status" aria-live="polite">
+                    <div id="caps-hint" className="auth-hint" role="status" aria-live="polite">
                         {capsOn ? "CapsLock이 켜져 있습니다." : "\u00A0"}
                     </div>
 
-                    <button type="submit" disabled={disabled} style={{ ...styles.btn, ...(disabled ? styles.btnDisabled : {}) }}>
+                    <button type="submit" disabled={disabled} className="auth-btn">
                         {loading ? (
                             <>
                                 로그인 중…
-                                <span style={{ ...styles.spinnerDot, animationDelay: "0s" }} />
-                                <span style={{ ...styles.spinnerDot, animationDelay: ".2s" }} />
-                                <span style={{ ...styles.spinnerDot, animationDelay: ".4s" }} />
+                                <span className="auth-dot" style={{ animationDelay: "0s" }} />
+                                <span className="auth-dot" style={{ animationDelay: ".2s" }} />
+                                <span className="auth-dot" style={{ animationDelay: ".4s" }} />
                             </>
                         ) : (
                             "로그인"
@@ -231,7 +144,7 @@ const LoginPage = () => {
 
                     <button
                         type="button"
-                        style={styles.secondaryBtn}
+                        className="auth-btn-secondary"
                         onClick={() => navigate("/auth/register")}
                     >
                         회원가입

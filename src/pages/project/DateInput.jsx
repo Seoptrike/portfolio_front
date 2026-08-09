@@ -1,6 +1,5 @@
 import React from 'react';
 import { TextField } from '@mui/material';
-import 'react-datepicker/dist/react-datepicker.css';
 import useIsMobile from '../../hooks/useIsMobile.js';
 
 const DateInput = ({ label, value, onChange, name }) => {

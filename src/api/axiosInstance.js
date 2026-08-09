@@ -25,34 +25,12 @@ if (!baseURL) console.error('VITE_API_URL is missing');
 const instance = axios.create({
   baseURL,
   withCredentials: true,
-  timeout: 5000, // 5초 타임아웃
+  // 백엔드가 Render 무료 티어라 콜드 스타트에 30초 이상 걸릴 수 있음
+  timeout: 60000,
   headers: {
     'Content-Type': 'application/json',
-    // Connection 헤더 제거 (브라우저가 자동 관리)
   },
   maxRedirects: 5,
 });
-
-// 요청/응답 시간 로깅
-instance.interceptors.request.use((config) => {
-  config.metadata = { startTime: performance.now() };
-  console.log(`🌐 API 요청 시작: ${config.method?.toUpperCase()} ${config.url}`);
-  return config;
-});
-
-instance.interceptors.response.use(
-  (response) => {
-    const duration = performance.now() - response.config.metadata.startTime;
-    console.log(`✅ API 응답: ${response.config.method?.toUpperCase()} ${response.config.url} - ${duration.toFixed(2)}ms`);
-    return response;
-  },
-  (error) => {
-    if (error.config?.metadata) {
-      const duration = performance.now() - error.config.metadata.startTime;
-      console.log(`❌ API 에러: ${error.config.method?.toUpperCase()} ${error.config.url} - ${duration.toFixed(2)}ms`);
-    }
-    return Promise.reject(error);
-  }
-);
 
 export default instance;

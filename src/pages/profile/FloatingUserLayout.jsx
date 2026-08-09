@@ -37,16 +37,6 @@ const FloatingUserLayout = ({
         }
     };
 
-    // 전화번호 포맷팅 함수 (3-4-4 형식)
-    const formatPhoneNumber = (phoneNumber) => {
-        if (!phoneNumber) return '';
-        const cleaned = phoneNumber.replace(/\D/g, '');
-        if (cleaned.length === 11) {
-            return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(7)}`;
-        }
-        return phoneNumber;
-    };
-
     const navItems = [
         { id: 'hero', label: 'Home', icon: '🏠' },
         { id: 'about', label: 'About', icon: '👨‍💻' },
@@ -62,45 +52,22 @@ const FloatingUserLayout = ({
                 <div className="floating-profile">
                     <div className="profile-avatar-wrapper">
                         <img
-                            src={userInfo.photo || "/images/vite.svg"}
+                            src={userInfo.photo || "/images/avatar-default.svg"}
                             alt="Profile"
                             className="profile-avatar"
                         />
                     </div>
                     <div className="profile-info">
-                        <h4 className="profile-name">김인섭</h4>
+                        <h4 className="profile-name">{userInfo.username || ''}</h4>
                         <p className="profile-role">Fullstack Developer</p>
                         <div className="profile-contact">
-                            {/* 임시 이메일 주소 - 백엔드에서 데이터 받으면 userInfo.email로 변경 */}
-                            <div
-                                className="contact-item"
-                                onClick={() => window.location.href = `mailto:dlstjq977@gmail.com`}
-                            >
-                                <span className="contact-icon">📧</span>
-                                <span className="contact-text">dlstjq977@gmail.com</span>
-                            </div>
-                            {userInfo.email && userInfo.email !== 'dlstjq977@gmail.com' && (
+                            {/* 연락처는 GitHub만 노출한다.
+                                전화번호는 개인정보라 공개 프로필에 싣지 않고(본인은 마이페이지에서 확인),
+                                이메일은 users 테이블에 컬럼 자체가 없다. */}
+                            {userInfo.githubUrl && (
                                 <div
                                     className="contact-item"
-                                    onClick={() => window.location.href = `mailto:${userInfo.email}`}
-                                >
-                                    <span className="contact-icon">📧</span>
-                                    <span className="contact-text">{userInfo.email}</span>
-                                </div>
-                            )}
-                            {userInfo.phone && (
-                                <div 
-                                    className="contact-item"
-                                    onClick={() => window.location.href = `tel:${userInfo.phone.replace(/\D/g, '')}`}
-                                >
-                                    <span className="contact-icon">📱</span>
-                                    <span className="contact-text">{formatPhoneNumber(userInfo.phone)}</span>
-                                </div>
-                            )}
-                            {userInfo.github && (
-                                <div 
-                                    className="contact-item"
-                                    onClick={() => window.open(userInfo.github, '_blank')}
+                                    onClick={() => window.open(userInfo.githubUrl, '_blank', 'noopener,noreferrer')}
                                 >
                                     <span className="contact-icon">💻</span>
                                     <span className="contact-text">GitHub</span>

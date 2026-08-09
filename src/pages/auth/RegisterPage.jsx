@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { register as apiRegister } from "../../api/authApi";
 import ImagePicker from "../../components/common/ImagePicker";
 import useImageKitUpload from "../../hooks/useImageKitUpload.js";
+import useIsMobile from "../../hooks/useIsMobile";
+import "./authForm.css";
 
 const RegisterPage = () => {
     const navigate = useNavigate();
@@ -23,114 +25,21 @@ const RegisterPage = () => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const isMobile =
-        typeof window !== "undefined" &&
-        window.matchMedia("(max-width: 768px)").matches;
+    const isMobile = useIsMobile();
 
-    // ===== inline styles =====
+    // 스타일은 authForm.css의 토큰 기반 클래스를 사용한다
     const styles = {
-        page: {
-            minHeight: "100svh",
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            paddingTop: isMobile ? 0 : "clamp(48px, 12vh, 160px)",
-            background:
-                "radial-gradient(1000px 600px at 10% 0%, #fff7ed 0, transparent 60%), " +
-                "radial-gradient(800px 500px at 100% 10%, #eff6ff 0, transparent 60%), " +
-                "linear-gradient(180deg, #f8fafc, #eef2f7)",
-            padding: 16,
-        },
-        card: {
-            width: 480,
-            maxWidth: "100%",
-            borderRadius: 16,
-            padding: 20,
-            background: "rgba(255,255,255,.78)",
-            border: "1px solid rgba(0,0,0,.06)",
-            boxShadow: "0 20px 50px rgba(15,23,42,.08)",
-            backdropFilter: "blur(12px)",
-        },
-        brandWrap: { display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 16 },
-        brandRow: { display: "inline-flex", alignItems: "center", gap: 10, fontWeight: 800, fontSize: 18, color: "#111827" },
-        subtle: { color: "#6b7280", fontSize: 12, marginTop: 4 },
-
-        alert: {
-            background: "rgba(224, 49, 49, .08)",
-            border: "1px solid rgba(224, 49, 49, .25)",
-            color: "#8a1c1c",
-            padding: "8px 10px",
-            borderRadius: 10,
-            fontSize: 13,
-            marginBottom: 12,
-        },
-
-        label: { display: "block", fontSize: 12, fontWeight: 700, marginBottom: 6, color: "#111827" },
-        input: {
-            width: "100%",
-            height: 40,
-            padding: "10px 12px",
-            borderRadius: 10,
-            border: "1px solid #e5e7eb",
-            outline: "none",
-            fontSize: 14,
-            background: "#fff",
-            color: "#111827",
-        },
-        field: { display: "grid", gap: 6, marginBottom: 12 },
-
-        inputRow: { display: "flex", alignItems: "center", gap: 8 },
+        page: { paddingTop: isMobile ? 16 : "clamp(48px, 12vh, 160px)" },
         toggleBtn: {
             whiteSpace: "nowrap",
-            height: 40,
-            borderRadius: 10,
-            border: "1px solid #e5e7eb",
-            background: "#f8fafc",
-            color: "#111827",
-            fontSize: 13,
+            height: 42,
+            borderRadius: "var(--radius)",
+            border: "1px solid var(--border-strong)",
+            background: "var(--surface-3)",
+            color: "var(--text-muted)",
+            fontSize: "var(--text-sm)",
             padding: "0 12px",
             cursor: "pointer",
-        },
-        hint: { color: "#6b7280", fontSize: 12, minHeight: 18, marginTop: -6, marginBottom: 6 },
-
-        btn: {
-            width: "100%",
-            height: 44,
-            borderRadius: 12,
-            border: "1px solid #ff8a00",
-            background: "#ff8a00",
-            color: "#fff",
-            fontWeight: 800,
-            fontSize: 14,
-            cursor: "pointer",
-            marginTop: 4,
-        },
-        btnDisabled: { opacity: 0.6, cursor: "not-allowed" },
-        secondaryBtn: {
-            width: "100%",
-            height: 44,
-            borderRadius: 12,
-            border: "1px solid #e5e7eb",
-            background: "#fff",
-            color: "#111827",
-            fontWeight: 700,
-            fontSize: 14,
-            cursor: "pointer",
-            marginTop: 8,
-        },
-
-        dashedBox: { border: "1px dashed #e5e7eb", borderRadius: 12, padding: 12 },
-        progressWrap: { height: 8, borderRadius: 999, background: "#f3f4f6", overflow: "hidden" },
-        progressBar: (p) => ({ width: `${p}%`, height: "100%", background: "#4f46e5" }),
-
-        spinnerDot: {
-            display: "inline-block",
-            width: 6,
-            height: 6,
-            marginLeft: 6,
-            borderRadius: "50%",
-            background: "rgba(255,255,255,.9)",
-            animation: "blink 1s infinite ease-in-out",
         },
     };
 
@@ -214,29 +123,27 @@ const RegisterPage = () => {
     const disabled = loading || uploading;
 
     return (
-        <div style={styles.page}>
-            <style>{`@keyframes blink { 0%,80%,100%{opacity:.2} 40%{opacity:1} }`}</style>
-
-            <div style={styles.card}>
+        <div className="auth-page" style={styles.page}>
+            <div className="auth-card">
                 {/* 헤더 */}
-                <div style={styles.brandWrap}>
-                    <div style={styles.brandRow}>
+                <div className="auth-brand">
+                    <div className="auth-brand-row">
                         <img src="/images/seoportfolio_logo.png" alt="logo" width={28} height={28} />
                         <span>Seopotfolio</span>
                     </div>
-                    <div style={styles.subtle}>새 계정을 만들어주세요</div>
+                    <div className="auth-subtle">새 계정을 만들어주세요</div>
                 </div>
 
                 {/* 에러 */}
-                {error ? <div style={styles.alert}>{error}</div> : null}
+                {error ? <div className="auth-alert">{error}</div> : null}
 
                 {/* 폼 (모두 수직 배치) */}
                 <form onSubmit={onSubmit} autoComplete="on">
                     {/* 아이디 */}
-                    <div style={styles.field}>
-                        <label style={styles.label}>아이디</label>
+                    <div className="auth-field">
+                        <label className="auth-label">아이디</label>
                         <input
-                            style={styles.input}
+                            className="auth-input"
                             type="text"
                             name="username"
                             value={username}
@@ -247,11 +154,12 @@ const RegisterPage = () => {
                     </div>
 
                     {/* 비밀번호 + 보기 토글 */}
-                    <div style={styles.field}>
-                        <label style={styles.label}>비밀번호</label>
-                        <div style={styles.inputRow}>
+                    <div className="auth-field">
+                        <label className="auth-label">비밀번호</label>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                             <input
-                                style={{ ...styles.input, flex: 1 }}
+                                className="auth-input"
+                                style={{ flex: 1 }}
                                 type={showPw ? "text" : "password"}
                                 name="password"
                                 value={password}
@@ -269,16 +177,16 @@ const RegisterPage = () => {
                                 {showPw ? "Hide" : "Show"}
                             </button>
                         </div>
-                        <div style={styles.hint} role="status" aria-live="polite">
+                        <div className="auth-hint" role="status" aria-live="polite">
                             {capsOn ? "CapsLock이 켜져 있습니다." : "\u00A0"}
                         </div>
                     </div>
 
                     {/* 휴대폰 번호 */}
-                    <div style={styles.field}>
-                        <label style={styles.label}>휴대폰 번호</label>
+                    <div className="auth-field">
+                        <label className="auth-label">휴대폰 번호</label>
                         <input
-                            style={styles.input}
+                            className="auth-input"
                             type="tel"
                             name="phone"
                             value={phone}
@@ -286,7 +194,7 @@ const RegisterPage = () => {
                             placeholder="010-1234-5678"
                             maxLength="13"
                         />
-                        <div style={styles.hint}>
+                        <div className="auth-hint">
                             {phone && phone.replace(/\D/g, '').length !== 11 && phone.length > 0 
                                 ? "11자리 숫자를 입력해주세요" 
                                 : "\u00A0"
@@ -295,10 +203,10 @@ const RegisterPage = () => {
                     </div>
 
                     {/* GitHub URL */}
-                    <div style={styles.field}>
-                        <label style={styles.label}>GitHub URL</label>
+                    <div className="auth-field">
+                        <label className="auth-label">GitHub URL</label>
                         <input
-                            style={styles.input}
+                            className="auth-input"
                             type="url"
                             name="githubUrl"
                             value={githubUrl}
@@ -308,16 +216,16 @@ const RegisterPage = () => {
                     </div>
 
                     {/* 프로필 사진 */}
-                    <div style={styles.field}>
-                        <label style={styles.label}>프로필 사진 (선택)</label>
-                        <div style={styles.dashedBox}>
+                    <div className="auth-field">
+                        <label className="auth-label">프로필 사진 (선택)</label>
+                        <div className="auth-dashed-box">
                             <ImagePicker value={photoFile} onChange={setPhotoFile} />
                             {uploading ? (
                                 <div style={{ marginTop: 8 }}>
-                                    <div style={styles.progressWrap}>
-                                        <div style={styles.progressBar(progress)} />
+                                    <div className="auth-progress-track">
+                                        <div className="auth-progress-bar" style={{ width: `${progress}%` }} />
                                     </div>
-                                    <div style={{ ...styles.subtle, marginTop: 6 }}>{progress}% 업로드 중…</div>
+                                    <div className="auth-subtle" style={{ marginTop: 6 }}>{progress}% 업로드 중…</div>
                                 </div>
                             ) : null}
                         </div>
@@ -327,14 +235,14 @@ const RegisterPage = () => {
                     <button
                         type="submit"
                         disabled={disabled}
-                        style={{ ...styles.btn, ...(disabled ? styles.btnDisabled : {}) }}
+                        className="auth-btn"
                     >
                         {loading ? (
                             <>
                                 회원가입 중…
-                                <span style={{ ...styles.spinnerDot, animationDelay: "0s" }} />
-                                <span style={{ ...styles.spinnerDot, animationDelay: ".2s" }} />
-                                <span style={{ ...styles.spinnerDot, animationDelay: ".4s" }} />
+                                <span className="auth-dot" style={{ animationDelay: "0s" }} />
+                                <span className="auth-dot" style={{ animationDelay: ".2s" }} />
+                                <span className="auth-dot" style={{ animationDelay: ".4s" }} />
                             </>
                         ) : (
                             "회원가입"
@@ -343,7 +251,7 @@ const RegisterPage = () => {
 
                     <button
                         type="button"
-                        style={styles.secondaryBtn}
+                        className="auth-btn-secondary"
                         onClick={() => navigate("/auth/login")}
                     >
                         로그인으로 돌아가기

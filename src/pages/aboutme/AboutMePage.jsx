@@ -34,7 +34,7 @@ const AboutMePage = () => {
             const sortedData = [...res.data].sort((a, b) => a.sort - b.sort);
             setAboutList(sortedData);
             setAbout_id(res.data?.[0]?.about_id ?? null);
-        } catch (e) {
+        } catch {
             navigate('/notfound');
         }
     };
